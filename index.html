@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a5c2e">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+<title>Data Petroleum Register</title>
+<style>
+:root{--bg:#f4f7f2;--card:#fff;--ink:#17261b;--mute:#5d6e61;--line:#cfdccf;--g:#0a5c2e;--gold:#c9a227;--w:#fff;--bad:#b3261e}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans Arabic",Tahoma,system-ui,sans-serif;line-height:1.7;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+.wrap{max-width:900px;margin:0 auto;padding:0 12px 80px}
+footer{position:fixed;inset:auto 0 0 0;background:linear-gradient(90deg,#063d1e,#0a5c2e 60%,#fff);border-top:3px solid var(--gold);padding:6px 12px calc(6px + env(safe-area-inset-bottom));display:flex;justify-content:space-between;align-items:center;color:#fff;font-size:12px;z-index:9}
+footer img{height:38px}footer small{color:#0a3d20}
+header{background:#fff;padding:8px 12px;margin:0 -12px 10px;display:flex;justify-content:space-between;align-items:center;gap:8px;border-bottom:4px solid var(--gold)}
+header img{height:52px;width:auto}
+#st{font-size:12px;padding:2px 10px;border-radius:12px;background:var(--g);color:#fff}
+h2{font-size:16px;margin:16px 0 6px;color:var(--g);border-left:4px solid var(--gold);padding-left:8px}
+input,select{width:100%;padding:8px 6px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink);font:inherit;text-align:center}
+label{font-size:12px;color:var(--mute);display:block}
+.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1 1 110px}
+.scroll{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;min-width:400px}
+th,td{border-bottom:1px solid var(--line);padding:3px 5px;text-align:center;font-size:13px}
+th{background:var(--g);color:var(--w)}td:first-child{text-align:left;white-space:nowrap}
+td input{min-width:62px;padding:5px 3px}
+tfoot td{font-weight:700;background:var(--bg)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:560px){.grid2{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px}
+.ln{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:2px 0}.ln input{width:110px}
+.tot{border-top:2px solid var(--g);margin-top:4px;padding-top:4px;font-weight:700}
+button{font:inherit;border:0;border-radius:8px;padding:9px 16px;background:var(--g);color:var(--w);font-weight:700}
+button.alt{background:transparent;color:var(--g);border:1px solid var(--g)}
+#login{max-width:340px;margin:12vh auto;padding:16px}#login input{margin:6px 0}
+#err{color:var(--bad);font-size:13px}.hide{display:none!important}
+@media print{header button,.noprint{display:none}}
+</style>
+</head>
+<body>
+<div id="login" class="card hide">
+<h2>Login</h2>
+<input id="em" type="email" placeholder="Email" autocomplete="username">
+<input id="pw" type="password" placeholder="Password" autocomplete="current-password">
+<button id="lg" style="width:100%">Login</button><div id="err"></div>
+</div>
+
+<div id="app" class="wrap hide">
+<header><img src="logo.png" alt="Daata Petroleum"><span id="st">…</span><button class="alt" id="out" style="padding:4px 10px">Bahar</button></header>
+<div class="row">
+<div><label>Tareekh</label><input type="date" id="date"></div>
+<div><label>Staff</label><input data-p="staff" placeholder="Naam"></div>
+<div><label>Petrol Rate</label><input data-p="rP" inputmode="decimal"></div>
+<div><label>Diesel Rate</label><input data-p="rD" inputmode="decimal"></div>
+</div>
+
+<h2>Nozzle Sale</h2>
+<div class="scroll"><table><thead><tr><th>Nozzle</th><th>Shuru</th><th>Aakhir</th><th>Litre</th><th>Raqam</th></tr></thead>
+<tbody id="noz"></tbody>
+<tfoot><tr><td>Kul</td><td></td><td></td><td data-c="nozL">0</td><td data-c="nozA">0</td></tr></tfoot></table></div>
+
+<h2>Oil aur Saman</h2>
+<div class="scroll"><table><thead><tr><th>Item</th><th>Tadaad</th><th>Rate</th><th>Raqam</th></tr></thead>
+<tbody id="itm"></tbody>
+<tfoot><tr><td>Kul</td><td></td><td></td><td data-c="itmA">0</td></tr></tfoot></table></div>
+
+<h2>Udhaar / Wusooli</h2>
+<div class="scroll"><table><thead><tr><th>Gaari/Naam</th><th>Tafseel</th><th>Udhaar</th><th>Wusool</th></tr></thead>
+<tbody id="ud"></tbody>
+<tfoot><tr><td>Kul</td><td></td><td data-c="udA">0</td><td data-c="wsA">0</td></tr></tfoot></table></div>
+<button class="alt noprint" id="addU">+ Nai Line</button>
+
+<h2>Kharcha</h2>
+<div class="scroll"><table><thead><tr><th>Tafseel</th><th>Raqam</th></tr></thead>
+<tbody id="kh"></tbody>
+<tfoot><tr><td>Kul</td><td data-c="khA">0</td></tr></tfoot></table></div>
+<button class="alt noprint" id="addK">+ Nai Line</button>
+
+<h2>Stock</h2>
+<div class="grid2">
+<div class="card"><b>PG1 (Petrol)</b>
+<div class="ln">Sabiqa <input data-p="pS" inputmode="decimal"></div>
+<div class="ln">Aamad <input data-p="pA" inputmode="decimal"></div>
+<div class="ln">Total <b data-c="pT">0</b></div><div class="ln">Sale <b data-c="pL">0</b></div>
+<div class="ln tot">Baqaya <b data-c="pB">0</b></div></div>
+<div class="card"><b>HSD (Diesel)</b>
+<div class="ln">Sabiqa <input data-p="hS" inputmode="decimal"></div>
+<div class="ln">Aamad <input data-p="hA" inputmode="decimal"></div>
+<div class="ln">Total <b data-c="hT">0</b></div><div class="ln">Sale <b data-c="hL">0</b></div>
+<div class="ln tot">Baqaya <b data-c="hB">0</b></div></div>
+</div>
+
+<h2>Roz ka Khulasa</h2>
+<div class="card">
+<div class="ln">Kul Sale <b data-c="sale">0</b></div>
+<div class="ln">Udhaar <b data-c="udA">0</b></div>
+<div class="ln">Wusooli <b data-c="wsA">0</b></div>
+<div class="ln">Kharcha <b data-c="khA">0</b></div>
+<div class="ln tot">Cash Jama <b data-c="cash">0</b></div>
+</div>
+<p class="noprint"><button onclick="print()">Print</button></p>
+</div>
+
+<footer class="noprint"><span>Daata Petroleum – Daily Register</span><span style="display:flex;align-items:center;gap:6px"><small>In partnership with</small><img src="pso.png" alt="PSO"></span></footer>
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import{getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import{initializeFirestore,persistentLocalCache,persistentMultipleTabManager,doc,setDoc,onSnapshot}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const app=initializeApp({apiKey:"AIzaSyDBBQEkgiYIWo9J-cxmdhitZ9XwHrUso_I",authDomain:"daata-petroleum.firebaseapp.com",projectId:"daata-petroleum",messagingSenderId:"878574161545",appId:"1:878574161545:web:08b651dcfb4bd462538058"});
+const auth=getAuth(app);
+const db=initializeFirestore(app,{localCache:persistentLocalCache({tabManager:persistentMultipleTabManager()})});
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const NOZ=["Diesel 1","Diesel 2","Diesel 3","Diesel 4","Petrol 5","Petrol 6","Petrol 7","Petrol 8"];
+const ITM=["Mobil Oil Khula","D3000 – 4L","D3000 – 10L","D8000 – 4L","Blaze – 700ml","2-Stroke – 1L","Carient + 4L","D/6000","Brake Oil Bari","Oil Filter Massey","Oil Filter Ford","Oil Filter Fiat","Diesel Filter"];
+const blank=date=>({date,staff:"",rP:"",rD:"",pS:"",pA:"",hS:"",hA:"",noz:NOZ.map(()=>({s:"",e:""})),itm:ITM.map(()=>({q:"",r:""})),ud:[{n:"",t:"",u:"",w:""},{n:"",t:"",u:"",w:""},{n:"",t:"",u:"",w:""}],kh:[{t:"",a:""},{t:"",a:""}]});
+let d=blank(new Date().toISOString().slice(0,10)),unsub=null,timer=null,pending=false;
+const n=v=>parseFloat(v)||0, f=v=>Math.round(v*100)/100;
+
+const inp=(p,v,ph="",m="decimal")=>`<input data-p="${p}" inputmode="${m}" placeholder="${ph}" value="${v??""}">`;
+function draw(){
+ $("#noz").innerHTML=d.noz.map((x,i)=>`<tr><td>${NOZ[i]}</td><td>${inp(`noz.${i}.s`,x.s)}</td><td>${inp(`noz.${i}.e`,x.e)}</td><td data-c="nl${i}">0</td><td data-c="na${i}">0</td></tr>`).join("");
+ $("#itm").innerHTML=d.itm.map((x,i)=>`<tr><td>${ITM[i]}</td><td>${inp(`itm.${i}.q`,x.q,"","numeric")}</td><td>${inp(`itm.${i}.r`,x.r)}</td><td data-c="ia${i}">0</td></tr>`).join("");
+ $("#ud").innerHTML=d.ud.map((x,i)=>`<tr><td>${inp(`ud.${i}.n`,x.n,"Gaari/Naam","text")}</td><td>${inp(`ud.${i}.t`,x.t,"Tafseel","text")}</td><td>${inp(`ud.${i}.u`,x.u)}</td><td>${inp(`ud.${i}.w`,x.w)}</td></tr>`).join("");
+ $("#kh").innerHTML=d.kh.map((x,i)=>`<tr><td>${inp(`kh.${i}.t`,x.t,"Tafseel","text")}</td><td>${inp(`kh.${i}.a`,x.a)}</td></tr>`).join("");
+ $$("[data-p]:not(table [data-p])").forEach(e=>{if(!e.closest("table"))e.value=get(e.dataset.p)??""});
+ $("#date").value=d.date;calc();
+}
+function get(p){return p.split(".").reduce((o,k)=>o?.[k],d)}
+function set(p,v){const k=p.split(".");const l=k.pop();k.reduce((o,x)=>o[x],d)[l]=v}
+function calc(){
+ const c={};let nl=0,na=0,pl=0,hl=0;
+ d.noz.forEach((x,i)=>{const L=Math.max(0,n(x.e)-n(x.s)),diesel=i<4,A=L*n(diesel?d.rD:d.rP);c["nl"+i]=f(L);c["na"+i]=f(A);nl+=L;na+=A;diesel?hl+=L:pl+=L});
+ let ia=0;d.itm.forEach((x,i)=>{const A=n(x.q)*n(x.r);c["ia"+i]=f(A);ia+=A});
+ const ua=d.ud.reduce((s,x)=>s+n(x.u),0),wa=d.ud.reduce((s,x)=>s+n(x.w),0),ka=d.kh.reduce((s,x)=>s+n(x.a),0);
+ Object.assign(c,{nozL:f(nl),nozA:f(na),itmA:f(ia),udA:f(ua),wsA:f(wa),khA:f(ka),pT:f(n(d.pS)+n(d.pA)),pL:f(pl),hT:f(n(d.hS)+n(d.hA)),hL:f(hl)});
+ c.pB=f(c.pT-pl);c.hB=f(c.hT-hl);c.sale=f(na+ia);c.cash=f(na+ia-ua+wa-ka);
+ $$("[data-c]").forEach(e=>e.textContent=c[e.dataset.c]??0);
+}
+function status(t){$("#st").textContent=t}
+function save(){
+ if(!auth.currentUser)return;pending=true;status("Save ho raha…");
+ clearTimeout(timer);timer=setTimeout(()=>{setDoc(doc(db,"days",d.date),d).catch(e=>status("Kharabi"))},500);
+}
+function load(date){
+ if(unsub)unsub();let first=true;d=blank(date);draw();
+ unsub=onSnapshot(doc(db,"days",date),{includeMetadataChanges:true},s=>{
+  if(first&&s.exists()&&!s.metadata.hasPendingWrites){d=Object.assign(blank(date),s.data());draw()}
+  if(!s.metadata.hasPendingWrites&&!s.metadata.fromCache)first=false;
+  if(s.metadata.hasPendingWrites)status("Offline – sync baqi");
+  else status(s.metadata.fromCache&&!navigator.onLine?"Offline":"✓ Sync");
+ });
+}
+document.addEventListener("input",e=>{
+ const p=e.target.dataset?.p;if(!p)return;set(p,e.target.value);calc();save();
+});
+$("#date").onchange=e=>{if(e.target.value)load(e.target.value)};
+$("#addU").onclick=()=>{d.ud.push({n:"",t:"",u:"",w:""});draw();save()};
+$("#addK").onclick=()=>{d.kh.push({t:"",a:""});draw();save()};
+$("#lg").onclick=()=>{$("#err").textContent="";signInWithEmailAndPassword(auth,$("#em").value.trim(),$("#pw").value).catch(()=>$("#err").textContent="Email ya password ghalat hai (ya internet nahi)")};
+$("#out").onclick=()=>signOut(auth);
+onAuthStateChanged(auth,u=>{$("#login").classList.toggle("hide",!!u);$("#app").classList.toggle("hide",!u);if(u)load(d.date);else if(unsub)unsub()});
+addEventListener("online",()=>status("Sync ho raha…"));addEventListener("offline",()=>status("Offline"));
+if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js");
+</script>
+</body>
+</html>
