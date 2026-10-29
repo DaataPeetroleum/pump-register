@@ -65,6 +65,12 @@ nav{background:rgba(255,255,255,.9);backdrop-filter:blur(16px);-webkit-backdrop-
 .qa{gap:8px}.qa button{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:3px;padding:9px 4px;font-size:12px;color:var(--navy);box-shadow:none;border:1px solid}
 .qa i{line-height:0}.qa i svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;color:var(--navy)}
 .q1{background:rgba(22,163,74,.13)!important;border-color:rgba(22,163,74,.35)!important}.q2{background:rgba(37,99,235,.13)!important;border-color:rgba(37,99,235,.35)!important}.q3{background:rgba(109,79,216,.13)!important;border-color:rgba(109,79,216,.35)!important}.q4{background:rgba(240,123,26,.14)!important;border-color:rgba(240,123,26,.38)!important}.q5{background:rgba(214,58,58,.12)!important;border-color:rgba(214,58,58,.35)!important}.q6{background:rgba(31,42,68,.12)!important;border-color:rgba(31,42,68,.32)!important}
+
+.card,.scroll{background:rgba(255,255,255,.72);border:1px solid rgba(10,26,60,.1)}.ki{width:15px;height:15px;fill:none;stroke:var(--navy);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;vertical-align:-3px;margin-right:4px}
+.tw{position:sticky;top:0;z-index:12;display:flex;align-items:center;gap:8px;margin:0 -12px 8px;padding:9px 12px;background:rgba(255,255,255,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(0,0,0,.08)}
+.tw .tt{position:static;flex:1;min-width:0;margin:0;padding:0;background:none;border:0;backdrop-filter:none}#st{position:static;flex:none;white-space:nowrap}
+@media(min-width:900px){.tw{margin:0 -22px 8px;padding:9px 22px}}
+@page{size:A4;margin:12mm}@media print{nav,.tw,.seg{display:none!important}.wrap{margin:0!important;max-width:none!important}body{background:#fff}}
 </style></head><body>
 <div id="login" class="hide"><img class="lg" src="icon-192.png" alt="">
 <div class="box"><input id="em" type="email" data-ph="Email|ای میل" autocomplete="username">
@@ -72,7 +78,7 @@ nav{background:rgba(255,255,255,.9);backdrop-filter:blur(16px);-webkit-backdrop-
 <button id="lg" class="gold" style="width:100%;margin-top:6px"><span data-bi="Login|لاگ ان"></span></button><div id="err"></div></div></div>
 
 <div id="app" class="wrap hide">
-<div id="tt" class="tt noprint"></div><span id="st">…</span>
+<div class="tw noprint"><div id="tt" class="tt"></div><span id="st">…</span></div>
 
 <section data-tab="home"><h2 data-bi="Today's Dashboard|آج کا ڈیش بورڈ"></h2>
 <div class="row"><div><label data-bi="Date|تاریخ"></label><input type="date" id="date"></div>
@@ -81,10 +87,10 @@ nav{background:rgba(255,255,255,.9);backdrop-filter:blur(16px);-webkit-backdrop-
 <div><label data-bi="Diesel Rate|ڈیزل ریٹ"></label><input data-p="rD" inputmode="decimal"></div>
 <div><label data-bi="CNG Rate|سی این جی ریٹ"></label><input data-p="rC" inputmode="decimal"></div></div>
 <div class="kp">
-<div class="card k1"><label>📈 <span data-bi="Total Sales|کل سیل"></span></label><b class="big">Rs. <span data-c="sale">0</span></b></div>
-<div class="card k2"><label>💧 <span data-bi="Total Litres|کل لیٹر"></span></label><b class="big"><span data-c="tL">0</span> Ltr</b></div>
-<div class="card k3"><label>💵 <span data-bi="Cash Sales|کیش سیل"></span></label><b class="big">Rs. <span data-c="cs">0</span></b></div>
-<div class="card k4"><label>💳 <span data-bi="Credit Sales|ادھار سیل"></span></label><b class="big">Rs. <span data-c="udA">0</span></b></div></div>
+<div class="card k1"><label><svg class="ki" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></svg><span data-bi="Total Sales|کل سیل"></span></label><b class="big">Rs. <span data-c="sale">0</span></b></div>
+<div class="card k2"><label><svg class="ki" viewBox="0 0 24 24"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg><span data-bi="Total Litres|کل لیٹر"></span></label><b class="big"><span data-c="tL">0</span> Ltr</b></div>
+<div class="card k3"><label><svg class="ki" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/></svg><span data-bi="Cash Sales|کیش سیل"></span></label><b class="big">Rs. <span data-c="cs">0</span></b></div>
+<div class="card k4"><label><svg class="ki" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg><span data-bi="Credit Sales|ادھار سیل"></span></label><b class="big">Rs. <span data-c="udA">0</span></b></div></div>
 <div id="al"></div><h2 data-bi="Quick Actions|فوری اعمال"></h2>
 <div class="qa"><button class="q1" data-go="sales"><i><svg viewBox="0 0 24 24"><path d="M4 21V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v16M3 21h12"/><rect x="6" y="6" width="6" height="5"/><path d="M14 9h2a2 2 0 0 1 2 2v5a1.5 1.5 0 0 0 3 0V8l-3-3"/></svg></i><span data-bi="New Fuel Sale|نئی فیول سیل"></span></button><button class="q2" data-go="fueling"><i><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 13l4-4M12 5v2M4.5 13h2M17.5 13h2"/></svg></i><span data-bi="Nozzle Readings|نوزل ریڈنگز"></span></button><button class="q3" data-go="stock"><i><svg viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg></i><span data-bi="Stock Entry|سٹاک اندراج"></span></button><button class="q4" data-go="expenses"><i><svg viewBox="0 0 24 24"><path d="M5 3h14v18l-3-2-2 2-2-2-2 2-2-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg></i><span data-bi="Add Expense|خرچہ شامل کریں"></span></button><button class="q5" data-go="customers"><i><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.5 3-6 6.5-6s6.5 2.5 6.5 6M16 4.5a3.5 3.5 0 0 1 0 7M18 14c2.5.6 4 2.6 4 6"/></svg></i><span data-bi="Credit Customer|ادھار کسٹمر"></span></button><button class="q6" data-go="dayclose"><i><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></i><span data-bi="Day Close|ڈے کلوز"></span></button></div>
 <div class="grid2"><div><h2 data-bi="Fuel Sales (Ltr)|فیول سیل (لیٹر)"></h2><div class="card" id="fbars"></div></div><div><h2 data-bi="Tank Stock Summary|ٹینک سٹاک خلاصہ"></h2><div class="card" id="tks"></div></div></div>
@@ -127,6 +133,7 @@ nav{background:rgba(255,255,255,.9);backdrop-filter:blur(16px);-webkit-backdrop-
 <p class="noprint"><button class="alt" id="addU"><span data-bi="+ New Line|+ نئی لائن"></span></button></p><h2 data-bi="Cash Tally|کیش گنتی"></h2><div class="card"><div id="ctl"></div><div class="ln tot"><span data-bi="Counted Cash|گنتی کا کیش"></span><b data-c="ctT">0</b></div>
 <div class="ln"><span data-bi="Easypaisa|ایزی پیسہ"></span><input data-p="dg.ep" inputmode="decimal"></div><div class="ln"><span data-bi="JazzCash|جاز کیش"></span><input data-p="dg.jc" inputmode="decimal"></div><div class="ln"><span data-bi="Card|کارڈ"></span><input data-p="dg.cd" inputmode="decimal"></div>
 <div class="ln"><span data-bi="Expected Cash|متوقع کیش"></span><b data-c="exp">0</b></div><div class="ln tot"><span data-bi="Difference|فرق"></span><b data-c="ctF">0</b></div></div>
+<h2 data-bi="Cash Handling|کیش حوالگی"></h2><div class="scroll"><table><thead><tr><th data-bi="Taken By|کس نے لیا"></th><th data-bi="Amount|رقم"></th><th data-bi="Deposited|جمع"></th><th data-bi="Bank|بینک"></th><th data-bi="Account No|اکاؤنٹ نمبر"></th></tr></thead><tbody id="chl"></tbody></table></div><p class="noprint"><button class="alt" id="addCh"><span data-bi="+ New Line|+ نئی لائن"></span></button></p>
 <h2 data-bi="Shift Handover|شفٹ حوالگی"></h2><div class="scroll"><table><thead><tr><th data-bi="Staff|سٹاف"></th><th data-bi="Shift|شفٹ"></th><th data-bi="Due|واجب الادا"></th><th data-bi="Handed In|جمع کرایا"></th><th data-bi="Diff|فرق"></th></tr></thead><tbody id="shl"></tbody></table></div>
 <p class="noprint"><button class="alt" id="addH"><span data-bi="+ New Line|+ نئی لائن"></span></button></p></section>
 
@@ -138,7 +145,7 @@ nav{background:rgba(255,255,255,.9);backdrop-filter:blur(16px);-webkit-backdrop-
 <section data-tab="reports" class="hide"><h2 data-bi="Reports|رپورٹس"></h2>
 <div class="seg"><button data-seg="rp:Daily" class="on"><span data-bi="Daily|روزانہ"></span></button><button data-seg="rp:Monthly"><span data-bi="Monthly|ماہانہ"></span></button><button data-seg="rp:Custom"><span data-bi="Custom|اپنی مرضی"></span></button></div>
 <div id="rcus" class="row hide" style="margin-bottom:8px"><div><label data-bi="From|سے"></label><input type="date" id="rf"></div><div><label data-bi="To|تک"></label><input type="date" id="rt"></div></div>
-<div id="reps" class="card"></div><p class="noprint"><button onclick="print()"><span data-bi="Print|پرنٹ"></span></button></p></section>
+<p class="noprint"><button class="gold" id="dayPdf"><span data-bi="Day Report A4 / PDF|ڈے رپورٹ A4 / پی ڈی ایف"></span></button></p><div id="reps" class="card"></div><p class="noprint"><button onclick="print()"><span data-bi="Print|پرنٹ"></span></button></p></section>
 
 <section data-tab="staff" class="hide"><h2 data-bi="Staff Management|سٹاف مینجمنٹ"></h2>
 <div class="card"><div class="menu" id="addS"><span data-bi="Add Staff|سٹاف شامل کریں"></span>›</div>
@@ -171,7 +178,7 @@ nav{background:rgba(255,255,255,.9);backdrop-filter:blur(16px);-webkit-backdrop-
 </nav>
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import{getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import{getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut,createUserWithEmailAndPassword}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import{initializeFirestore,persistentLocalCache,persistentMultipleTabManager,doc,setDoc,onSnapshot,collection,getDocs,query,orderBy,limit,addDoc}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 const app=initializeApp({apiKey:"AIzaSyDBBQEkgiYIWo9J-cxmdhitZ9XwHrUso_I",authDomain:"daata-petroleum.firebaseapp.com",projectId:"daata-petroleum",messagingSenderId:"878574161545",appId:"1:878574161545:web:08b651dcfb4bd462538058"});
 const auth=getAuth(app),db=initializeFirestore(app,{localCache:persistentLocalCache({tabManager:persistentMultipleTabManager()})});
@@ -182,10 +189,14 @@ const ITM=[["Mobil Oil Loose","موبل آئل کھلا"],["D3000 – 4L","ڈی 
 const CATS=[["Electricity","بجلی"],["Salaries","تنخواہیں"],["Maintenance","مرمت"],["Office","دفتر"],["Other","دیگر"]];
 const TANKS=[["h","HSD Tank 1","ایچ ایس ڈی ٹینک 1",20000],["p","Petrol Tank 2","پیٹرول ٹینک 2",20000],["c","CNG","سی این جی",10000]];
 const FUELS=[["HSD","ایچ ایس ڈی","rD"],["Petrol","پیٹرول","rP"],["CNG","سی این جی","rC"]];
-const blank=date=>({date,staff:"",rP:"",rD:"",rC:"",pS:"",pA:"",hS:"",hA:"",ob:"",oi:"",oo:"",dip:{h:"",p:"",c:""},chk:{},att:{},fl:[],dc:{h:"",p:"",c:""},dl:[],ct:{},dg:{ep:"",jc:"",cd:""},sh:[],noz:NOZ.map(()=>({s:"",e:"",t:""})),itm:ITM.map(()=>({q:"",r:""})),ud:[{n:"",t:"",u:"",w:""},{n:"",t:"",u:"",w:""},{n:"",t:"",u:"",w:""}],kh:[{c:"Other",t:"",a:""},{c:"Other",t:"",a:""}]});
+const blank=date=>({date,staff:"",rP:"",rD:"",rC:"",pS:"",pA:"",hS:"",hA:"",ob:"",oi:"",oo:"",dip:{h:"",p:"",c:""},chk:{},att:{},fl:[],dc:{h:"",p:"",c:""},dl:[],ct:{},dg:{ep:"",jc:"",cd:""},sh:[],noz:NOZ.map(()=>({s:"",e:"",t:""})),itm:ITM.map(()=>({q:"",r:""})),ch:[],ud:[{n:"",t:"",u:"",w:""},{n:"",t:"",u:"",w:""},{n:"",t:"",u:"",w:""}],kh:[{c:"Other",t:"",a:""},{c:"Other",t:"",a:""}]});
 let d=blank(new Date().toISOString().slice(0,10)),m={cu:[],st:[],lg:[],rh:[],fac:{},ls:{},lc:{},ow:null},unsub=null,timer=null,pos={f:"HSD",nz:1,amt:"",ltr:""},cur="home";
 let cdi=0,mt,oldv="";const today=()=>new Date().toISOString().slice(0,10),isOwner=()=>!m.ow||m.ow.includes(auth.currentUser?.email),bal=c=>n(c.b)+m.lg.filter(x=>x.c===c.n).reduce((s,x)=>s+(x.k==="credit"?n(x.a):-n(x.a)),0);
 const n=v=>parseFloat(v)||0,f=v=>Math.round(v*100)/100,fmt=v=>Number(v).toLocaleString("en-PK");
+const role=()=>{const e=auth.currentUser?.email;return isOwner()?"owner":(m.mg||[]).includes(e)?"mgr":"staff"};
+function applyRole(){const r=role(),al=m.us?.[auth.currentUser.email]?.tabs||["home","sales","fueling"];document.body.classList.toggle("st",r==="staff");$$("#nav [data-go]").forEach(b=>b.classList.toggle("hide",r==="staff"&&b.dataset.go!=="home"&&!al.includes(b.dataset.go)));window.AL=r==="staff"?al:null}
+async function mkUser(nm){const em=(prompt("Login email / ای میل")||"").trim();if(!em)return;const pw=prompt("Password (min 6) / پاسورڈ");if(!pw)return;const rl=(prompt("Role: staff / manager","staff")||"staff").toLowerCase();let tb=["home","sales","fueling"];if(rl!=="manager"){const t=prompt("Allowed tabs / اجازت والی ٹیبز (sales,fueling,stock,accounts,expenses)","sales,fueling");if(t)tb=["home",...t.split(",").map(x=>x.trim()).filter(Boolean)]}
+try{const sc=getAuth(initializeApp(app.options,"s"+Date.now()));await createUserWithEmailAndPassword(sc,em,pw);await signOut(sc);(m.us??={})[em]={n:nm,r:rl,tabs:tb};if(rl==="manager")(m.mg??=[]).push(em);saveM();alert("User created ✓ / یوزر بن گیا")}catch(e){alert("Error: "+e.message)}}
 function labels(){$$("[data-bi]").forEach(e=>{const[a,b]=e.dataset.bi.split("|");e.innerHTML=bi(a,b)});$$("[data-ph]").forEach(e=>e.placeholder=e.dataset.ph.replace("|"," / "))}
 const inp=(p,v,ph="",mo="decimal")=>`<input data-p="${p}" inputmode="${mo}" placeholder="${ph.replace("|"," / ")}" value="${v??""}">`;
 function T(d){const c={};let nl=0,na=0,pl=0,hl=0;
@@ -216,14 +227,15 @@ async function trend(){try{const q=await getDocs(query(collection(db,"days"),ord
 function tkDraw(){$("#tanks").innerHTML=TANKS.map(t=>{const v=n(d.dip[t[0]]),p=Math.min(100,Math.round(v/t[3]*100));return`<div class="card" style="margin-bottom:10px"><div class="ln"><b>${bi(t[1],t[2])}</b><span data-tp="${t[0]}">${p}%</span></div><div class="bar"><i data-tb="${t[0]}" style="width:${p}%"></i></div><div class="ln"><span>${bi("Dip (cm)","ڈپ (سینٹی میٹر)")}</span>${inp("dc."+t[0],d.dc[t[0]])}</div><div class="ln"><span data-x>${bi("Current Stock (Ltr)","موجودہ سٹاک (لیٹر)")}</span>${inp("dip."+t[0],d.dip[t[0]])}</div><small>${bi("Capacity","گنجائش")} ${fmt(t[3])} Ltr</small></div>`}).join("");
 }
 function tkBars(){TANKS.forEach(t=>{const p=Math.min(100,Math.round(n(d.dip[t[0]])/t[3]*100));const a=$(`[data-tp="${t[0]}"]`),b=$(`[data-tb="${t[0]}"]`);if(a)a.textContent=p+"%";if(b)b.style.width=p+"%"})}
-function all(){tkDraw();flDraw();stDraw();cuDraw();dlDraw();shDraw();ctDraw()}
+function chDraw(){$("#chl").innerHTML=(d.ch||[]).map((x,i)=>`<tr><td>${inp(`ch.${i}.w`,x.w,"","text")}</td><td>${inp(`ch.${i}.a`,x.a)}</td><td><select data-p="ch.${i}.y"><option value="">-</option><option${x.y==="Yes"?" selected":""}>Yes</option><option${x.y==="No"?" selected":""}>No</option></select></td><td>${inp(`ch.${i}.b`,x.b,"","text")}</td><td>${inp(`ch.${i}.n`,x.n,"","text")}</td></tr>`).join("")}
+function all(){chDraw();tkDraw();flDraw();stDraw();cuDraw();dlDraw();shDraw();ctDraw()}
 function flDraw(){
  $("#pf").innerHTML=FUELS.map(x=>`<button class="chip ${pos.f===x[0]?"on":""}" data-pf="${x[0]}">${bi(x[0],x[1])}</button>`).join("");
  $("#pn").innerHTML=[1,2,3,4].map(i=>{const k=pos.f==="Petrol"?i+4:i;return`<button class="chip ${pos.nz===k?"on":""}" data-pn="${k}">${k}</button>`}).join("");
  $("#pa").innerHTML=[500,1000,2000].map(v=>`<button class="chip ${pos.amt==v?"on":""}" data-pa="${v}">${v}</button>`).join("");
  $("#pl").innerHTML=[10,20,50].map(v=>`<button class="chip ${pos.ltr==v?"on":""}" data-pl="${v}">${v}</button>`).join("");
  const tot=d.fl.reduce((s,x)=>s+n(x.a),0);
- $("#fl").innerHTML=d.fl.length?d.fl.map((x,i)=>`<div class="rep"><span>${x.f} · N${x.z}</span><span>${fmt(x.l)} L · Rs. ${fmt(x.a)} <a data-pr="${i}" style="cursor:pointer">🖨</a> <a data-fd="${i}" style="color:var(--bad);cursor:pointer">✕</a></span></div>`).join("")+`<div class="ln tot"><span>${bi("Total","کل")}</span><b>Rs. ${fmt(f(tot))}</b></div>`:bi("No fueling entries yet","ابھی کوئی فیولنگ اندراج نہیں")}
+ $("#fl").innerHTML=d.fl.length?d.fl.map((x,i)=>`<div class="rep"><span>${x.f} · N${x.z}${x.u?" · "+x.u:""}</span><span>${fmt(x.l)} L · Rs. ${fmt(x.a)} <a data-pr="${i}" style="cursor:pointer">🖨</a> <a data-fd="${i}" style="color:var(--bad);cursor:pointer">✕</a></span></div>`).join("")+`<div class="ln tot"><span>${bi("Total","کل")}</span><b>Rs. ${fmt(f(tot))}</b></div>`:bi("No fueling entries yet","ابھی کوئی فیولنگ اندراج نہیں")}
 function stDraw(){$("#stl").innerHTML=m.st.length?m.st.map((x,i)=>`<div class="ln"><span>${x.n} <small>${x.r||""}</small></span><input type="checkbox" data-at="${x.n}" ${d.att[x.n]?"checked":""}></div>`).join(""):bi("No staff added","کوئی سٹاف شامل نہیں")}
 function cuDraw(){const q=($("#cq").value||"").toLowerCase();const l=m.cu.map((x,i)=>[x,i]).filter(([x])=>x.n.toLowerCase().includes(q));
  $("#cul").innerHTML=l.length?l.map(([x,i])=>`<div class="rep" data-cu="${i}" style="cursor:pointer"><span>${x.n}</span><b class="${n(x.l)&&bal(x)>n(x.l)?"r":""}">Rs. ${fmt(bal(x))}</b></div>`).join("")+`<div class="ln tot"><span>${bi("Total","کل")}</span><b>Rs. ${fmt(m.cu.reduce((s,x)=>s+bal(x),0))}</b></div>`:bi("No customers","کوئی کسٹمر نہیں")}
@@ -246,6 +258,7 @@ function load(date){if(unsub)unsub();let first=true,filled=false;d=blank(date);d
  unsub=onSnapshot(doc(db,"days",date),{includeMetadataChanges:true},s=>{
   if(first&&s.exists()&&!s.metadata.hasPendingWrites){d=Object.assign(blank(date),s.data());draw()}
   else if(first&&!s.exists()&&!s.metadata.hasPendingWrites&&!filled){filled=true;prevFill()}
+  if(!first&&s.exists()&&!s.metadata.hasPendingWrites){const hv=new Set(d.fl.map(x=>x.t)),nw=(s.data().fl||[]).filter(x=>x.t&&!hv.has(x.t));if(nw.length){d.fl.push(...nw);d.fl.sort((a,b)=>a.t-b.t);draw()}}
   if(!s.metadata.hasPendingWrites&&!s.metadata.fromCache)first=false;
   if(s.metadata.hasPendingWrites)status("Offline – sync pending","آف لائن – سنک باقی");
   else if(s.metadata.fromCache&&!navigator.onLine)status("Offline","آف لائن");else status("✓ Synced","✓ سنک")})}
@@ -260,6 +273,7 @@ document.addEventListener("focusin",e=>{const p=e.target.dataset?.p;if(p)oldv=e.
 document.addEventListener("change",e=>{const t=e.target,a=t.dataset?.at;if(a){d.att[a]=t.checked;save()}
  const p=t.dataset?.p;if(p&&auth.currentUser){const nv=t.type==="checkbox"?t.checked:t.value;if(String(nv)!==String(oldv)){addDoc(collection(db,"audit"),{t:Date.now(),u:auth.currentUser.email,d:d.date,p,o:String(oldv),n:String(nv)}).catch(()=>{});if(["rP","rD","rC"].includes(p)){m.rh.push({t:Date.now(),d:d.date,f:p,o:String(oldv),n:String(nv)});saveM()}oldv=nv}}});
 $("#addD").onclick=()=>{const g=i=>$(i).value;if(!n(g("#dlt")))return;d.dl.push({c:g("#dcn"),f:g("#dff"),l:g("#dlt"),s:g("#dsh"),den:g("#dds")});["#dcn","#dlt","#dsh","#dds"].forEach(i=>$(i).value="");draw();save()};
+$("#addCh").onclick=()=>{(d.ch??=[]).push({w:"",a:"",y:"",b:"",n:""});draw();save()};
 $("#addH").onclick=()=>{d.sh.push({n:"",s:"",e:"",h:""});draw();save()};
 $("#tkset").onclick=()=>{TANKS.slice(0,2).forEach(t=>{const v=prompt(t[1]+" – litres per cm / لیٹر فی سینٹی میٹر",m.fac[t[0]]||"");if(v!==null)m.fac[t[0]]=n(v)});saveM()};
 $("#addO").onclick=()=>{const e=prompt("Owner email / اونر ای میل");if(e&&m.ow){m.ow.push(e.trim());saveM()}};
@@ -267,12 +281,14 @@ const cdAdd=k=>{const a=n($("#cda").value);if(!a||!m.cu[cdi])return;m.lg.push({c
 $("#date").onchange=e=>{if(e.target.value)load(e.target.value)};
 $("#addU").onclick=()=>{d.ud.push({n:"",t:"",u:"",w:""});draw();save()};
 $("#addK").onclick=()=>{d.kh.push({c:"Other",t:"",a:""});draw();save()};
-$("#addS").onclick=()=>{const a=prompt("Staff name / سٹاف کا نام");if(!a)return;m.st.push({n:a,r:prompt("Role / عہدہ")||"",sal:n(prompt("Salary / تنخواہ")),adv:0});stDraw();saveM()};
+$("#addS").onclick=()=>{const a=prompt("Staff name / سٹاف کا نام");if(!a)return;m.st.push({n:a,r:prompt("Role / عہدہ")||"",sal:n(prompt("Salary / تنخواہ")),adv:0});stDraw();saveM();if(confirm("Login bhi banayen? / لاگ ان بھی بنائیں؟"))mkUser(a)};
 $("#addC").onclick=()=>{const a=prompt("Customer name / کسٹمر کا نام");if(!a)return;m.cu.push({n:a,b:n(prompt("Opening balance / ابتدائی بیلنس")),l:n(prompt("Credit limit / ادھار حد (0 = none)"))});cuDraw();saveM()};
 $("#sf").onclick=()=>{const fu=FUELS.find(x=>x[0]===pos.f),r=n(d[fu[2]]);let a=n(pos.amt),l=n(pos.ltr);if(!r){alert("Set rate on Home / ہوم پر ریٹ لکھیں");return}
- if(a)l=f(a/r);else if(l)a=f(l*r);else return;d.fl.push({f:pos.f,z:pos.nz,l,a,t:Date.now()});pos.amt=pos.ltr="";$("#pc").value="";draw();save()};
+ if(a)l=f(a/r);else if(l)a=f(l*r);else return;d.fl.push({f:pos.f,z:pos.nz,l,a,t:Date.now(),u:(auth.currentUser?.email||"").split("@")[0]});pos.amt=pos.ltr="";$("#pc").value="";draw();save()};
 function ttDraw(t){const e=$(`[data-tab="${t}"]`);if(!e)return;$("#tt").dataset.t=t;$("#tt").innerHTML=[...e.querySelectorAll("h2")].map((h,i)=>`<button class="${i?"":"on"}" data-ti="${i}">${bi(...h.dataset.bi.split("|"))}</button>`).join("")}
-function go(t){cur=t;$$("[data-tab]").forEach(e=>e.classList.toggle("hide",e.dataset.tab!==t));$$("#nav [data-go]").forEach(b=>b.classList.toggle("on",b.dataset.go===t));scrollTo(0,0);ttDraw(t);if(t==="reports")reps();if(t==="home")trend();if(t==="audit")auDraw();if(t==="rates")rtDraw();if(t==="payroll")pyDraw();if(t==="lub")lbDraw()}
+function dayPdf(){const c=T(d),w=open("","_blank");if(!w)return;const L=(a,b)=>`<tr><td style="text-align:left">${a}</td><td style="text-align:right">${b}</td></tr>`;const noz=d.noz.map((x,i)=>`<tr><td>${NOZ[i][0]}</td><td>${x.s}</td><td>${x.e}</td><td>${x.t}</td><td>${fmt(c["nl"+i])}</td><td>${fmt(c["na"+i])}</td></tr>`).join(""),ch=(d.ch||[]).map(x=>`<tr><td>${x.w}</td><td>${x.a}</td><td>${x.y}</td><td>${x.b}</td><td>${x.n}</td></tr>`).join(""),kh=d.kh.filter(x=>n(x.a)).map(x=>`<tr><td>${x.c}</td><td>${x.t}</td><td>${x.a}</td></tr>`).join("");
+w.document.write(`<html><head><meta charset="utf-8"><title>Daata Petroleum ${d.date}</title><style>@page{size:A4;margin:12mm}body{font:12px Tahoma,sans-serif;color:#111}h1{margin:0;font-size:18px}table{width:100%;border-collapse:collapse;margin:6px 0 14px}th,td{border:1px solid #999;padding:4px 6px;text-align:center}th{background:#0a1a3c;color:#f0c850}h3{margin:10px 0 0}</style></head><body><h1>DAATA PETROLEUM (PSO) · داتا پیٹرولیم</h1><div>13KM Vehari Road, Burewala, Near 37 Phatak · 0300-6994891 / 0300-3637489</div><h3>Daily Report / روزانہ رپورٹ — ${d.date} ${d.staff||""}</h3><table>${L("Total Sales",fmt(c.sale))}${L("Total Litres",fmt(c.tL))}${L("Cash Sales",fmt(c.cs))}${L("Credit Sales",fmt(c.udA))}${L("Expenses",fmt(c.khA))}${L("Closing Balance",fmt(c.cb))}</table><h3>Nozzles</h3><table><tr><th>Nozzle</th><th>Open</th><th>Close</th><th>Test</th><th>Ltr</th><th>Amount</th></tr>${noz}</table><h3>Expenses</h3><table><tr><th>Category</th><th>Details</th><th>Amount</th></tr>${kh}</table><h3>Cash Handling</h3><table><tr><th>Taken By</th><th>Amount</th><th>Deposited</th><th>Bank</th><th>Account No</th></tr>${ch}</table></body></html>`);w.document.close();w.print()}
+function go(t){if(window.AL&&t!=="home"&&t!=="cdet"&&!AL.includes(t))return;cur=t;$$("[data-tab]").forEach(e=>e.classList.toggle("hide",e.dataset.tab!==t));$$("#nav [data-go]").forEach(b=>b.classList.toggle("on",b.dataset.go===t));scrollTo(0,0);ttDraw(t);if(t==="reports")reps();if(t==="home")trend();if(t==="audit")auDraw();if(t==="rates")rtDraw();if(t==="payroll")pyDraw();if(t==="lub")lbDraw()}
 let R=[],rm="Daily";
 async function reps(){const el=$("#reps");el.innerHTML=bi("Loading…","لوڈ ہو رہا ہے");
  try{const q=await getDocs(query(collection(db,"days"),orderBy("date","desc"),limit(400)));R=q.docs.map(x=>x.data());rdraw()}catch(e){el.innerHTML=bi("Could not load reports","رپورٹس لوڈ نہیں ہوئیں")}}
@@ -295,6 +311,7 @@ document.addEventListener("click",e=>{const t=e.target,B=s=>t.closest(s);let x;
  if(x=B("[data-dd]")){d.dl.splice(+x.dataset.dd,1);draw();return save()}
  if(x=B("[data-pay]")){const s=m.st[+x.dataset.pay];s.sal=n(prompt("Salary / تنخواہ",s.sal||0));s.adv=n(prompt("Advance / ایڈوانس",s.adv||0));pyDraw();return saveM()}
  if(x=B(".rep[data-d]")){if(x.dataset.d){load(x.dataset.d);go("home")}return}
+ if(B("#dayPdf"))return dayPdf();
  if(B("[data-soon]"))alert("Coming soon / جلد آ رہا ہے");
  if(B("#prof"))alert("Daata Petroleum (PSO)\n13KM Vehari Road, Burewala, Near 37 Phatak\n0300-6994891 / 0300-3637489");
  if(B("#eye")){const p=$("#pw");p.type=p.type==="password"?"text":"password"}});
@@ -304,7 +321,7 @@ $("#lg").onclick=()=>{$("#err").textContent="";signInWithEmailAndPassword(auth,$
 $("#out").onclick=()=>signOut(auth);
 let mu=null;
 onAuthStateChanged(auth,u=>{["#login"].forEach(s=>$(s).classList.toggle("hide",!!u));$("#app").classList.toggle("hide",!u);$("#nav").classList.toggle("hide",!u);
- if(u){load(d.date);trend();mu=onSnapshot(doc(db,"meta","main"),s=>{if(s.exists())m=Object.assign({cu:[],st:[],lg:[],rh:[],fac:{},ls:{},lc:{}},s.data());if(!m.ow&&!s.metadata.fromCache){m.ow=[auth.currentUser.email];saveM()}document.body.classList.toggle("st",!isOwner());stDraw();cuDraw();alDraw();if(isOwner()&&m.ow&&m.lb!==today())backup()})}else{if(unsub)unsub();if(mu)mu()}});
+ if(u){load(d.date);trend();mu=onSnapshot(doc(db,"meta","main"),s=>{if(s.exists())m=Object.assign({cu:[],st:[],lg:[],rh:[],fac:{},ls:{},lc:{}},s.data());if(!m.ow&&!s.metadata.fromCache){m.ow=[auth.currentUser.email];saveM()}applyRole();stDraw();cuDraw();alDraw();if(isOwner()&&m.ow&&m.lb!==today())backup()})}else{if(unsub)unsub();if(mu)mu()}});
 addEventListener("online",()=>status("Syncing…","سنک ہو رہا ہے"));addEventListener("offline",()=>status("Offline","آف لائن"));
 labels();draw();ttDraw("home");if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js");
 </script></body></html>
