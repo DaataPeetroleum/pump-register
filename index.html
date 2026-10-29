@@ -42,6 +42,15 @@ button.alt{background:transparent;color:var(--navy);border:1px solid var(--navy)
 #login input{margin:6px 0;text-align:left}#err{color:var(--bad);font-size:13px;margin-top:6px}.hide{display:none!important}
 body.st [data-own]{display:none!important}
 @media print{.noprint{display:none}}
+
+.card{border-radius:16px;box-shadow:0 2px 8px rgba(10,26,60,.07)}.hd{border-radius:0 0 18px 18px;overflow:hidden}
+.kp .card{border-left:0;display:flex;flex-direction:column;gap:2px}.kp .k1{background:#e6f6ec}.kp .k2{background:#e6effb}.kp .k3{background:#fdf0df}.kp .k4{background:#eeeafc}
+.qa{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.qa button{padding:14px 4px;font-size:12.5px;border-radius:12px;color:#fff}.qa i{display:block;font-style:normal;font-size:22px}
+.q1{background:#16a34a}.q2{background:#2563eb}.q3{background:#6d4fd8}.q4{background:#f07b1a}.q5{background:#d63a3a}.q6{background:#1f2a44}
+.tk-h i{background:#2563eb!important}.tk-p i{background:#16a34a!important}.tk-c i{background:#f59e0b!important}
+.trd{display:flex;gap:6px;align-items:flex-end;height:150px}.tc{flex:1;text-align:center}.tb{height:120px;display:flex;gap:2px;align-items:flex-end;justify-content:center}.tb i{width:28%;border-radius:3px 3px 0 0;min-height:2px}
+.lgd{font-size:11px;display:flex;gap:12px;justify-content:center;margin-top:6px}.sbh{display:none;align-items:center;gap:8px;color:var(--gold2);padding:6px 8px 12px;font-size:15px;line-height:1.1}.sbh img{width:44px;height:44px;border-radius:10px}
+@media(min-width:900px){nav{inset:0 auto 0 0;width:230px;flex-direction:column;overflow-y:auto;border-top:0;border-right:3px solid var(--gold);padding:12px 8px}nav button{display:flex;align-items:center;gap:10px;text-align:left;min-width:0;font-size:13px;padding:8px 10px;margin:2px 0}nav i{font-size:18px}nav button span{text-align:left}.sbh{display:flex}.wrap{margin:0 0 0 230px;max-width:none;padding:0 22px 30px}.hd{margin:0 -22px 10px}.kp{grid-template-columns:repeat(4,1fr)}.qa{grid-template-columns:repeat(6,1fr)}}
 </style></head><body>
 <div id="login" class="hide"><img class="lg" src="icon-192.png" alt="">
 <div class="box"><input id="em" type="email" data-ph="Email|ای میل" autocomplete="username">
@@ -58,12 +67,15 @@ body.st [data-own]{display:none!important}
 <div><label data-bi="Diesel Rate|ڈیزل ریٹ"></label><input data-p="rD" inputmode="decimal"></div>
 <div><label data-bi="CNG Rate|سی این جی ریٹ"></label><input data-p="rC" inputmode="decimal"></div></div>
 <div class="kp">
-<div class="card"><label data-bi="Total Sales|کل سیل"></label><b class="big">Rs. <span data-c="sale">0</span></b></div>
-<div class="card"><label data-bi="Total Litres|کل لیٹر"></label><b class="big"><span data-c="tL">0</span> Ltr</b></div>
-<div class="card"><label data-bi="Cash Sales|کیش سیل"></label><b class="big">Rs. <span data-c="cs">0</span></b></div>
-<div class="card"><label data-bi="Credit Sales|ادھار سیل"></label><b class="big">Rs. <span data-c="udA">0</span></b></div></div>
-<div id="al"></div><h2 data-bi="Fuel Sales (Ltr)|فیول سیل (لیٹر)"></h2><div class="card" id="fbars"></div>
-<div class="row" style="margin-top:12px"><button class="gold" data-go="sales"><span data-bi="New Sale|نئی سیل"></span></button><button class="alt" data-go="expenses"><span data-bi="Expense|خرچہ"></span></button><button class="alt" data-go="dayclose"><span data-bi="Day Close|ڈے کلوز"></span></button></div></section>
+<div class="card k1"><label>📈 <span data-bi="Total Sales|کل سیل"></span></label><b class="big">Rs. <span data-c="sale">0</span></b></div>
+<div class="card k2"><label>💧 <span data-bi="Total Litres|کل لیٹر"></span></label><b class="big"><span data-c="tL">0</span> Ltr</b></div>
+<div class="card k3"><label>💵 <span data-bi="Cash Sales|کیش سیل"></span></label><b class="big">Rs. <span data-c="cs">0</span></b></div>
+<div class="card k4"><label>💳 <span data-bi="Credit Sales|ادھار سیل"></span></label><b class="big">Rs. <span data-c="udA">0</span></b></div></div>
+<div id="al"></div><h2 data-bi="Quick Actions|فوری اعمال"></h2>
+<div class="qa"><button class="q1" data-go="sales"><i>⛽</i><span data-bi="New Fuel Sale|نئی فیول سیل"></span></button><button class="q2" data-go="fueling"><i>🔢</i><span data-bi="Nozzle Readings|نوزل ریڈنگز"></span></button><button class="q3" data-go="stock"><i>📦</i><span data-bi="Stock Entry|سٹاک اندراج"></span></button><button class="q4" data-go="expenses"><i>🧾</i><span data-bi="Add Expense|خرچہ شامل کریں"></span></button><button class="q5" data-go="customers"><i>👥</i><span data-bi="Credit Customer|ادھار کسٹمر"></span></button><button class="q6" data-go="dayclose"><i>🔒</i><span data-bi="Day Close|ڈے کلوز"></span></button></div>
+<div class="grid2"><div><h2 data-bi="Fuel Sales (Ltr)|فیول سیل (لیٹر)"></h2><div class="card" id="fbars"></div></div><div><h2 data-bi="Tank Stock Summary|ٹینک سٹاک خلاصہ"></h2><div class="card" id="tks"></div></div></div>
+<h2 data-bi="Sales Trend (Last 7 Days)|سیل ٹرینڈ (پچھلے 7 دن)"></h2><div class="card"><div class="trd" id="trd"></div><div class="lgd"><span style="color:#2563eb">■ HSD</span><span style="color:#16a34a">■ Petrol</span><span style="color:#f59e0b">■ CNG</span></div></div>
+<h2 data-bi="Recent Transactions|حالیہ لین دین"></h2><div class="scroll"><table><thead><tr><th data-bi="Time|وقت"></th><th data-bi="Type|قسم"></th><th data-bi="Details|تفصیل"></th><th data-bi="Amount|رقم"></th></tr></thead><tbody id="rec"></tbody></table></div></section>
 
 <section data-tab="sales" class="hide"><h2 data-bi="Fuel Sales (POS)|فیول سیل (پی او ایس)"></h2>
 <div class="chips" id="pf"></div>
@@ -140,7 +152,7 @@ body.st [data-own]{display:none!important}
 <section data-tab="audit" class="hide"><h2 data-bi="Audit Log|آڈٹ لاگ"></h2><div class="card" id="aul"></div></section>
 </div>
 
-<nav id="nav" class="noprint hide">
+<nav id="nav" class="noprint hide"><div class="sbh"><img src="icon-192.png" alt=""><b>DAATA<br>PETROLEUM</b></div>
 <button data-go="home" class="on"><i>🏠</i><span data-bi="Home|ہوم"></span></button><button data-go="sales"><i>⛽</i><span data-bi="Sales|سیل"></span></button><button data-go="fueling"><i>🔢</i><span data-bi="Fueling|فیولنگ"></span></button><button data-go="stock"><i>📦</i><span data-bi="Stock|سٹاک"></span></button><button data-go="accounts"><i>💰</i><span data-bi="Accounts|اکاؤنٹس"></span></button><button data-own data-go="reports"><i>📊</i><span data-bi="Reports|رپورٹس"></span></button><button data-go="expenses"><i>🧾</i><span data-bi="Expenses|خرچہ"></span></button><button data-own data-go="staff"><i>👥</i><span data-bi="Staff|سٹاف"></span></button><button data-own data-go="more"><i>⋯</i><span data-bi="More|مزید"></span></button>
 </nav>
 <script type="module">
@@ -182,8 +194,11 @@ function set(p,v){const k=p.split(".");const l=k.pop();k.reduce((o,x)=>o[x]??={}
 function calc(){const c=T(d);alDraw();$$("[data-c]").forEach(e=>e.textContent=fmt(c[e.dataset.c]??0));
  $("#close").innerHTML=d.closed?bi("Day Closed ✓ (close again)","ڈے کلوز ہو چکا ✓ (دوبارہ کلوز)"):bi("Close Day","ڈے کلوز کریں");
  const mx=Math.max(c.hL,c.pL,c.cL,1);$("#fbars").innerHTML=[["HSD","ایچ ایس ڈی",c.hL],["Petrol","پیٹرول",c.pL],["CNG","سی این جی",c.cL]].map(x=>`<div style="margin:6px 0"><div class="ln"><span>${bi(x[0],x[1])}</span><b>${fmt(x[2])}</b></div><div class="bar"><i style="width:${x[2]/mx*100}%"></i></div></div>`).join("");
- tkBars();
+ tkBars();tkSum();recDraw();
  }
+function tkSum(){$("#tks").innerHTML=TANKS.map(t=>{const v=n(d.dip[t[0]]),p=Math.min(100,Math.round(v/t[3]*100));return`<div class="ln"><span>${bi(t[1],t[2])}</span><b>${fmt(v)} Ltr · ${p}%</b></div><div class="bar tk-${t[0]}"><i style="width:${p}%"></i></div>`}).join("")}
+function recDraw(){const r=[...d.fl.map(x=>({t:x.t,y:"Fuel Sale",a:x.a,x:`${x.f} - Nozzle ${x.z} (${fmt(x.l)} Ltr)`})),...d.kh.filter(x=>n(x.a)).map(x=>({y:"Expense",a:-n(x.a),x:x.c+(x.t?" - "+x.t:"")}))].slice(-6).reverse();$("#rec").innerHTML=r.length?r.map(x=>`<tr><td>${x.t?new Date(x.t).toTimeString().slice(0,5):"-"}</td><td>${x.y}</td><td style="text-align:left">${x.x}</td><td class="${x.a<0?"r":""}">Rs. ${fmt(Math.abs(x.a))}</td></tr>`).join(""):`<tr><td colspan="4">-</td></tr>`}
+async function trend(){try{const q=await getDocs(query(collection(db,"days"),orderBy("date","desc"),limit(7)));const L=q.docs.map(x=>{const r=x.data();return{k:r.date,c:T(Object.assign(blank(r.date),r))}}).reverse();const mx=Math.max(1,...L.flatMap(x=>[x.c.hL,x.c.pL,x.c.cL]));$("#trd").innerHTML=L.map(x=>`<div class="tc"><div class="tb">${[["hL","#2563eb"],["pL","#16a34a"],["cL","#f59e0b"]].map(([k,c])=>`<i style="height:${x.c[k]/mx*100}%;background:${c}"></i>`).join("")}</div><small>${x.k.slice(8)}/${x.k.slice(5,7)}</small></div>`).join("")}catch(e){}}
 function tkDraw(){$("#tanks").innerHTML=TANKS.map(t=>{const v=n(d.dip[t[0]]),p=Math.min(100,Math.round(v/t[3]*100));return`<div class="card" style="margin-bottom:10px"><div class="ln"><b>${bi(t[1],t[2])}</b><span data-tp="${t[0]}">${p}%</span></div><div class="bar"><i data-tb="${t[0]}" style="width:${p}%"></i></div><div class="ln"><span>${bi("Dip (cm)","ڈپ (سینٹی میٹر)")}</span>${inp("dc."+t[0],d.dc[t[0]])}</div><div class="ln"><span data-x>${bi("Current Stock (Ltr)","موجودہ سٹاک (لیٹر)")}</span>${inp("dip."+t[0],d.dip[t[0]])}</div><small>${bi("Capacity","گنجائش")} ${fmt(t[3])} Ltr</small></div>`}).join("");
 }
 function tkBars(){TANKS.forEach(t=>{const p=Math.min(100,Math.round(n(d.dip[t[0]])/t[3]*100));const a=$(`[data-tp="${t[0]}"]`),b=$(`[data-tb="${t[0]}"]`);if(a)a.textContent=p+"%";if(b)b.style.width=p+"%"})}
@@ -241,8 +256,8 @@ $("#addK").onclick=()=>{d.kh.push({c:"Other",t:"",a:""});draw();save()};
 $("#addS").onclick=()=>{const a=prompt("Staff name / سٹاف کا نام");if(!a)return;m.st.push({n:a,r:prompt("Role / عہدہ")||"",sal:n(prompt("Salary / تنخواہ")),adv:0});stDraw();saveM()};
 $("#addC").onclick=()=>{const a=prompt("Customer name / کسٹمر کا نام");if(!a)return;m.cu.push({n:a,b:n(prompt("Opening balance / ابتدائی بیلنس")),l:n(prompt("Credit limit / ادھار حد (0 = none)"))});cuDraw();saveM()};
 $("#sf").onclick=()=>{const fu=FUELS.find(x=>x[0]===pos.f),r=n(d[fu[2]]);let a=n(pos.amt),l=n(pos.ltr);if(!r){alert("Set rate on Home / ہوم پر ریٹ لکھیں");return}
- if(a)l=f(a/r);else if(l)a=f(l*r);else return;d.fl.push({f:pos.f,z:pos.nz,l,a});pos.amt=pos.ltr="";$("#pc").value="";draw();save()};
-function go(t){cur=t;$$("[data-tab]").forEach(e=>e.classList.toggle("hide",e.dataset.tab!==t));$$("#nav [data-go]").forEach(b=>b.classList.toggle("on",b.dataset.go===t));scrollTo(0,0);if(t==="reports")reps();if(t==="audit")auDraw();if(t==="rates")rtDraw();if(t==="payroll")pyDraw();if(t==="lub")lbDraw()}
+ if(a)l=f(a/r);else if(l)a=f(l*r);else return;d.fl.push({f:pos.f,z:pos.nz,l,a,t:Date.now()});pos.amt=pos.ltr="";$("#pc").value="";draw();save()};
+function go(t){cur=t;$$("[data-tab]").forEach(e=>e.classList.toggle("hide",e.dataset.tab!==t));$$("#nav [data-go]").forEach(b=>b.classList.toggle("on",b.dataset.go===t));scrollTo(0,0);if(t==="reports")reps();if(t==="home")trend();if(t==="audit")auDraw();if(t==="rates")rtDraw();if(t==="payroll")pyDraw();if(t==="lub")lbDraw()}
 let R=[],rm="Daily";
 async function reps(){const el=$("#reps");el.innerHTML=bi("Loading…","لوڈ ہو رہا ہے");
  try{const q=await getDocs(query(collection(db,"days"),orderBy("date","desc"),limit(400)));R=q.docs.map(x=>x.data());rdraw()}catch(e){el.innerHTML=bi("Could not load reports","رپورٹس لوڈ نہیں ہوئیں")}}
@@ -273,7 +288,7 @@ $("#lg").onclick=()=>{$("#err").textContent="";signInWithEmailAndPassword(auth,$
 $("#out").onclick=()=>signOut(auth);
 let mu=null;
 onAuthStateChanged(auth,u=>{["#login"].forEach(s=>$(s).classList.toggle("hide",!!u));$("#app").classList.toggle("hide",!u);$("#nav").classList.toggle("hide",!u);
- if(u){load(d.date);mu=onSnapshot(doc(db,"meta","main"),s=>{if(s.exists())m=Object.assign({cu:[],st:[],lg:[],rh:[],fac:{},ls:{},lc:{}},s.data());if(!m.ow&&!s.metadata.fromCache){m.ow=[auth.currentUser.email];saveM()}document.body.classList.toggle("st",!isOwner());stDraw();cuDraw();alDraw();if(isOwner()&&m.ow&&m.lb!==today())backup()})}else{if(unsub)unsub();if(mu)mu()}});
+ if(u){load(d.date);trend();mu=onSnapshot(doc(db,"meta","main"),s=>{if(s.exists())m=Object.assign({cu:[],st:[],lg:[],rh:[],fac:{},ls:{},lc:{}},s.data());if(!m.ow&&!s.metadata.fromCache){m.ow=[auth.currentUser.email];saveM()}document.body.classList.toggle("st",!isOwner());stDraw();cuDraw();alDraw();if(isOwner()&&m.ow&&m.lb!==today())backup()})}else{if(unsub)unsub();if(mu)mu()}});
 addEventListener("online",()=>status("Syncing…","سنک ہو رہا ہے"));addEventListener("offline",()=>status("Offline","آف لائن"));
 labels();draw();if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js");
 </script></body></html>
