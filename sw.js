@@ -1,5 +1,5 @@
-const C="pump-v2";
-self.addEventListener("install",e=>{self.skipWaiting();e.waitUntil(caches.open(C).then(c=>c.addAll(["./","index.html","manifest.json","icon-192.png","logo.png","pso.png"])))});
+const C="pump-v3";
+self.addEventListener("install",e=>{self.skipWaiting();e.waitUntil(caches.open(C).then(c=>c.addAll(["./","index.html","manifest.json","icon-192.png","logo.png","pso.png","header.jpg"])))});
 self.addEventListener("activate",e=>e.waitUntil(clients.claim()));
 self.addEventListener("fetch",e=>{
  const u=new URL(e.request.url);
