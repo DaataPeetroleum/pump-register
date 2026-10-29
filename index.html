@@ -51,6 +51,16 @@ body.st [data-own]{display:none!important}
 .trd{display:flex;gap:6px;align-items:flex-end;height:150px}.tc{flex:1;text-align:center}.tb{height:120px;display:flex;gap:2px;align-items:flex-end;justify-content:center}.tb i{width:28%;border-radius:3px 3px 0 0;min-height:2px}
 .lgd{font-size:11px;display:flex;gap:12px;justify-content:center;margin-top:6px}.sbh{display:none;align-items:center;gap:8px;color:var(--gold2);padding:6px 8px 12px;font-size:15px;line-height:1.1}.sbh img{width:44px;height:44px;border-radius:10px}
 @media(min-width:900px){nav{inset:0 auto 0 0;width:230px;flex-direction:column;overflow-y:auto;border-top:0;border-right:3px solid var(--gold);padding:12px 8px}nav button{display:flex;align-items:center;gap:10px;text-align:left;min-width:0;font-size:13px;padding:8px 10px;margin:2px 0}nav i{font-size:18px}nav button span{text-align:left}.sbh{display:flex}.wrap{margin:0 0 0 230px;max-width:none;padding:0 22px 30px}.hd{margin:0 -22px 10px}.kp{grid-template-columns:repeat(4,1fr)}.qa{grid-template-columns:repeat(6,1fr)}}
+
+#st{position:fixed;top:calc(9px + env(safe-area-inset-top));right:10px;z-index:15}h2{scroll-margin-top:66px}
+nav{background:rgba(255,255,255,.9);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid #e5e5ea}nav button{color:#3a4258}nav i svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.tt{position:sticky;top:0;z-index:12;display:flex;gap:8px;overflow-x:auto;margin:0 -12px 8px;padding:9px 118px 9px 12px;background:rgba(255,255,255,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(0,0,0,.08)}
+.tt button,.seg button,.chip{background:linear-gradient(180deg,#fff,#eeeef2);color:#111;border:1px solid rgba(0,0,0,.08);box-shadow:0 1px 3px rgba(0,0,0,.14),inset 0 1px 0 #fff}
+.tt button{flex:0 0 auto;border-radius:20px;padding:6px 14px;font-size:12.5px;white-space:nowrap}
+.tt button.on,.seg button.on,.chip.on{background:linear-gradient(180deg,#505054 0%,#17171a 50%,#000 100%);color:#fff;border-color:#000;box-shadow:0 2px 6px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.35)}
+.seg{background:rgba(120,120,128,.16);border-radius:16px;padding:4px;position:sticky;top:56px;z-index:8}.seg button{border-radius:12px}
+.sbh img{width:46px;height:46px}.sbh{color:var(--ink);align-items:flex-start}.sbh b{display:block;color:var(--navy);font-size:15px}.sbh span{display:block;font-size:11px;color:var(--gold);font-weight:700}.sbh small{font-size:10.5px;color:var(--mute);margin-top:2px}
+@media(min-width:900px){nav{background:rgba(255,255,255,.92);border-right:1px solid #e5e5ea}nav button{font-size:13px}.tt{margin:0 -22px 8px;padding-left:22px}}
 </style></head><body>
 <div id="login" class="hide"><img class="lg" src="icon-192.png" alt="">
 <div class="box"><input id="em" type="email" data-ph="Email|ای میل" autocomplete="username">
@@ -58,7 +68,7 @@ body.st [data-own]{display:none!important}
 <button id="lg" class="gold" style="width:100%;margin-top:6px"><span data-bi="Login|لاگ ان"></span></button><div id="err"></div></div></div>
 
 <div id="app" class="wrap hide">
-<header class="hd"><img src="header.jpg" alt="Daata Petroleum"><span id="st">…</span></header>
+<div id="tt" class="tt noprint"></div><span id="st">…</span>
 
 <section data-tab="home"><h2 data-bi="Today's Dashboard|آج کا ڈیش بورڈ"></h2>
 <div class="row"><div><label data-bi="Date|تاریخ"></label><input type="date" id="date"></div>
@@ -72,7 +82,7 @@ body.st [data-own]{display:none!important}
 <div class="card k3"><label>💵 <span data-bi="Cash Sales|کیش سیل"></span></label><b class="big">Rs. <span data-c="cs">0</span></b></div>
 <div class="card k4"><label>💳 <span data-bi="Credit Sales|ادھار سیل"></span></label><b class="big">Rs. <span data-c="udA">0</span></b></div></div>
 <div id="al"></div><h2 data-bi="Quick Actions|فوری اعمال"></h2>
-<div class="qa"><button class="q1" data-go="sales"><i>⛽</i><span data-bi="New Fuel Sale|نئی فیول سیل"></span></button><button class="q2" data-go="fueling"><i>🔢</i><span data-bi="Nozzle Readings|نوزل ریڈنگز"></span></button><button class="q3" data-go="stock"><i>📦</i><span data-bi="Stock Entry|سٹاک اندراج"></span></button><button class="q4" data-go="expenses"><i>🧾</i><span data-bi="Add Expense|خرچہ شامل کریں"></span></button><button class="q5" data-go="customers"><i>👥</i><span data-bi="Credit Customer|ادھار کسٹمر"></span></button><button class="q6" data-go="dayclose"><i>🔒</i><span data-bi="Day Close|ڈے کلوز"></span></button></div>
+<div class="qa"><button class="q1" data-go="sales"><i><svg viewBox="0 0 24 24"><path d="M4 21V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v16M3 21h12"/><rect x="6" y="6" width="6" height="5"/><path d="M14 9h2a2 2 0 0 1 2 2v5a1.5 1.5 0 0 0 3 0V8l-3-3"/></svg></i><span data-bi="New Fuel Sale|نئی فیول سیل"></span></button><button class="q2" data-go="fueling"><i><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 13l4-4M12 5v2M4.5 13h2M17.5 13h2"/></svg></i><span data-bi="Nozzle Readings|نوزل ریڈنگز"></span></button><button class="q3" data-go="stock"><i><svg viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg></i><span data-bi="Stock Entry|سٹاک اندراج"></span></button><button class="q4" data-go="expenses"><i><svg viewBox="0 0 24 24"><path d="M5 3h14v18l-3-2-2 2-2-2-2 2-2-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg></i><span data-bi="Add Expense|خرچہ شامل کریں"></span></button><button class="q5" data-go="customers"><i>👥</i><span data-bi="Credit Customer|ادھار کسٹمر"></span></button><button class="q6" data-go="dayclose"><i>🔒</i><span data-bi="Day Close|ڈے کلوز"></span></button></div>
 <div class="grid2"><div><h2 data-bi="Fuel Sales (Ltr)|فیول سیل (لیٹر)"></h2><div class="card" id="fbars"></div></div><div><h2 data-bi="Tank Stock Summary|ٹینک سٹاک خلاصہ"></h2><div class="card" id="tks"></div></div></div>
 <h2 data-bi="Sales Trend (Last 7 Days)|سیل ٹرینڈ (پچھلے 7 دن)"></h2><div class="card"><div class="trd" id="trd"></div><div class="lgd"><span style="color:#2563eb">■ HSD</span><span style="color:#16a34a">■ Petrol</span><span style="color:#f59e0b">■ CNG</span></div></div>
 <h2 data-bi="Recent Transactions|حالیہ لین دین"></h2><div class="scroll"><table><thead><tr><th data-bi="Time|وقت"></th><th data-bi="Type|قسم"></th><th data-bi="Details|تفصیل"></th><th data-bi="Amount|رقم"></th></tr></thead><tbody id="rec"></tbody></table></div></section>
@@ -152,8 +162,8 @@ body.st [data-own]{display:none!important}
 <section data-tab="audit" class="hide"><h2 data-bi="Audit Log|آڈٹ لاگ"></h2><div class="card" id="aul"></div></section>
 </div>
 
-<nav id="nav" class="noprint hide"><div class="sbh"><img src="icon-192.png" alt=""><b>DAATA<br>PETROLEUM</b></div>
-<button data-go="home" class="on"><i>🏠</i><span data-bi="Home|ہوم"></span></button><button data-go="sales"><i>⛽</i><span data-bi="Sales|سیل"></span></button><button data-go="fueling"><i>🔢</i><span data-bi="Fueling|فیولنگ"></span></button><button data-go="stock"><i>📦</i><span data-bi="Stock|سٹاک"></span></button><button data-go="accounts"><i>💰</i><span data-bi="Accounts|اکاؤنٹس"></span></button><button data-own data-go="reports"><i>📊</i><span data-bi="Reports|رپورٹس"></span></button><button data-go="expenses"><i>🧾</i><span data-bi="Expenses|خرچہ"></span></button><button data-own data-go="staff"><i>👥</i><span data-bi="Staff|سٹاف"></span></button><button data-own data-go="more"><i>⋯</i><span data-bi="More|مزید"></span></button>
+<nav id="nav" class="noprint hide"><div class="sbh"><img src="icon-192.png" alt=""><div><b>DAATA PETROLEUM</b><span>in partnership with PSO</span><small>13KM Vehari Road, Burewala, Near 37 Phatak</small><small>0300-6994891 / 0300-3637489</small></div></div>
+<button data-go="home" class="on"><i><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg></i><span data-bi="Home|ہوم"></span></button><button data-go="sales"><i>⛽</i><span data-bi="Sales|سیل"></span></button><button data-go="fueling"><i>🔢</i><span data-bi="Fueling|فیولنگ"></span></button><button data-go="stock"><i>📦</i><span data-bi="Stock|سٹاک"></span></button><button data-go="accounts"><i><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h13v4"/><path d="M3 7v11a2 2 0 0 0 2 2h15V9H5a2 2 0 0 1-2-2z"/><circle cx="16" cy="14.5" r="1"/></svg></i><span data-bi="Accounts|اکاؤنٹس"></span></button><button data-own data-go="reports"><i><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg></i><span data-bi="Reports|رپورٹس"></span></button><button data-go="expenses"><i>🧾</i><span data-bi="Expenses|خرچہ"></span></button><button data-own data-go="staff"><i><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.5 3-6 6.5-6s6.5 2.5 6.5 6M16 4.5a3.5 3.5 0 0 1 0 7M18 14c2.5.6 4 2.6 4 6"/></svg></i><span data-bi="Staff|سٹاف"></span></button><button data-own data-go="more"><i><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></i><span data-bi="More|مزید"></span></button>
 </nav>
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -257,7 +267,8 @@ $("#addS").onclick=()=>{const a=prompt("Staff name / سٹاف کا نام");if(!
 $("#addC").onclick=()=>{const a=prompt("Customer name / کسٹمر کا نام");if(!a)return;m.cu.push({n:a,b:n(prompt("Opening balance / ابتدائی بیلنس")),l:n(prompt("Credit limit / ادھار حد (0 = none)"))});cuDraw();saveM()};
 $("#sf").onclick=()=>{const fu=FUELS.find(x=>x[0]===pos.f),r=n(d[fu[2]]);let a=n(pos.amt),l=n(pos.ltr);if(!r){alert("Set rate on Home / ہوم پر ریٹ لکھیں");return}
  if(a)l=f(a/r);else if(l)a=f(l*r);else return;d.fl.push({f:pos.f,z:pos.nz,l,a,t:Date.now()});pos.amt=pos.ltr="";$("#pc").value="";draw();save()};
-function go(t){cur=t;$$("[data-tab]").forEach(e=>e.classList.toggle("hide",e.dataset.tab!==t));$$("#nav [data-go]").forEach(b=>b.classList.toggle("on",b.dataset.go===t));scrollTo(0,0);if(t==="reports")reps();if(t==="home")trend();if(t==="audit")auDraw();if(t==="rates")rtDraw();if(t==="payroll")pyDraw();if(t==="lub")lbDraw()}
+function ttDraw(t){const e=$(`[data-tab="${t}"]`);if(!e)return;$("#tt").dataset.t=t;$("#tt").innerHTML=[...e.querySelectorAll("h2")].map((h,i)=>`<button class="${i?"":"on"}" data-ti="${i}">${bi(...h.dataset.bi.split("|"))}</button>`).join("")}
+function go(t){cur=t;$$("[data-tab]").forEach(e=>e.classList.toggle("hide",e.dataset.tab!==t));$$("#nav [data-go]").forEach(b=>b.classList.toggle("on",b.dataset.go===t));scrollTo(0,0);ttDraw(t);if(t==="reports")reps();if(t==="home")trend();if(t==="audit")auDraw();if(t==="rates")rtDraw();if(t==="payroll")pyDraw();if(t==="lub")lbDraw()}
 let R=[],rm="Daily";
 async function reps(){const el=$("#reps");el.innerHTML=bi("Loading…","لوڈ ہو رہا ہے");
  try{const q=await getDocs(query(collection(db,"days"),orderBy("date","desc"),limit(400)));R=q.docs.map(x=>x.data());rdraw()}catch(e){el.innerHTML=bi("Could not load reports","رپورٹس لوڈ نہیں ہوئیں")}}
@@ -267,6 +278,7 @@ function rdraw(){const el=$("#reps");let L=R.map(r=>({k:r.date,c:T(Object.assign
  el.innerHTML=L.length?L.map(x=>`<div class="rep" data-d="${rm==="Daily"?x.k:""}" style="${rm==="Daily"?"cursor:pointer":""}"><span>${x.k}${x.z?" ✓":""}</span><span style="text-align:right">${bi("Sale "+fmt(f(x.c.sale))+" · "+fmt(f(x.c.tL))+" L","سیل / لیٹر")}<small>${bi("Exp "+fmt(f(x.c.khA))+" · Cash "+fmt(f(x.c.cash)),"خرچہ / کیش")}</small></span></div>`).join(""):bi("No records yet","ابھی کوئی ریکارڈ نہیں")}
 $("#rf").onchange=$("#rt").onchange=rdraw;
 document.addEventListener("click",e=>{const t=e.target,B=s=>t.closest(s);let x;
+ if(x=B("[data-ti]")){$$("#tt button").forEach(b=>b.classList.toggle("on",b===x));$(`[data-tab="${$("#tt").dataset.t}"]`).querySelectorAll("h2")[+x.dataset.ti].scrollIntoView({behavior:"smooth",block:"start"});return}
  if(x=B("[data-seg]")){const[g,v]=x.dataset.seg.split(":");x.parentElement.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b===x));$$(`[data-pane^="${g}:"]`).forEach(p=>p.classList.toggle("hide",p.dataset.pane!==x.dataset.seg));if(g==="rp"){rm=v;$("#rcus").classList.toggle("hide",v!=="Custom");rdraw()}return}
  if(x=B("[data-go]"))return go(x.dataset.go);
  if(x=B("[data-pf]")){pos.f=x.dataset.pf;pos.nz=pos.f==="Petrol"?5:1;return flDraw()}
@@ -290,5 +302,5 @@ let mu=null;
 onAuthStateChanged(auth,u=>{["#login"].forEach(s=>$(s).classList.toggle("hide",!!u));$("#app").classList.toggle("hide",!u);$("#nav").classList.toggle("hide",!u);
  if(u){load(d.date);trend();mu=onSnapshot(doc(db,"meta","main"),s=>{if(s.exists())m=Object.assign({cu:[],st:[],lg:[],rh:[],fac:{},ls:{},lc:{}},s.data());if(!m.ow&&!s.metadata.fromCache){m.ow=[auth.currentUser.email];saveM()}document.body.classList.toggle("st",!isOwner());stDraw();cuDraw();alDraw();if(isOwner()&&m.ow&&m.lb!==today())backup()})}else{if(unsub)unsub();if(mu)mu()}});
 addEventListener("online",()=>status("Syncing…","سنک ہو رہا ہے"));addEventListener("offline",()=>status("Offline","آف لائن"));
-labels();draw();if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js");
+labels();draw();ttDraw("home");if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js");
 </script></body></html>
