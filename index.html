@@ -159,7 +159,8 @@ section[data-tab]:not([data-tab=home])>h2:first-child{display:none}#posbox .chip
 <div class="scroll"><table><thead><tr><th data-bi="Item|آئٹم"></th><th data-bi="Qty|تعداد"></th><th data-bi="Rate|ریٹ"></th><th data-bi="Amount|رقم"></th><th class="pe"></th></tr></thead><tbody id="itm"></tbody>
 <tfoot><tr><td data-bi="Total|کل"></td><td></td><td></td><td data-c="itmA">0</td><td></td></tr></tfoot></table></div><div class="card" style="margin-top:8px"><div class="ln"><span data-bi="Margin|منافع"></span><b data-c="mg">0</b></div></div></section>
 
-<section data-tab="fueling" class="hide"><h2 data-bi="Nozzle Readings|نوزل ریڈنگز"></h2><p class="noprint" id="subN"><button class="gold" id="subNb" style="width:100%"><span data-bi="Submit Readings for Approval|ریڈنگز منظوری کے لیے بھیجیں"></span></button></p>
+<section data-tab="fueling" class="hide"><h2 data-bi="Nozzle Readings|نوزل ریڈنگز"></h2>
+<div class="card noprint" style="display:flex;gap:8px;align-items:center;margin-bottom:8px"><button class="alt" id="nzp" type="button" style="padding:6px 12px">‹</button><input type="date" id="nzd" style="flex:1"><button class="alt" id="nzn" type="button" style="padding:6px 12px">›</button><button class="alt" id="nzt" type="button" style="padding:6px 10px"><span data-bi="Today|آج"></span></button></div><div id="nzi" class="noprint" style="font-size:12px;margin:-2px 2px 8px"></div><p class="noprint" id="subN"><button class="gold" id="subNb" style="width:100%"><span data-bi="Submit Readings for Approval|ریڈنگز منظوری کے لیے بھیجیں"></span></button></p>
 <div class="scroll"><table><thead><tr><th data-bi="Nozzle|نوزل"></th><th data-bi="Opening|شروع"></th><th data-bi="Closing|آخر"></th><th data-bi="Test (Ltr)|ٹیسٹ (لیٹر)"></th><th data-bi="Sales (Ltr)|سیل (لیٹر)"></th><th data-bi="Amount|رقم"></th><th class="pe"></th></tr></thead><tbody id="noz"></tbody>
 <tfoot><tr><td data-bi="Total Sales|کل سیل"></td><td></td><td></td><td></td><td data-c="nozL">0</td><td data-c="nozA">0</td><td></td></tr></tfoot></table></div></section>
 
@@ -261,7 +262,7 @@ const inp=(p,v,ph="",mo="decimal")=>`<input data-p="${p}" inputmode="${mo}" plac
 const IC={pen:'<svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>',ok:'<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7"/></svg>',del:'<svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></svg>',eye:'<svg viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',eyeoff:'<svg viewBox="0 0 24 24"><path d="M3 3l18 18M10.6 6.2A9.6 9.6 0 0 1 12 6c6 0 10 6 10 6a17 17 0 0 1-3.2 3.7M6.5 7.5C3.8 9.3 2 12 2 12s4 7 10 7c1.6 0 3-.4 4.3-1M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>'};
 const pe=(s,i,nd)=>`<td class="pe"><a class="pen" data-pen>${IC.pen}</a>${nd?"":`<a class="pen dl" data-del="${s}:${i}">${IC.del}</a>`}</td>`;
 const dfmt=s=>s?String(s).split("-").reverse().join("/"):"";
-function dtb(){const e=$("#dtb");if(!e)return;e.textContent=dfmt(d.date).slice(0,5);e.style.color=d.date===today()?"":"var(--bad)";e.title=d.date}
+function dtb(){const z=$("#nzd");if(z){z.value=d.date;const i=$("#nzi");if(i){const p=d.date!==today();i.style.color=p?"var(--bad)":"var(--mute)";i.textContent=p?"Purani date / پرانی تاریخ: "+dfmt(d.date)+" — pencil se edit":""}}const e=$("#dtb");if(!e)return;e.textContent=dfmt(d.date).slice(0,5);e.style.color=d.date===today()?"":"var(--bad)";e.title=d.date}
 const aud=(p,o,nn,dt)=>auth.currentUser&&addDoc(collection(db,"audit"),{t:Date.now(),u:auth.currentUser.email,d:dt||d.date,p,o:String(o),n:String(nn)}).catch(()=>{});
 function ask(t,fs,o={}){return new Promise(res=>{const el=document.createElement("div");el.id="md";
  const h=(fs||[]).map((f,i)=>f.sel?`<label>${f.l}</label><select data-f="${i}">${f.sel.map(x=>`<option${x===f.v?" selected":""}>${x}</option>`).join("")}</select>`:`<label>${f.l}</label><input data-f="${i}" type="${f.ty||"text"}" inputmode="${f.im||"text"}" value="${String(f.v??"").replace(/"/g,"&quot;")}">`).join("");
@@ -455,6 +456,7 @@ $("#tkset").onclick=()=>{TANKS.slice(0,2).forEach(t=>{const v=prompt(t[1]+" – 
 $("#addO").onclick=()=>{const e=prompt("Owner email / اونر ای میل");if(e&&m.ow){m.ow.push(e.trim());saveM()}};
 const cdAdd=k=>{const a=n($("#cda").value);if(!a||!m.cu[cdi])return;m.lg.push({c:m.cu[cdi].n,k,a,d:$("#cdd").value||d.date,t:Date.now()});$("#cda").value="";$("#cdd").value=d.date;cdShow=true;cdDraw();cuDraw();alDraw();saveM()};$("#cdc").onclick=()=>cdAdd("credit");$("#cdp").onclick=()=>cdAdd("pay");
 $("#date").onchange=e=>{if(e.target.value)load(e.target.value)};
+{const sh=k=>{const t=new Date(d.date+"T00:00:00Z");t.setUTCDate(t.getUTCDate()+k);load(t.toISOString().slice(0,10))};$("#nzd").onchange=e=>{if(e.target.value)load(e.target.value)};$("#nzp").onclick=()=>sh(-1);$("#nzn").onclick=()=>sh(1);$("#nzt").onclick=()=>load(today())}
 $("#addU").onclick=()=>{d.ud.push({n:"",t:"",u:"",w:""});draw();save()};
 $("#addK").onclick=()=>{d.kh.push({c:"Other",t:"",a:""});draw();save()};
 $("#addS").onclick=()=>{const a=prompt("Staff name / سٹاف کا نام");if(!a)return;const r=prompt("Type: nozzle staff, guard, cleaner... / عہدہ")||"",sd=prompt("Start date YYYY-MM-DD / شروع کی تاریخ",today())||today(),pt=(prompt("Pay type: m = Monthly, d = Daily","m")||"m").toLowerCase().startsWith("d")?"daily":"monthly";m.st.push({n:a,r,sd,pt,sal:n(prompt("Salary or daily rate / تنخواہ یا روزانہ")),adv:0,av:[]});stDraw();pyDraw();saveM();if(/nozzle|نوزل/i.test(r)&&confirm("Login bhi banayen? / لاگ ان بھی بنائیں؟"))mkUser(a)};
@@ -558,7 +560,7 @@ document.addEventListener("click",e=>{const t=e.target,B=s=>t.closest(s);let x;
  if(x=B("[data-pn]")){pos.nz=+x.dataset.pn;return flDraw()}
  if(x=B("[data-pa]")){pos.amt=x.dataset.pa;pos.ltr="";$("#pc").value=pos.amt;return flDraw()}
  if(x=B("[data-pl]")){pos.ltr=x.dataset.pl;pos.amt="";$("#pc").value="";return flDraw()}
- if(x=B("[data-pen]")){const g=gOf(x);if(!g)return;if(g.dataset.ul)delete g.dataset.ul;else g.dataset.ul="1";lockApply();if(g.dataset.ul){const i=g.querySelector("input:not([type=checkbox]),select");if(i)i.focus()}return}
+ if(x=B("[data-pen]")){const g=gOf(x);if(!g)return;if(cur==="fueling"&&d.date!==today()&&!g.dataset.ul&&!confirm("Warning / خبردار: Aap purani date ("+dfmt(d.date)+") ki reading edit kar rahe hain. Aage barhein? / پرانی تاریخ کی ریڈنگ تبدیل ہو رہی ہے"))return;if(g.dataset.ul)delete g.dataset.ul;else g.dataset.ul="1";lockApply();if(g.dataset.ul){const i=g.querySelector("input:not([type=checkbox]),select");if(i)i.focus()}return}
  if(x=B("[data-del]")){const[a,b]=x.dataset.del.split(":");return delEntry(a,+b)}
  if(x=B("[data-fe]"))return editFl(+x.dataset.fe);
  if(x=B("[data-de]"))return editDl(+x.dataset.de);
