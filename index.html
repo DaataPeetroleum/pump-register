@@ -838,6 +838,50 @@ const reportSection=$('[data-tab="reports"]');reportSection.querySelectorAll('.w
 const v6TabBar=tabBar;tabBar=function(){v6TabBar();taskSwitcher.classList.toggle('v6-hidden',work.size<2);const w=work.get(activeWork);$('#svb').classList.toggle('v6-hidden',!!w?.render||['reports','more','customers','cdet','audit','rates'].includes(cur));for(const b of $$('#nav .v3nav')){const g=({fueling:'reading',stock:'stock',customers:'customer',accounts:'cash'})[b.dataset.go];b.classList.toggle('on',g?activeWork===groupKey(g):activeWork===b.dataset.go)}};
 const v6Render=renderGroup;renderGroup=function(w){v6Render(w);entryPage.querySelector('.ep>.ln:first-child b').innerHTML=bi(groups[w.group].title,groups[w.group].ur);const no=$('#v4NozzleForm');if(no)no.style.marginTop='8px';const mode=$('#v5Mode');if(mode){mode.closest('.v5-mode').querySelector('label').innerHTML=w.group==='reading'?bi('Nozzle','نوزل'):bi('Transaction Type','لین دین کی قسم')}entryPage.querySelectorAll('.epRow label').forEach(l=>{if(!l.querySelector('small')&&l.textContent.includes(' / ')){const [a,b]=l.textContent.split(' / ');l.innerHTML=bi(a,b)}});if(w.group==='reading'){const b=document.createElement('button');b.className='alt';b.dataset.go='sales';b.innerHTML=bi('Oil & Items / POS','آئل اور سامان');entryPage.querySelector('.ep>.ln:first-child').append(b)}};
 $('#dtb').removeAttribute('data-go');
+// V7: use the real permission-aware navigation in a compact horizontal rail.
+const v7Nav=$('#nav');v6Shell.querySelector('.tw').after(v7Nav);
+const v7Brand=document.createElement('div');v7Brand.id='v7Brand';v7Brand.innerHTML='<img src="icon-192.png" alt=""><div><b>DAATA PETROLEUM</b><small>In partnership with PSO</small></div>';v6Shell.querySelector('.tw').prepend(v7Brand);
+const v7Names={home:['Home','ہوم'],fueling:['Meter','نوزل'],stock:['Stock','سٹاک'],customers:['Customers','کھاتے'],accounts:['Cash & Bank','کیش اور بینک'],reports:['Reports','رپورٹس'],more:['Management','انتظام']};
+for(const b of v7Nav.querySelectorAll('.v3nav')){b.querySelector('span').innerHTML=bi(...v7Names[b.dataset.go]);if(b.dataset.go==='more')b.querySelector('i').textContent='⚙';}
+// Group existing settings without cloning IDs or changing their handlers.
+const v7Settings=$('[data-tab="settings"]'),v7SettingsCard=v7Settings.querySelector(':scope>.card');
+const v7Categories=[
+ ['pump','Pump Setup','پمپ کی ترتیبات',['[data-go="rates"]','#tkset','[data-go="lub"]']],
+ ['security','Users & Security','صارفین اور حفاظت',['[data-go="audit"]','#ddy','#clr','#bk','#cpw']],
+ ['app','App Settings','ایپ کی ترتیبات',['#prof','[data-soon]','#out']]
+];
+for(const [key,en,ur,selectors] of v7Categories){const detail=document.createElement('details');detail.className='v7-settings card';detail.id='v7-setting-'+key;detail.innerHTML='<summary>'+bi(en,ur)+'</summary>';for(const sel of selectors){const el=v7SettingsCard.querySelector(sel);if(el)detail.append(el)}v7SettingsCard.before(detail)}
+v7SettingsCard.classList.add('v6-hidden');
+mgrid.innerHTML='';mgmt.querySelector(':scope>.card:not(.work-grid)')?.classList.add('v6-hidden');
+const v7MgmtItems=[['staff','Staff','عملہ'],['pump','Pump Setup','پمپ کی ترتیبات'],['bank','Account Setup','اکاؤنٹس کی ترتیب'],['security','Users & Security','صارفین اور حفاظت'],['app','App Settings','ایپ کی ترتیبات']];
+for(const [key,en,ur] of v7MgmtItems){const b=document.createElement('button');b.type='button';b.dataset.category=key;b.innerHTML=bi(en,ur);if(key==='bank'||key==='pump')b.dataset.own='';b.onclick=()=>{if(key==='staff')return go('staff');if(key==='bank')return openTask('accounts');go('settings');for(const x of v7Settings.querySelectorAll('details'))x.open=x.id==='v7-setting-'+key;};mgrid.append(b);}
+const v7Role=applyRole;applyRole=function(){v7Role();mgrid.querySelector('[data-category="staff"]').classList.toggle('hide',role()==='staff'&&!AL?.includes('staff'));};
+const v7Security=$('#v7-setting-security');const v7StaffLink=document.createElement('button');v7StaffLink.className='alt';v7StaffLink.dataset.own='';v7StaffLink.innerHTML=bi('Staff & User Approvals','عملہ اور صارفین کی منظوری');v7StaffLink.onclick=()=>go('staff');v7Security.append(v7StaffLink);
+const v7Style=document.createElement('style');v7Style.textContent=`
+#app.wrap{margin:0 auto!important;width:100%!important;max-width:1600px!important;padding:0 16px 24px!important}
+#v6Shell{padding:0 0 5px!important;margin-bottom:8px!important}
+#v6Shell .tw{padding:5px 0!important;gap:6px!important;min-height:48px!important}
+#v7Brand{display:flex;align-items:center;gap:7px;flex:none;order:-1;white-space:nowrap;color:var(--v6-navy)}
+#v7Brand img{width:35px;height:35px;border-radius:7px;object-fit:contain}
+#v7Brand b{display:block;font-size:15px;line-height:1.15}
+#v7Brand small{display:block;color:#b38a20;font-size:10px;line-height:1.2}
+#v6Shell .tw .r2{justify-content:flex-end!important}
+#v6Shell #v3MenuToggle,#nav .sbh,#nav .sbf,#nav .work-nav-hidden{display:none!important}
+#nav:not(.hide){position:static!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;gap:5px!important;width:100%!important;height:auto!important;max-width:none!important;min-width:0!important;inset:auto!important;transform:none!important;padding:4px!important;margin:0!important;border:1px solid var(--v6-line)!important;border-radius:12px!important;overflow-x:auto!important;overflow-y:hidden!important;scrollbar-width:thin;direction:ltr;overscroll-behavior-x:contain;touch-action:pan-x;box-sizing:border-box}
+#nav .v3nav:not(.hide){display:flex!important;flex:0 0 auto!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;gap:6px!important;width:auto!important;margin:0!important;min-height:40px!important;padding:6px 12px!important;border:1.5px solid #a9bacd!important;border-radius:10px!important;background:var(--v6-surface)!important;color:var(--v6-navy)!important;white-space:nowrap;font-size:13px!important}
+#nav .v3nav span{display:block!important;text-align:left!important;line-height:1.05!important}#nav .v3nav small{display:block;font-size:10px!important;font-weight:400!important;line-height:1.15!important}
+#nav .v3nav i{width:19px!important;flex:none}#nav .v3nav.on:not(.hide){background:#176737!important;color:white!important;border-color:#176737!important}#nav .v3nav.on small{color:white!important}
+#nav .v3nav.v4-open:not(.on){border-color:#87add6!important;background:var(--v6-open)!important}
+#nav .v3nav.hide,#nav.hide,body.st #nav [data-own]{display:none!important}
+#v6Shell .v6-tabline{margin-top:4px!important}#workTabs .wt:first-child{display:none!important}#v6Shell .v6-tabline.v7-empty{display:none!important}
+#v6Shell #workTabs .wt{min-height:30px!important;border-radius:10px!important}#v6Shell #workTabs .wt button{min-height:28px!important;padding:4px 8px!important}
+#app .v7-settings{padding:7px 12px!important;margin:6px 0!important;max-width:760px}#app .v7-settings summary{font-size:15px;font-weight:600;cursor:pointer;padding:6px 0;color:var(--v6-navy)}#app .v7-settings .menu{padding:9px 0!important}
+#app .work-grid button,#app .v4-actions button,#app .v4modes button{border-radius:10px!important}
+@media(min-width:900px){#nav .v3nav:not(.hide){flex:1 0 auto!important}#app section[data-tab],#entryPage{max-width:none!important}}
+@media(max-width:899px){#app.wrap{padding:0 9px calc(76px + env(safe-area-inset-bottom))!important}#nav:not(.hide){position:fixed!important;inset:auto 0 0!important;z-index:60!important;padding:5px 7px calc(5px + env(safe-area-inset-bottom))!important;border-radius:12px 12px 0 0!important;box-shadow:0 -2px 10px #10234512!important;min-height:56px!important}#nav .v3nav:not(.hide){min-height:44px!important;padding:6px 10px!important}#v7Brand{gap:5px}#v7Brand img{width:28px;height:28px}#v7Brand b{font-size:11px}#v7Brand small{font-size:8px}#v6Shell #st{max-width:65px!important}#v6Shell #dtb{font-size:11px!important}#v6Shell #thb,#v6Shell #pwr{width:27px!important;height:28px!important;min-height:28px!important}#v6Shell .tw .r2{gap:4px!important}#v6Shell #svb{min-width:0!important;min-height:32px!important}#v6Shell .tw{flex-wrap:wrap!important}#v6Shell .v5-switcher{flex-basis:112px!important}}
+@media print{#nav,#v7Brand{display:none!important}#app.wrap{padding:0!important}}
+`;document.head.appendChild(v7Style);
+const v7TabBar=tabBar;tabBar=function(){v7TabBar();tabLine.classList.toggle('v7-empty',work.size<2);const w=work.get(activeWork);const parent=({staff:'more',settings:'more',rates:'more',payroll:'more',audit:'more',lub:'more',cdet:'customers',sales:'fueling',expenses:'accounts',dayclose:'home'})[activeWork];if(parent){for(const b of v7Nav.querySelectorAll('.v3nav'))b.classList.toggle('on',b.dataset.go===parent)}const selected=v7Nav.querySelector('.v3nav.on:not(.hide)');if(selected){const left=selected.offsetLeft,right=left+selected.offsetWidth;if(left<v7Nav.scrollLeft)v7Nav.scrollLeft=left;else if(right>v7Nav.scrollLeft+v7Nav.clientWidth)v7Nav.scrollLeft=right-v7Nav.clientWidth;}};
 tabBar();
 cuDel=async i=>alert("Customer deletion disabled to protect ledger history.");
 labels();draw();ttDraw("home");lrem();if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js");
