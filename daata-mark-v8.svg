@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Daata Petroleum DP emblem">
+  <rect width="100" height="100" rx="20" fill="#102345"/>
+  <path d="M21 18h28c19 0 32 11 35 27-8-9-18-13-30-13H35v29L21 73z" fill="#ffffff"/>
+  <path d="M48 43h13c14 0 23 8 23 19S75 81 61 81h-5v10H43V69h18c6 0 10-3 10-8s-4-8-10-8h-5z" fill="#ffffff"/>
+  <path d="M49 36c-5 8-13 16-13 24a13 13 0 0 0 26 0c0-8-8-16-13-24z" fill="#d4a72c"/>
+  <path d="M13 83c9-12 23-19 38-20v10C36 74 24 78 13 83z" fill="#45a569"/>
+</svg>
