@@ -1163,6 +1163,14 @@ const v27Diesel=v27Group('v27-diesel-group','Diesel Stock (L)','ڈیزل سٹا�
 const v27Petrol=v27Group('v27-petrol-group','Petrol Stock (L)','پیٹرول سٹاک (لیٹر)',[v27Card('pB','Available','دستیاب'),v27Card('pL','Daily Sold','روزانہ فروخت'),v27Card('pA','Received','وصول شدہ')]);
 v27KP.classList.add('v27-summary');v27KP.replaceChildren(v27Finance,v27Diesel,v27Petrol);
 
+const v28Style=document.createElement("style");v28Style.textContent="#app #easyPanel{display:none!important}\n#nav .v3nav[data-v28=\"recovery\"]{--v14-bg:#ede8f7;--v14-fg:#624a9b;--v14-border:#cfc1e5}\n#nav .v3nav[data-v28=\"close\"]{--v14-bg:#e2f1e7;--v14-fg:#176737;--v14-border:#a5cdb3}\nhtml[data-theme=\"dark\"] #nav .v3nav[data-v28=\"recovery\"]{--v14-bg:#3d3155;--v14-fg:#dfcdf9;--v14-border:#655080}\nhtml[data-theme=\"dark\"] #nav .v3nav[data-v28=\"close\"]{--v14-bg:#243e32;--v14-fg:#b8e0c5;--v14-border:#476d58}";document.head.appendChild(v28Style);
+
+const v28Recovery=document.createElement('button');v28Recovery.type='button';v28Recovery.className='v3nav';v28Recovery.dataset.v28='recovery';v28Recovery.dataset.own='';v28Recovery.dataset.easy='recovery';v28Recovery.dataset.targettab='customers';v28Recovery.innerHTML='<i>↓</i><span>'+bi('Receive Payment','رقم وصولی')+'</span>';
+const v28Close=document.createElement('button');v28Close.type='button';v28Close.className='v3nav';v28Close.dataset.v28='close';v28Close.dataset.go='dayclose';v28Close.innerHTML='<i>✓</i><span>'+bi('Day Closing','حساب بند')+'</span>';
+v7Nav.querySelector('.v3nav[data-go="customers"]').after(v28Recovery);v7Nav.querySelector('.v3nav[data-go="reports"]').before(v28Close);
+const v28Role=applyRole;applyRole=function(){v28Role();v28Recovery.classList.toggle('hide',role()==='staff');};
+const v28TabBar=tabBar;tabBar=function(){v28TabBar();const w=work.get(activeWork),rec=w?.group==='customer'&&w.mode==='recovery',close=activeWork==='dayclose';v28Recovery.classList.toggle('on',rec);v28Close.classList.toggle('on',close);v28Recovery.classList.toggle('v4-open',work.get(groupKey('customer'))?.mode==='recovery');v28Close.classList.toggle('v4-open',work.has('dayclose'));if(rec||close){for(const b of v7Nav.querySelectorAll('.v3nav'))b.classList.toggle('on',b===(rec?v28Recovery:v28Close));const b=rec?v28Recovery:v28Close;if(b.offsetLeft<v7Nav.scrollLeft||b.offsetLeft+b.offsetWidth>v7Nav.scrollLeft+v7Nav.clientWidth)b.scrollIntoView({block:'nearest',inline:'nearest'});}};
+
 tabBar();
 cuDel=async i=>alert("Customer deletion disabled to protect ledger history.");
 labels();draw();ttDraw("home");lrem();if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js");
