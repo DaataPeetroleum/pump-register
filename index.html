@@ -280,7 +280,7 @@ html,body,section,table,input,select,textarea{direction:ltr}input,select,td,th{f
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import{getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut,createUserWithEmailAndPassword,sendPasswordResetEmail,updatePassword,reauthenticateWithCredential,EmailAuthProvider}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import{initializeFirestore,persistentLocalCache,persistentMultipleTabManager,doc,setDoc,onSnapshot,collection,getDocs,getDocsFromServer,query,where,orderBy,limit,addDoc,getDoc,deleteDoc,runTransaction}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import{initializeFirestore,persistentLocalCache,persistentMultipleTabManager,doc,setDoc,onSnapshot,collection,getDocs,getDocsFromServer,query,where,orderBy,limit,addDoc,getDoc,deleteDoc,runTransaction,waitForPendingWrites}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 const app=initializeApp({apiKey:"AIzaSyDBBQEkgiYIWo9J-cxmdhitZ9XwHrUso_I",authDomain:"daata-petroleum.firebaseapp.com",projectId:"daata-petroleum",messagingSenderId:"878574161545",appId:"1:878574161545:web:08b651dcfb4bd462538058"});
 const auth=getAuth(app),db=initializeFirestore(app,{localCache:persistentLocalCache({tabManager:persistentMultipleTabManager()})});
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
@@ -474,7 +474,7 @@ async function prevFill(date=d.date){try{const p=await v17Previous(date);if(!p||
 let v17LoadedDate="";
 function load(date){v21DayReady="";v17LoadedDate="";if(unsub)unsub();let first=true,filled=false;d=blank(date);$("#dad").value=date;draw();
  unsub=onSnapshot(doc(db,"days",date),{includeMetadataChanges:true},s=>{
-  if(d.date!==date)return;if(!s.metadata.hasPendingWrites&&(s.exists()||!s.metadata.fromCache)){v21DayReady=date;queueMicrotask(v19DayLoaded)}if(!s.metadata.hasPendingWrites&&!s.metadata.fromCache){v17LoadedDate=date;queueMicrotask(v17RefreshReading);queueMicrotask(v19DayLoaded)}
+  if(d.date!==date)return;if(!s.metadata.hasPendingWrites&&!s.metadata.fromCache&&(s.data()?.v37Deleted||d.v37Deleted)&&!v37Equal(d,s.data())){clearTimeout(timer);timer=null;d=Object.assign(blank(date),s.data()||{});draw()}if(!s.metadata.hasPendingWrites&&(s.exists()||!s.metadata.fromCache)){v21DayReady=date;queueMicrotask(v19DayLoaded)}if(!s.metadata.hasPendingWrites&&!s.metadata.fromCache){v17LoadedDate=date;queueMicrotask(v17RefreshReading);queueMicrotask(v19DayLoaded)}
   if(!s.metadata.hasPendingWrites)NZ0=s.exists()?JSON.stringify(s.data().noz||null):null;
   if(first&&!filled&&s.exists()&&!s.metadata.hasPendingWrites){d=Object.assign(blank(date),s.data());draw();if(d.noz.every(x=>!x.s))prevFill(date);else if(!d.rP||!d.rD||!d.staff)carry(date)}
   else if(first&&!s.exists()&&!s.metadata.hasPendingWrites&&!s.metadata.fromCache&&!filled){filled=true;prevFill(date)}
@@ -598,7 +598,7 @@ async function reps(){const el=$("#reps");el.innerHTML=bi("Loading…","لوڈ �
  try{const q=await getDocs(query(collection(db,"days"),orderBy("date","desc"),limit(400)));R=q.docs.map(x=>x.data());rdraw()}catch(e){el.innerHTML=bi("Could not load reports","رپورٹس لوڈ نہیں ہوئیں")}}
 function v22DateLabel(k){return String(k).split(' → ').map(x=>/^\d{4}-\d{2}-\d{2}$/.test(x)?x.split('-').reverse().join('/'): /^\d{4}-\d{2}$/.test(x)?x.split('-').reverse().join('/'):x).join(' → ')}
 function v22Num(v){return Number(f(n(v))).toLocaleString('en-PK',{minimumFractionDigits:2,maximumFractionDigits:2})}
-function v22Rows(rows,cutoff){return rows.filter(r=>/^\d{4}-\d{2}-\d{2}$/.test(r.date)&&r.date<=cutoff)}
+function v22Rows(rows,cutoff){return rows.filter(r=>!r.v37Deleted&&/^\d{4}-\d{2}-\d{2}$/.test(r.date)&&r.date<=cutoff)}
 function rdraw(){const el=$("#reps"),status=$("#v22ReportStatus"),eligible=v22Rows(R,d.date);if(status)status.textContent='Business date: '+v22DateLabel(d.date)+' · '+eligible.length+' records'+(R.some(r=>r.date>d.date)?' · '+R.filter(r=>r.date>d.date).length+' later-dated records excluded (unchanged)':'');let L=eligible.map(r=>({k:r.date,c:T(Object.assign(blank(r.date),r)),z:r.closed}));
  if(rm==="Monthly"){const month=$("#rmo").value||d.date.slice(0,7);L=L.filter(x=>x.k.startsWith(month));const g={};L.forEach(x=>{const k=x.k.slice(0,7);const o=g[k]??={k,c:{sale:0,tL:0,khA:0,cash:0,gp:0,np:0}};for(const y in o.c)o.c[y]+=x.c[y]});L=Object.values(g)}
  if(rm==="Custom"){const a=$("#rf").value,b=$("#rt").value;L=L.filter(x=>(!a||x.k>=a)&&(!b||x.k<=b));const o={k:(a||"…")+" → "+(b||"…"),c:{sale:0,tL:0,khA:0,cash:0,gp:0,np:0}};L.forEach(x=>{for(const y in o.c)o.c[y]+=x.c[y]});L=L.length?[o]:[]}
@@ -1050,7 +1050,7 @@ const v16Palette=document.createElement('style');v16Palette.id='v16-quick-palett
 // V17: read-only opening suggestion. Only the normal meter save writes the reading.
 function v17ValidReading(v){return (typeof v==='number'||typeof v==='string'&&v.trim()!=='')&&Number.isFinite(Number(v))&&Number(v)>=0}
 function v17Opening(day,prior,i){const current=day.noz?.[i];if(!current||day.closed||v17ValidReading(current.e)||v17ValidReading(current.s)||!prior||prior.date>=day.date)return null;const previous=prior?.noz?.[i]?.e;return v17ValidReading(previous)?String(previous):null}
-async function v17Previous(date){const q=await getDocs(query(collection(db,'days'),where('date','<',date),orderBy('date','desc'),limit(1)));const p=q.docs[0]?.data();return p&&p.date<date?p:null}
+async function v17Previous(date){let cursor=date;for(;;){const q=await getDocs(query(collection(db,'days'),where('date','<',cursor),orderBy('date','desc'),limit(30)));const rows=q.docs.map(x=>x.data()),p=rows.find(x=>!x.v37Deleted&&x.date<cursor);if(p)return p;const next=rows.at(-1)?.date;if(!next||next>=cursor)return null;cursor=next}}
 // V18: paginated, nozzle-specific history; no age or total-record limit.
 function v18FindClosing(rows,date,i){return rows.find(p=>p&&typeof p.date==='string'&&p.date<date&&v17ValidReading(p.noz?.[i]?.e))||null}
 async function v18LastClosing(date,i,fetchPage){let cursor=date;for(;;){const rows=await fetchPage(cursor);if(!rows.length)return null;const found=v18FindClosing(rows,date,i);if(found)return found;const next=rows[rows.length-1]?.date;if(typeof next!=='string'||next>=cursor)throw Error('History pagination did not advance');cursor=next}}
@@ -1335,7 +1335,7 @@ function v34Options(id,options,all){const el=$('#'+id),old=el.value;el.innerHTML
 function v34Filters(){const t=$('#v34Type').value,opts=['customers','outstanding'].includes(t)?m.cu.map(c=>[c.n,c.n]):['stock','delivery'].includes(t)?[['HSD','Diesel'],['Petrol','Petrol']]:t==='nozzles'?[['HSD','All Diesel'],['Petrol','All Petrol'],...NOZ.map((x,i)=>[i,x[0]])]:t==='expense'?CATS.map(x=>[x[0],x[0]]):t==='staff'?m.st.map(x=>[x.n,x.n]):t==='items'?ITM.map((x,i)=>[i,x[0]]):t==='cash'?accountChoices():[];v34Options('v34Filter',opts,'All');const c=$('#v34Filter').value;v34Options('v34Vehicle',[['','General / Unassigned'],...[...new Set(m.cu.filter(x=>c==='*'||x.n===c).flatMap(v33Vehicles))].map(x=>[x,x])],'All Vehicles');$('#v34VehicleLabel').classList.toggle('hide',t!=='customers');$('#v34Filter').parentElement.classList.toggle('hide',!opts.length)}
 function v34SetPeriod(){const [a,b]=v34Period($('#v34Period').value,d.date,$('#v34From').value,$('#v34To').value);$('#v34From').value=a;$('#v34To').value=b>d.date?d.date:b;v34Invalidate()}
 function v34HTML(data){const renderRow=r=>r.map(x=>typeof x==='number'?fmt(x):escV(x??''));const body=data.groups.map(g=>'<details open><summary>'+escV(g.title)+' <span style="float:right">'+g.rows.length+' records</span></summary>'+rTbl(data.columns,g.rows.map(renderRow),g.subtotal.length?renderRow(g.subtotal):undefined)+'</details>').join('')||'<p>No records for the selected period.</p>';let html=rBase(v34Types[data.type],dfmt(data.from)+' — '+dfmt(data.to),body+(data.groups.length?rTbl(data.columns,[renderRow(data.total)]):''));return html.replace('</head>','<style>details{margin:8px 0;border:1px solid #176737;padding:5px}summary{font-weight:bold;padding:6px;background:#e3f3e8;cursor:pointer}td{overflow-wrap:anywhere}td:not(:first-child){text-align:right;font-variant-numeric:tabular-nums} @media print{summary{list-style:none}summary::-webkit-details-marker{display:none}details{border:0;padding:0}tr{break-inside:avoid}}</style></head>')}
-async function v34View(){if(!auth.currentUser||role()==='staff')return;v34Invalidate();const uid=auth.currentUser.uid,token=v34Token,type=$('#v34Type').value,from=$('#v34From').value,to=$('#v34To').value,filter=$('#v34Filter').value,vehicle=$('#v34Vehicle').value,search=$('#v34Search').value;if(!from||!to||from>to||to>d.date){$('#v34Status').textContent='Choose a valid range up to the business date.';return}$('#v34Status').textContent='Loading saved records…';try{const q=await getDocsFromServer(query(collection(db,'days'),where('date','>=',from),where('date','<=',to),orderBy('date','asc')));if(token!==v34Token||auth.currentUser?.uid!==uid||role()==='staff')return;const days=q.docs.map(x=>x.data()).filter(x=>x.date>=from&&x.date<=to).map(x=>Object.assign(blank(x.date),x)).sort((a,b)=>a.date.localeCompare(b.date));const report=v34Data(type,days,from,to,filter,vehicle,search);v34Snapshot=report;v34HTMLCache=v34HTML(report);$('#v34Frame').srcdoc=v34HTMLCache;$('#v34Preview').classList.remove('hide');for(const id of ['v34Print','v34CSV','v34Expand','v34Collapse'])$('#'+id).disabled=false;$('#v34Status').textContent=days.length+' saved business dates · '+report.groups.length+' groups · Pending offline entries not included. Historical profit uses available cost records.'}catch(e){if(token===v34Token)$('#v34Status').textContent='Report unavailable: '+e.message}}
+async function v34View(){if(!auth.currentUser||role()==='staff')return;v34Invalidate();const uid=auth.currentUser.uid,token=v34Token,type=$('#v34Type').value,from=$('#v34From').value,to=$('#v34To').value,filter=$('#v34Filter').value,vehicle=$('#v34Vehicle').value,search=$('#v34Search').value;if(!from||!to||from>to||to>d.date){$('#v34Status').textContent='Choose a valid range up to the business date.';return}$('#v34Status').textContent='Loading saved records…';try{const q=await getDocsFromServer(query(collection(db,'days'),where('date','>=',from),where('date','<=',to),orderBy('date','asc')));if(token!==v34Token||auth.currentUser?.uid!==uid||role()==='staff')return;const days=q.docs.map(x=>x.data()).filter(x=>!x.v37Deleted&&x.date>=from&&x.date<=to).map(x=>Object.assign(blank(x.date),x)).sort((a,b)=>a.date.localeCompare(b.date));const report=v34Data(type,days,from,to,filter,vehicle,search);v34Snapshot=report;v34HTMLCache=v34HTML(report);$('#v34Frame').srcdoc=v34HTMLCache;$('#v34Preview').classList.remove('hide');for(const id of ['v34Print','v34CSV','v34Expand','v34Collapse'])$('#'+id).disabled=false;$('#v34Status').textContent=days.length+' saved business dates · '+report.groups.length+' groups · Pending offline entries not included. Historical profit uses available cost records.'}catch(e){if(token===v34Token)$('#v34Status').textContent='Report unavailable: '+e.message}}
 $('#v34Type').onchange=()=>{$('#v34Filter').value='*';$('#v34Vehicle').value='*';v34Filters();v34Invalidate()};$('#v34Filter').onchange=()=>{v34Filters();v34Invalidate()};$('#v34Period').onchange=v34SetPeriod;for(const id of ['v34From','v34To','v34Vehicle','v34Search'])$('#'+id).onchange=v34Invalidate;
 $('#v34View').onclick=v34View;$('#v34Print').onclick=()=>{if(auth.currentUser&&role()!=='staff'&&v34Snapshot)dpPrint(open('','_blank'),v34HTMLCache)};
 for(const [id,on] of [['v34Expand',true],['v34Collapse',false]])$('#'+id).onclick=()=>$('#v34Frame').contentDocument?.querySelectorAll('details').forEach(x=>x.open=on);
@@ -1405,6 +1405,154 @@ document.addEventListener('pointerdown',e=>{if(!v35Cal.hidden&&!v35Cal.contains(
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!v35Cal.hidden){const b=v36Button;v36Close();b?.focus()}});
 window.addEventListener('resize',()=>{if(!v35Cal.hidden)v36Position()});
 document.addEventListener('scroll',()=>{if(!v35Cal.hidden)v36Position()},true);
+
+// V37: local owner PIN, atomic move to/restore from the server recycle bin.
+let v37Busy=false;
+const v37Owner=()=>!!auth.currentUser&&Array.isArray(m.ow)&&m.ow.includes(auth.currentUser.email);
+const v37PinKey=()=> 'dp37:pin:'+v32User();
+const v37Hash=async(salt,pin)=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(salt+':'+pin)))).map(x=>x.toString(16).padStart(2,'0')).join('');
+async function v37Pin(){
+ if(!v37Owner())throw Error('Owner only');
+ let p=JSON.parse(localStorage.getItem(v37PinKey())||'null');
+ if(!p){
+  const a=await ask('Set Owner PIN',[{l:'New 6-digit PIN',ty:'password',im:'numeric'},{l:'Repeat PIN',ty:'password',im:'numeric'}],{m:'This PIN is an application-level confirmation on this device, not a server security rule.'});
+  if(!a)throw Error('Cancelled');
+  if(!/^\d{6}$/.test(a[0])||a[0]!==a[1])throw Error('PINs must match and contain exactly six digits');
+  p={salt:crypto.randomUUID(),hash:''};p.hash=await v37Hash(p.salt,a[0]);localStorage.setItem(v37PinKey(),JSON.stringify(p));
+ }
+ const a=await ask('Owner PIN',[{l:'Enter PIN',ty:'password',im:'numeric'}],{ok:'Confirm',danger:1});
+ if(!a)throw Error('Cancelled');
+ if(await v37Hash(p.salt,a[0])!==p.hash)throw Error('Incorrect PIN');
+}
+function v37Pending(){
+ return Object.keys(localStorage).some(k=>k.startsWith('dp32:'+v32User()+':queue:')||k.startsWith('dp32:'+v32User()+':entry:'));
+}
+function v37Ready(date){
+ if(!v37Owner())throw Error('Owner only');
+ if(!navigator.onLine)throw Error('Internet required');
+ if(bankBusy||workChanging||timer||v32Flushing||v32EntryBusy||v37Pending())throw Error('Wait for all entries to sync first');
+ if(date&&[...work.values()].some(w=>w.date===date&&w.dirty))throw Error('Close or save unfinished work for this business date first');
+}
+const v37Split=(rows,date)=>[(rows||[]).filter(r=>r.d===date),(rows||[]).filter(r=>r.d!==date)];
+const v37Canonical=x=>Array.isArray(x)?x.map(v37Canonical):x&&typeof x==='object'?Object.fromEntries(Object.keys(x).sort().map(k=>[k,v37Canonical(x[k])])):x;
+const v37Equal=(a,b)=>JSON.stringify(v37Canonical(a))===JSON.stringify(v37Canonical(b));
+function v37CheckMeta(meta){if(!meta||!Array.isArray(meta.ow)||!meta.ow.includes(auth.currentUser?.email))throw Error('Owner permission not verified on server')}
+function v37Stock(meta,day,direction){
+ if(!day?.closed)return;
+ for(let i=0;i<(day.itm||[]).length;i++){
+  const q=n(day.itm[i].q);if(!q)continue;
+  // Historical stock deduction cannot be inferred when the stock register changed.
+  throw Error('Closed day includes lubricant sales. Reconcile stock before deleting this day.');
+ }
+}
+function v37Count(day,ledger,rates=[]){return Object.values(ddCnt(day,day?.date||'')).reduce((a,b)=>a+b,0)-(m.lg||[]).filter(x=>x.d===day?.date).length+ledger.length+rates.length+(day?.accountTransactions||[]).length}
+function v37Preview(day,ledger,rates=[]){
+ const c=ddCnt(day,day?.date||'');c.lg=ledger.length;c.rates=rates.length;c.accountTransactions=(day?.accountTransactions||[]).length;
+ return Object.entries(c).filter(([,v])=>v).map(([k,v])=>escV(DDN[k]?.[0]||({lg:'Customer ledger',rates:'Rate history',accountTransactions:'Account transactions'}[k]||k))+': '+v).join('<br>')||'Day record (including settings and any saved entries)';
+}
+async function v37ReadDate(date){
+ const [ds,ms]=await Promise.all([getDoc(doc(db,'days',date)),getDoc(doc(db,'meta','main'))]);
+ const day=ds.exists()?ds.data():null,meta=ms.data();v37CheckMeta(meta);
+ return {day,ledger:v37Split(meta.lg,date)[0],rates:v37Split(meta.rh,date)[0]};
+}
+async function v37Move(date){
+ v37Ready(date);if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||date>today())throw Error('Invalid business date');
+ const p=await v37ReadDate(date);
+ if(p.day?.v37Deleted||(!p.day&&!p.ledger.length&&!p.rates.length))throw Error('No active day found');
+ v37Stock(m,p.day,1);
+ if(!await ask('Move '+dfmt(date)+' to Recycle Bin?',[],{m:v37Preview(p.day||blank(date),p.ledger,p.rates)+'<br>Later days may contain carried opening balances; review those separately.',ok:'Move to Recycle Bin',danger:1}))throw Error('Cancelled');
+ await v37Pin();v37Ready(date);
+ bankBusy=v37Busy=true;
+ try{
+  await waitForPendingWrites(db);
+  const dr=doc(db,'days',date),mr=doc(db,'meta','main'),ar=doc(db,'recycleBin',date),uid=auth.currentUser.uid,email=auth.currentUser.email;
+  let nextMeta;
+  await runTransaction(db,async tx=>{
+   const ds=await tx.get(dr),ms=await tx.get(mr),as=await tx.get(ar),day=ds.exists()?ds.data():null,meta=ms.data();v37CheckMeta(meta);
+   if(auth.currentUser?.uid!==uid||as.exists()||day?.v37Deleted)throw Error('Day already in Recycle Bin or account changed');
+   const [ledger,lg]=v37Split(meta.lg,date),[rates,rh]=v37Split(meta.rh,date);
+   if(!v37Equal([day,ledger,rates],[p.day,p.ledger,p.rates]))throw Error('Day changed; reopen and review');
+   v37Stock(meta,day,1);
+   const id=crypto.randomUUID(),when=Date.now();
+   nextMeta={...meta,lg,rh};
+   tx.set(ar,{date,id,deletedAt:when,deletedBy:email,day,ledger,rates});
+   tx.set(dr,{...blank(date),closed:true,v37Deleted:id});
+   tx.set(mr,nextMeta);
+  });
+  m=nextMeta;if(d.date===date){if(unsub)unsub();load(date)}else calc();
+  aud('recycle:day',date,'moved',date);trend();profit();
+ }finally{bankBusy=v37Busy=false}
+}
+async function v37Recover(date,purge=false){
+ v37Ready(date);
+ const ar=doc(db,'recycleBin',date),dr=doc(db,'days',date),mr=doc(db,'meta','main');
+ const snap=await getDoc(ar);if(!snap.exists())throw Error('Record unavailable');
+ const p=snap.data();
+ if(!await ask((purge?'Permanently delete ':'Restore ')+dfmt(date)+'?',[],{m:purge?'This cannot be undone. The deleted date remains locked.':v37Preview(p.day||blank(date),p.ledger,p.rates),ok:purge?'Permanently Delete':'Restore Day',danger:purge?1:0}))throw Error('Cancelled');
+ await v37Pin();v37Ready(date);bankBusy=v37Busy=true;
+ try{
+  await waitForPendingWrites(db);let nextMeta;
+  await runTransaction(db,async tx=>{
+   const as=await tx.get(ar),ds=await tx.get(dr),ms=await tx.get(mr),meta=ms.data();v37CheckMeta(meta);
+   if(!as.exists()||as.data().id!==p.id||!ds.exists()||ds.data().v37Deleted!==p.id)throw Error('Record changed; reopen Recycle Bin');
+   const expected={...blank(date),closed:true,v37Deleted:p.id};
+   if(!v37Equal(ds.data(),expected))throw Error('Deleted day has been modified; restore blocked');
+   if((meta.lg||[]).some(x=>x.d===date)||(meta.rh||[]).some(x=>x.d===date))throw Error('New entries exist for this date; operation blocked');
+   if(!purge){
+    for(const r of p.ledger)if(!meta.cu?.some(c=>c.n===r.c))throw Error('A customer no longer exists. Restore the customer first.');
+    nextMeta={...meta,lg:[...(meta.lg||[]),...p.ledger],rh:[...(meta.rh||[]),...(p.rates||[])]};
+    tx.set(mr,nextMeta);if(p.day)tx.set(dr,p.day);else tx.delete(dr);
+   }
+   tx.delete(ar);
+  });
+  if(nextMeta)m=nextMeta;
+  if(d.date===date)load(date);else calc();aud(purge?'recycle:purge':'recycle:restore',date,'done',date);trend();profit();
+ }finally{v37Busy=bankBusy=false}
+}
+async function v37Bin(){
+ if(!v37Owner())return alert('Owner only');v36Close();
+ try{
+  const q=await getDocsFromServer(collection(db,'recycleBin'));
+  const rows=q.docs.map(x=>x.data()).sort((a,b)=>b.deletedAt-a.deletedAt);
+  const dialog=document.createElement('div');dialog.id='v37Bin';dialog.innerHTML='<div class="v37-panel"><h3>Recycle Bin</h3><p>Deleted business dates · Owner only</p><div id="v37Rows"></div><button class="alt" data-close>Close</button></div>';
+  const list=dialog.querySelector('#v37Rows');
+  for(const p of rows){
+   const row=document.createElement('div');row.className='v37-row';row.innerHTML='<b>'+escV(dfmt(p.date))+'</b><small>'+escV(p.deletedBy)+' · '+escV(new Date(p.deletedAt).toLocaleString())+'</small><div class="v37-actions"><button class="alt">View Record</button><button class="alt">Restore Day</button><button class="alt v37-danger">Permanently Delete</button></div>';
+   const [view,restore,purge]=row.querySelectorAll('button');view.onclick=()=>alert(dfmt(p.date)+'\n'+v37Preview(p.day||blank(p.date),p.ledger,p.rates).replace(/<br>/g,'\n').replace(/<[^>]*>/g,''));
+   for(const [b,flag] of [[restore,false],[purge,true]])b.onclick=async()=>{dialog.remove();try{await v37Recover(p.date,flag);alert(flag?'Permanently deleted':'Day restored')}catch(e){alert(e.message)}void v37Bin()};
+   list.append(row);
+  }
+  if(!rows.length)list.textContent='Recycle Bin is empty';
+  dialog.querySelector('[data-close]').onclick=()=>dialog.remove();document.body.append(dialog);
+ }catch(e){alert('Recycle Bin unavailable: '+e.message)}
+}
+const v37Style=document.createElement('style');v37Style.textContent=`
+.v37-actions{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.v37-actions button{padding:6px 10px!important;font-size:13px!important}
+.v37-danger{color:#a12b2b!important;border:1px solid #db9a9a!important}
+#v35Calendar .v37-deleted{background:#e8d9f6!important;color:#663699!important}
+#v37Bin{position:fixed;inset:0;z-index:2147483000;background:#0008;display:grid;place-items:center;padding:12px}
+.v37-panel{background:white;color:#142744;width:min(560px,100%);max-height:90vh;overflow:auto;padding:16px;border-radius:12px}
+.v37-row{border:1px solid #ddd;border-radius:8px;padding:10px;margin:8px 0}
+.v37-row small{display:block}
+html[data-theme=dark] .v37-panel{background:#172337;color:white}
+`;document.head.append(v37Style);
+const v37Choose=v36Choose;
+v36Choose=function(date){if(v36Input?.id==='date'&&v37Owner()&&!v36Delete){v35Selected=date;v35DrawCalendar();return}v37Choose(date)};
+const v37Draw=v35DrawCalendar;
+v35DrawCalendar=function(){v37Draw();if(v35Cal.hidden||!v37Owner()||v36Input?.id!=='date'||v36Delete)return;
+ for(const b of v35Cal.querySelectorAll('[data-v35date]'))if(v35Rows?.get(b.dataset.v35date)?.v37Deleted)b.classList.add('v37-deleted');
+ const el=$('#v35CalDetail'),date=v35Selected;
+ el.innerHTML='<small>Purple: Deleted day</small><b style="display:block">'+escV(dfmt(date))+'</b><div class="v37-actions"><button class="alt" data-open>Open Day</button><button class="alt v37-danger" data-trash>Delete Day</button><button class="alt" data-bin>Recycle Bin</button></div>';
+ const open=el.querySelector('[data-open]'),trash=el.querySelector('[data-trash]'),deleted=v35Rows?.get(date)?.v37Deleted;
+ open.disabled=!date||date>today()||!!deleted;trash.disabled=!date||date>today()||!v35Rows||!!deleted;
+ open.onclick=()=>v37Choose(date);trash.onclick=async()=>{v36Close();try{await v37Move(date);alert('Day moved to Recycle Bin')}catch(e){alert(e.message)}};el.querySelector('[data-bin]').onclick=v37Bin;v36Position();
+};
+const v37OldDdy=$('#ddy').onclick;$('#ddy').onclick=async()=>{if(!v37Owner()){if(role()==='staff')return v37OldDdy();return alert('Owner only')}const v=await ask('Delete Day',[{l:'Business Date',ty:'date',v:d.date}],{entryCalendar:true,ok:'Next'});if(v?.[0])try{await v37Move(v[0]);alert('Day moved to Recycle Bin')}catch(e){alert(e.message)}};
+applyDayDel=async date=>v37Move(date);
+const v37Save=save;save=function(){if(d.v37Deleted||v37Busy)return;return v37Save()};
+const v37Sv=$('#svb').onclick;$('#svb').onclick=function(){if(d.v37Deleted||v37Busy)return alert('Deleted day is locked');return v37Sv()};
+const v37DrawDay=draw;draw=function(){v37DrawDay();if(d.v37Deleted){$('#app').querySelectorAll('[data-p]').forEach(x=>x.disabled=true);status('Deleted day — Recycle Bin','')}};
 
 tabBar();
 cuDel=async i=>alert("Customer deletion disabled to protect ledger history.");
