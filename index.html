@@ -1186,6 +1186,19 @@ const v29Guide=v29Reconcile.querySelector('.v13-sectionhelp');if(v29Guide)v29Gui
 const v29LubNote=document.createElement('p');v29LubNote.className='v4-note';v29LubNote.textContent='Lubricant stock is maintained manually here. Daily accounts do not need to be closed.';$('[data-tab="lub"] > h2').after(v29LubNote);
 const v29Observer=new MutationObserver(()=>{for(const row of $('#dsum').querySelectorAll(':scope>.ln')){const name=row.firstElementChild?.textContent||'';row.classList.toggle('v29-total',name.startsWith('Total Sale'));row.classList.toggle('v29-stock',name.includes('stock lasts'));}});v29Observer.observe($('#dsum'),{childList:true});
 
+// Rate editor inputs are not historical entry fields; never apply the legacy input lock.
+EX.add('v10InputP');EX.add('v10InputD');
+const v31RateDraw=v10RatesDraw;
+v10RatesDraw=function(){v31RateDraw();const can=!!auth.currentUser&&role()!=='staff'&&!d.closed&&!v10RateBusy;for(const id of ['v10InputP','v10InputD','v31SaveP','v31SaveD'])$('#'+id).disabled=!can;};
+const v31Lock=lockApply;
+lockApply=function(){v31Lock();const can=!!auth.currentUser&&role()!=='staff'&&!d.closed&&!v10RateBusy;$('#v10InputP').disabled=!can;$('#v10InputD').disabled=!can;};
+for(const [id,input,key] of [['v31SaveP','v10InputP','rP'],['v31SaveD','v10InputD','rD']]){
+ const b=document.createElement('button');b.type='button';b.id=id;b.className='alt';b.textContent=key==='rP'?'Save Petrol':'Save Diesel';$('#'+input).closest('label').after(b);
+ b.onclick=()=>{if(v10RateEditDate!==d.date)return;const value=$('#'+input).value;return v10CommitRates(key==='rP'?value:d.rP,key==='rD'?value:d.rD,'updated');};
+}
+const v31Render=renderGroup;renderGroup=function(w){v31Render(w);if(w.group!=='customer'||w.mode==='customeradd'||role()==='staff')return;const b=document.createElement('button');b.type='button';b.id='v31AddCustomer';b.className='gold noprint';b.innerHTML=bi('+ Add Customer','نیا گاہک');b.onclick=()=>openTask('customeradd');const card=entryPage.querySelector('.ep');const mode=card.querySelector('.v5-mode');(mode||card.firstElementChild).after(b);};
+const v31Style=document.createElement('style');v31Style.textContent='#app #v31AddCustomer{grid-column:1/-1!important;justify-self:start;min-width:150px;margin:4px 0;background:#176737!important;color:white!important}#app #v31AddCustomer small{color:inherit!important}#app #v10RateEdit label{flex:0 0 auto}#app #v10RateEdit input{width:clamp(100px,14vw,140px)!important}';document.head.appendChild(v31Style);
+
 tabBar();
 cuDel=async i=>alert("Customer deletion disabled to protect ledger history.");
 labels();draw();ttDraw("home");lrem();if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js");
