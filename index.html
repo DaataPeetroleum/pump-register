@@ -469,7 +469,7 @@ async function prevFill(date=d.date){try{const p=await v17Previous(date);if(!p||
 let v17LoadedDate="";
 function load(date){v17LoadedDate="";if(unsub)unsub();let first=true,filled=false;d=blank(date);$("#dad").value=date;draw();
  unsub=onSnapshot(doc(db,"days",date),{includeMetadataChanges:true},s=>{
-  if(d.date!==date)return;if(!s.metadata.hasPendingWrites&&!s.metadata.fromCache){v17LoadedDate=date;queueMicrotask(v17RefreshReading)}
+  if(d.date!==date)return;if(!s.metadata.hasPendingWrites&&!s.metadata.fromCache){v17LoadedDate=date;queueMicrotask(v17RefreshReading);queueMicrotask(v19DayLoaded)}
   if(!s.metadata.hasPendingWrites)NZ0=s.exists()?JSON.stringify(s.data().noz||null):null;
   if(first&&!filled&&s.exists()&&!s.metadata.hasPendingWrites){d=Object.assign(blank(date),s.data());draw();if(d.noz.every(x=>!x.s))prevFill(date);else if(!d.rP||!d.rD||!d.staff)carry(date)}
   else if(first&&!s.exists()&&!s.metadata.hasPendingWrites&&!s.metadata.fromCache&&!filled){filled=true;prevFill(date)}
@@ -688,11 +688,11 @@ const THI={system:'<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 
 function thApply(){const t=thGet(),dk=t==="dark"||(t==="system"&&matchMedia("(prefers-color-scheme:dark)").matches);document.documentElement.dataset.theme=dk?"dark":"light";const b=$("#thb");if(b){b.innerHTML='<svg viewBox="0 0 24 24">'+(dk?THI.dark:THI.light)+'</svg>'+(t==="system"?'<i class="ab">A</i>':"");b.removeAttribute("title")}}
 $("#thb").onclick=()=>{const o=["system","light","dark"],t=o[(o.indexOf(thGet())+1)%3];try{localStorage.setItem("th",t)}catch(e){}thApply()};
 matchMedia("(prefers-color-scheme:dark)").addEventListener("change",thApply);thApply();
-$("#pwr").onclick=()=>{if(confirm("Logout? / لاگ آؤٹ کریں؟"))signOut(auth)};
+$("#pwr").onclick=()=>{if(confirm("Logout? / لاگ آؤٹ کریں؟")){v19Clear();signOut(auth)}};
 $("#out").onclick=()=>signOut(auth);
 let mu=null;
 onAuthStateChanged(auth,u=>{["#login"].forEach(s=>$(s).classList.toggle("hide",!!u));$("#app").classList.toggle("hide",!u);$("#nav").classList.toggle("hide",!u);
- if(u){ldH();load(d.date);trend();profit();mu=onSnapshot(doc(db,"meta","main"),s=>{if(s.exists())m=Object.assign({cu:[],st:[],lg:[],rh:[],fac:{},ls:{},lc:{}},s.data());if(!m.ow&&!s.metadata.fromCache){m.ow=[auth.currentUser.email];saveM()}applyRole();calc();try{const e2=auth.currentUser.email,nm=m.us?.[e2]?.n;if(nm)localStorage.setItem("lu",JSON.stringify({e:e2,n:nm}))}catch(x){}stDraw();payRemind();cuDraw();alDraw();if(isOwner()&&m.ow&&m.lb!==today())backup()},e=>failSt(e,"Settings sync: "))}else{ldH(1);lrem();if(unsub)unsub();if(mu)mu()}});
+ if(u){ldH();load(v19Start(u));trend();profit();mu=onSnapshot(doc(db,"meta","main"),s=>{if(s.exists())m=Object.assign({cu:[],st:[],lg:[],rh:[],fac:{},ls:{},lc:{}},s.data());if(!m.ow&&!s.metadata.fromCache){m.ow=[auth.currentUser.email];saveM()}applyRole();v19MetaLoaded(s);calc();try{const e2=auth.currentUser.email,nm=m.us?.[e2]?.n;if(nm)localStorage.setItem("lu",JSON.stringify({e:e2,n:nm}))}catch(x){}stDraw();payRemind();cuDraw();alDraw();if(isOwner()&&m.ow&&m.lb!==today())backup()},e=>failSt(e,"Settings sync: "))}else{v19Clear();ldH(1);lrem();if(unsub)unsub();if(mu)mu()}});
 addEventListener("online",()=>status("Syncing…","سنک ہو رہا ہے"));addEventListener("offline",()=>status("Offline","آف لائن"));
 // Vehicle ledger candidate: legacy transactions remain unassigned.
 const escV=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -1088,6 +1088,39 @@ html[data-theme="dark"] #app .v10-rate .pending{color:#ffd3d3!important;backgrou
 @media(max-width:600px){#entryPage .epRow>div{min-width:0}#entryPage .epRow input,#entryPage .epRow select{max-width:100%;min-width:0}#entryPage .epRow label{overflow-wrap:anywhere}#app .v13-helptext{max-width:75vw}}
 @media print{html[data-theme="dark"]{color-scheme:light!important;--ink:#0f1c3a;--mute:#5b6682;--line:#d5dbe8;--navy:#0a1a3c;--v6-bg:#fff;--v6-surface:#fff;--v6-text:#172840}html[data-theme="dark"] #app table th{background:#e3f3e8!important;color:#0b3d1e!important}html[data-theme="dark"] #app table td{color:#0b3d1e!important;border-color:#0a7a3c!important}.v17-opening-hint{display:none!important}}
 `;document.head.appendChild(v17Theme);
+
+
+// V19: session-scoped navigation only; never persist unsaved financial inputs.
+const v19Key='daata.navigation.v19';
+let v19Pending=null,v19Meta=false,v19Ready=false,v19Restoring=false,v19Activating=false;
+function v19Read(u){try{const s=JSON.parse(sessionStorage.getItem(v19Key)||'null');return s?.user===(u.uid||u.email)&&Array.isArray(s.tabs)&&/^\d{4}-\d{2}-\d{2}$/.test(s.date)?s:null}catch{return null}}
+function v19Clear(){try{sessionStorage.removeItem(v19Key)}catch{}v19Pending=null;v19Ready=false;v19Meta=false}
+function v19Start(u){v19Ready=false;v19Meta=false;v19Pending=v19Read(u);if(!v19Pending){for(const k of work.keys())if(k!=='home')work.delete(k);groupDrafts.clear();activeWork='home';entryOpen=false;entryPage.classList.add('hide');baseGo('home',true);tabBar()}return v19Pending?.date||priorBusinessDate()}
+function v19Selection(w){if(!w||w.group&&!entryOpen||w.section&&w.section!==cur)return;const v={};const c=$('#epCustomer');if(w.group==='customer'&&c&&m.cu[Number(c.value)]){v.customer=m.cu[Number(c.value)].n;v.vehicle=$('#epVehicle')?.value}
+if(w.section==='reports'){v.period=$('#v5ReportPeriod')?.value;for(const id of ['rf','rt','rmo'])v[id]=$('#'+id)?.value}
+w.navSelection=v}
+const v19SaveWork=saveWork;saveWork=function(){if(!v19Restoring)v19Selection(work.get(activeWork));v19SaveWork()};
+function v19Capture(){if(!v19Ready||v19Restoring||v19Activating||workChanging||!auth.currentUser)return;v19Selection(work.get(activeWork));const tabs=[...work.values()].map(w=>({key:w.key,section:w.section,group:w.group,mode:w.mode,date:w.key===activeWork?d.date:w.date,origin:w.origin,customer:w.section==='cdet'?m.cu[w.customer]?.n:undefined,vehicle:w.section==='cdet'&&w.key===activeWork?vehicleChoice:w.vehicle,selection:w.navSelection}));try{sessionStorage.setItem(v19Key,JSON.stringify({user:auth.currentUser.uid||auth.currentUser.email,date:d.date,active:activeWork,tabs}))}catch{}}
+function v19Allowed(t){return role()!=='staff'||['home','more'].includes(t)||!!AL?.includes(t)}
+function v19Customer(name){const ids=m.cu.map((c,i)=>c.n===name?i:-1).filter(i=>i>=0);return ids.length===1?ids[0]:-1}
+function v19ApplySelection(w){const v=w?.navSelection;if(!v)return;const c=$('#epCustomer');if(w.group==='customer'&&c&&v.customer){const i=v19Customer(v.customer);if(i>=0&&[...c.options].some(o=>o.value===String(i))){c.value=String(i);c.onchange?.();const vehicle=$('#epVehicle');if(vehicle&&[...vehicle.options].some(o=>o.value===v.vehicle))vehicle.value=v.vehicle;w.baseline=JSON.stringify(fieldState(entryPage))}}
+if(w.section==='reports'){for(const id of ['rf','rt','rmo'])if(v[id]&&$('#'+id))$('#'+id).value=v[id];const p=$('#v5ReportPeriod');if(p&&['Daily','Monthly','Custom'].includes(v.period)){p.value=v.period;p.onchange?.()}}}
+const v19Activate=activateWork;activateWork=async function(key){if(workChanging||v19Activating)return;const target=work.get(key);v19Activating=true;try{await v19Activate(key);if(activeWork===key&&target&&!target.dirty)v19ApplySelection(target)}finally{v19Activating=false;v19Capture()}};
+const v19TabBar=tabBar;tabBar=function(){v19TabBar();v19Capture()};
+async function v19Restore(){if(!v19Meta||!v19Pending||v19Restoring||v17LoadedDate!==d.date)return;const s=v19Pending;v19Pending=null;v19Restoring=true;try{const keys=new Map([['home','home']]);for(const a of s.tabs.slice(0,50)){if(!a||a.key==='home')continue;const date=/^\d{4}-\d{2}-\d{2}$/.test(a.date||'')?a.date:s.date;let w;
+if(a.group&&Object.hasOwn(groups,a.group)){const g=groups[a.group];if(!v19Allowed(g.origin)||role()==='staff'&&(a.group==='customer'||['accounts','transfer'].includes(a.mode))||!g.modes.some(x=>x[0]===a.mode))continue;w={key:groupKey(a.group),group:a.group,mode:a.mode,title:g.title,origin:g.origin,date,fields:[],navSelection:a.selection};w.render=()=>renderGroup(w)}
+else if(a.section==='cdet'&&role()!=='staff'){const i=v19Customer(a.customer);if(i<0)continue;w={key:'customer:'+i,section:'cdet',customer:i,title:m.cu[i].n,date,show:true,vehicle:a.vehicle??'*'}}
+else if(a.section&&Object.hasOwn(workNames,a.section)&&v19Allowed(a.section)&&$$('section[data-tab]').some(e=>e.dataset.tab===a.section)){w={key:a.section,section:a.section,title:workNames[a.section],date,navSelection:a.selection}}
+else if(typeof a.key==='string'){const kind=a.key.split(':')[0];if(!['sale','attendance'].includes(kind)||!v19Allowed(kind==='sale'?'sales':'staff'))continue;w={key:a.key,title:kind==='sale'?'Fuel POS':'Attendance',origin:kind==='sale'?'sales':'staff',date,render:()=>v3Simple(kind)}}
+if(w){work.set(w.key,w);keys.set(a.key,w.key)}}await activateWork(keys.get(s.active)||'home')}finally{v19Restoring=false;v19Ready=true;v19Capture()}}
+function v19MetaLoaded(s){if(s.metadata.fromCache)return;v19Meta=true;if(v19Pending)void v19Restore();else if(!v19Restoring){v19Ready=true;v19Capture()}}
+function v19DayLoaded(){if(v19Pending)void v19Restore()}
+addEventListener('pagehide',v19Capture);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)v19Capture()});
+document.addEventListener('change',()=>queueMicrotask(v19Capture));
+document.addEventListener('click',()=>queueMicrotask(v19Capture));
+$('#lg').addEventListener('click',v19Clear,true);
+$('#out').addEventListener('click',v19Clear,true);
 
 tabBar();
 cuDel=async i=>alert("Customer deletion disabled to protect ledger history.");
