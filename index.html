@@ -1009,7 +1009,7 @@ const v11Style=document.createElement('style');v11Style.textContent='.v11-filter
 
 // V13: contextual assistance and faster entry, without changing accounting.
 const v13Guides={
- home:['Select the business date first. Complete the pending tasks, then review the closing checklist.','پہلے کاروباری تاریخ منتخب کریں۔ باقی کام مکمل کرکے حساب بند کرنے کی فہرست دیکھیں۔'],
+ home:['Select the business date first. Save your entries and continue an open date whenever needed.','پہلے کاروباری تاریخ منتخب کریں۔ اندراج محفوظ کریں اور ضرورت کے مطابق دوبارہ جاری رکھیں۔'],
  reading:['Check opening reading from the previous day. Enter closing and testing litres. Use No Sale only when the meter has not moved.','پچھلے دن کی ابتدائی ریڈنگ دیکھیں۔ آخری ریڈنگ اور ٹیسٹنگ لیٹر درج کریں۔ میٹر نہ چلے تو کوئی فروخت نہیں منتخب کریں۔'],
  stock:['Record a delivery once using its challan and vehicle number. Check actual received litres against challan litres.','چالان اور گاڑی نمبر کے ساتھ آمد ایک بار درج کریں۔ اصل وصول شدہ لیٹر چالان سے ملائیں۔'],
  dip:['Enter measured tank litres, not the meter reading.','ٹینک میں موجود ناپے گئے لیٹر درج کریں، میٹر ریڈنگ نہیں۔'],
@@ -1174,7 +1174,7 @@ const v28TabBar=tabBar;tabBar=function(){v28TabBar();const w=work.get(activeWork
 const v29Style=document.createElement("style");v29Style.textContent="\n#app #dsum>.ln,#app #fbars>div,#app #tks>.ln,#app :is(.card,.ep)>.ln{border-bottom:1px solid var(--v6-line);padding-block:7px;gap:10px;min-width:0}\n#app #dsum>.ln:last-child,#app #fbars>div:last-child,#app :is(.card,.ep)>.ln:last-child{border-bottom:0}\n#app :is(#dsum,#fbars,#tks) .ln>b{flex-shrink:0;text-align:right;font-variant-numeric:tabular-nums lining-nums;white-space:nowrap}\n#app :is(#dsum,#fbars,#tks) .ln>span{min-width:0}\n#app #dsum>.v29-total{background:var(--v6-active);padding-inline:9px;border-radius:6px;font-weight:700}\n#app #dsum>.v29-stock{background:var(--v6-open);padding-inline:9px;border-radius:6px}\n#app #tks>.bar{margin-bottom:8px}\n#app #tks>.ln{border-bottom:0}\n#app #tks>.bar:not(:last-child){box-shadow:0 6px 0 -5px var(--v6-line)}\n#nav .v3nav span{white-space:normal!important;overflow:visible!important;font-size:12px!important;line-height:1.15!important}\n#nav .v3nav span small{white-space:normal!important}\n#app [data-tab=\"dayclose\"] #close,#app [data-tab=\"dayclose\"] [data-p^=\"chk.\"]{display:none!important}\n";document.head.appendChild(v29Style);
 
 v28Close.remove();
-for(const el of $('[data-go="dayclose"]'))if(el!==v28Close)el.remove();
+for(const el of $$('[data-go="dayclose"]'))if(el!==v28Close)el.remove();
 for(const b of easyPanel.querySelectorAll('[data-easy="close"]'))b.remove();
 const v29Reconcile=$('[data-tab="dayclose"]');
 v29Reconcile.querySelector('h2').dataset.bi='Cash Reconciliation|کیش کی تصدیق';
