@@ -2094,6 +2094,56 @@ const v54Style=document.createElement("style");v54Style.textContent=`@media scre
 #app .v54cash{display:none}
 `;document.head.append(v54Style);
 
+const v55Style=document.createElement("style");v55Style.textContent=`@media screen and (max-width:600px){
+#app #entryPage .ep.v50compact{padding:5px!important;gap:3px!important;margin:2px 0!important}
+#app #entryPage .ep.v50compact>.v13-sectionhelp{justify-self:end;margin:0!important;padding:0!important;min-height:0!important}
+#app #entryPage .ep.v50compact:has(>.v13-sectionhelp){position:relative}
+#app #entryPage .ep.v50compact>.v13-sectionhelp:not(:has(.v13-help-open)){position:absolute;right:6px;top:5px;z-index:1}
+#app #entryPage .ep.v50compact>.ln:has(#epBack){padding-right:60px!important;min-height:30px!important}
+#app #entryPage .ep.v50compact .epRow{grid-template-columns:minmax(0,35%) minmax(0,1fr)!important;gap:4px!important}
+#app #entryPage .ep.v50compact .epRow>*{min-width:0!important}
+#app #v41Totals{gap:3px!important;margin:0 0 3px!important}
+#app #v41Totals>div{display:grid!important;grid-template-columns:1fr!important;gap:2px!important;padding:4px 5px!important;font-size:11px!important}
+#app #v41Totals>div>b,#app #v32Register .v52total>span{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:4px!important;width:100%!important}
+#app #v41Totals>div:not(:last-child)>b{grid-template-columns:1fr!important;gap:2px!important}
+#app #v41Totals>div:not(:last-child)>b>span{display:flex!important;flex-direction:row!important;justify-content:space-between!important;align-items:baseline!important;gap:3px!important}
+#app #v41Totals>div>b>span>b,#app #v32Register .v52total span b{font-size:12px!important;white-space:nowrap!important;letter-spacing:-.15px}
+#app #v41Totals small,#app #v32Register .v52total small{font-size:10px!important;line-height:1.15!important}
+#app #entryPage .ep.v50compact #v32Register .v32-nozzle{grid-template-columns:1fr!important;gap:3px!important;padding:4px 0!important}
+#app #entryPage .ep.v50compact #v32Register .v32-nozzle>.v32-header{flex-direction:row!important;align-items:center!important;justify-content:space-between!important;min-height:28px!important}
+#app #entryPage .ep.v50compact #v32Register .v32-three{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:3px!important}
+#app #entryPage .ep.v50compact #v32Register .v32-three :is(input,output){font-size:12px!important;height:30px!important;min-height:30px!important}
+#app #entryPage .ep.v50compact #v32Register .v32-sub{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:2px 4px!important}
+#app #entryPage .ep.v50compact #v32Register .v32-sub>*{min-width:0!important;margin:0!important}
+#app #entryPage .ep.v50compact #v32Register .v32-sub>span{white-space:normal!important;overflow-wrap:normal!important;font-size:11px!important}
+#app #entryPage .ep.v50compact #v32Register .v32-sub>button{justify-self:stretch!important}
+#app #entryPage .ep.v50compact #v45Summary{padding:4px!important;gap:3px!important}
+#app #entryPage .ep.v50compact #v45Summary .ln{font-size:10px!important;gap:1px!important}
+#app #entryPage .ep.v50compact #v45Summary .ln b{font-size:12px!important;white-space:nowrap!important;font-variant-numeric:tabular-nums}
+#app #entryPage .ep.v50compact .v45tabs{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:3px!important}
+#app #entryPage .ep.v50compact .v45tabs button{min-width:0!important;min-height:36px!important;font-size:11px!important;padding:3px!important}
+#app #entryPage .ep.v50compact .v33-toolbar{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;gap:3px!important}
+#app #entryPage .ep.v50compact .v33-toolbar>b,#app #entryPage .ep.v50compact .v33-toolbar>label{grid-column:1/-1!important}
+#app #entryPage .ep.v50compact .v33-toolbar>input{width:100%!important;min-width:0!important}
+#app #entryPage .ep.v50compact .v33-toolbar>label{justify-content:flex-start!important;gap:6px!important}
+#app #v34Centre>.card,#app #v47Mgmt{padding:6px!important;margin:2px 0!important;min-width:0!important}
+#app #v34Centre h2,#app #v47Mgmt h3{margin:0 0 4px!important;padding:4px 6px!important;font-size:15px!important;line-height:1.25!important}
+#app #v47Mgmt h3{color:white!important;background:#235c9f!important}
+#app #v34Centre .v34filters{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:4px!important}
+#app #v34Centre .v34filters>label{font-size:11px!important;gap:2px!important;min-width:0!important;margin:0!important}
+#app #v34Centre .v34filters>label:has(#v34Type),#app #v34Centre .v34filters>label:has(#v34Search){grid-column:1/-1!important}
+#app #v34Centre .v34filters :is(input,select){width:100%!important;min-width:0!important;min-height:32px!important;height:32px!important;padding:3px 5px!important;font-size:12px!important;margin:0!important}
+#app #v34Centre .v34actions{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:3px!important;margin-top:4px!important}
+#app #v34Centre .v34actions button{min-height:36px!important;padding:3px!important;font-size:11px!important;white-space:normal!important;margin:0!important;line-height:1.15!important}
+#app #v47Mgmt .v47body{padding:3px!important;gap:4px!important}
+#app #v47Mgmt .v48grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:4px!important}
+#app #v47Mgmt .v48grid .v47menu{min-height:42px!important;height:42px!important;align-items:center!important;justify-content:center!important;font-size:12px!important;padding:4px!important;line-height:1.2!important;margin:0!important}
+#app #v47Mgmt .v50grid{gap:3px!important}#app #v47Mgmt .v50grid button{min-height:34px!important;padding:3px!important;font-size:11px!important}
+#app #v47Mgmt .v50detail{padding:5px!important;margin:3px 0!important}#app #v47Mgmt .v50detail h4{font-size:12px!important;margin:0 0 4px!important;padding:4px!important}
+#app #nav button{min-width:108px!important;word-break:normal!important;overflow-wrap:normal!important;font-size:11px!important;line-height:1.2!important;padding:4px!important}
+#app #nav button small{font-size:9px!important}#nav .v3nav span{overflow-wrap:normal!important;word-break:normal!important;font-size:11px!important}#nav .v3nav:not(.hide){padding-inline:3px!important}
+}
+`;document.head.append(v55Style);
 v47Show();
 
 tabBar();
