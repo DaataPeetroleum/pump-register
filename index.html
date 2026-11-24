@@ -1582,10 +1582,10 @@ const v41Entries=()=>{const out=[];const add=(title,section,terms,run,guide,sele
  for(const [g,group] of Object.entries(groups)){if(!v41Allowed(group.origin)||role()==='staff'&&g==='customer')continue;for(const [mode,title] of group.modes){if(role()==='staff'&&['accounts','transfer'].includes(mode))continue;if(g==='reading'){if(mode!=='reading:0')continue;add('Nozzle Readings','Quick Entry','meter diesel petrol opening closing testing nozzle 1 2 3 4 5 6 7 8',()=>openTask('reading',0),'reading','#entryPage');continue}add(title,group.title,mode+' '+({debit:'udhar credit lent',recovery:'payment recovery received',delivery:'fuel stock delivery tanker',count:'cash notes denominations',dip:'tank measured stock',customerlist:'vehicle ledger balance statement',customeradd:'new customer register'}[mode]||''),()=>openTask(mode),v13Guides[mode]?mode:g,'#entryPage')}}
  if(v41Allowed('sales'))add('Fuel Sale','Quick Entry','pos sale receipt',()=>openTask('sale'),'sales','#entryPage');
  if(v41Allowed('staff')){add('Attendance','Staff','present employee',()=>openTask('attendance'),'staff','#entryPage');nav('Staff Management','staff','staff employee attendance approvals payroll','staff')}
- if(role()!=='staff'){nav('Report Centre','reports','report pdf print excel','reports');for(const [key,title] of Object.entries(v34Types))add(title,'Reports','print pdf export '+key,()=>{go('reports');setTimeout(()=>{if(cur==='reports'&&!entryOpen){$('#v34Type').value=key;v34Filters();v34Invalidate()}},80)},'reports','#v34Centre');nav('Day Closing','dayclose','close day reconciliation');nav('Fuel Rates','rates','rate price diesel petrol');nav('Oil & Items','lub','oil item inventory');nav('Payroll','payroll','salary advance staff');nav('Audit & Corrections','audit','audit approval correction');nav('Management','more','settings administration','management');nav('Settings','settings','pump setup users security app settings','management');
- for(const [key,title] of v7Categories){add(title,'Settings',key,()=>{go('settings');setTimeout(()=>{const e=$('#v7-setting-'+key);if(e)e.open=true},80)},'management','#v7-setting-'+key)}
+ if(role()!=='staff'){nav('Report Centre','reports','report pdf print excel','reports');for(const [key,title] of Object.entries(v34Types))add(title,'Reports','print pdf export '+key,()=>{go('reports');setTimeout(()=>{if(cur==='reports'&&!entryOpen){$('#v34Type').value=key;v34Filters();v34Invalidate()}},80)},'reports','#v34Centre');nav('Day Closing','dayclose','close day reconciliation');nav('Fuel Rates','rates','rate price diesel petrol');nav('Oil & Items','lub','oil item inventory');nav('Payroll','payroll','salary advance staff');nav('Audit & Corrections','audit','audit approval correction');nav('Management','more','settings administration','management');
+
  add('Business Date Calendar','Owner & Management','date history calendar previous business date',()=>{go('home');setTimeout(()=>$('#date')?.closest('.v36-date-tools')?.querySelector('button')?.click(),100)},'home','#v35Calendar',{noDemo:true});
- if(v37Owner()){add('Recycle Bin','Owner','restore deleted day permanent delete',()=>v37Bin(),'audit','#v37Bin',{noDemo:true});add('Delete Day','Owner','delete business date owner pin',()=>{go('settings');setTimeout(()=>{const e=$('#v7-setting-security');if(e){e.open=true;$('#ddy')?.scrollIntoView({block:'center'})}},80)},'audit','#v7-setting-security')}
+ if(v37Owner()){add('Recycle Bin','Owner','restore deleted day permanent delete',()=>v37Bin(),'audit','#v37Bin',{noDemo:true});add('Delete Day','Owner','delete business date owner pin',()=>{go('home');setTimeout(()=>$('#date')?.closest('.v36-date-tools')?.querySelector('button')?.click(),100)},'audit','#v7-setting-security')}
  }return out};
 const v41Tools=document.createElement('div');v41Tools.id='v41Tools';v41Tools.className='noprint';v41Tools.innerHTML='<button type="button" class="alt" id="v41SearchBtn">⌕ Search anything</button><button type="button" class="alt" id="v41HelpBtn">▶ User Manual</button>';v6Shell.querySelector('.tw').after(v41Tools);
 const v41Overlay=document.createElement('div');v41Overlay.id='v41Overlay';v41Overlay.className='noprint';v41Overlay.hidden=true;v41Overlay.innerHTML='<div id="v41Panel" role="dialog" aria-modal="true" aria-labelledby="v41Title"><div class="v41Head"><h3 id="v41Title">Search</h3><button class="alt" id="v41Close">Close ×</button></div><div id="v41List"><input id="v41Query" type="search" placeholder="Search options, reports, customer or vehicle" autocomplete="off"><div id="v41Results"></div></div><div id="v41Player" hidden><div id="v41Caption" aria-live="polite"></div><iframe id="v41Frame" title="Isolated visual tutorial" sandbox="allow-same-origin"></iframe><div id="v41Controls"><button class="alt" id="v41Play">▶ Play</button><button class="alt" id="v41Pause">Ⅱ Pause</button><button class="alt" id="v41Replay">↻ Replay</button><button class="alt" id="v41Back">Tutorials</button><select id="v41Speed" aria-label="Playback speed"><option value="1">1×</option><option value="2">2×</option></select></div><small>Demonstration only — no entries are saved or submitted.</small></div></div>';document.body.append(v41Overlay);
@@ -1784,6 +1784,63 @@ function v46Dashboard(){const c=v45BaseT(d),z=v45Summary(d),rows=v46Rows(z).filt
 const v46Calc=calc;calc=function(){v46Calc();v46Dashboard()};
 // V45 subscribed to cash history only after opening Cash Handling. Start it on Home as well.
 setInterval(()=>{if(auth.currentUser){if(v45UID!==auth.currentUser.uid)v45Refresh();if(cur==='home')v46Dashboard()}},1000);
+
+// V47: compact dashboard and administration; no new database schema or security claims.
+workNames.home='Dashboard';v7Names.home[0]='Dashboard';work.get('home').title='Dashboard';
+for(const b of v7Nav.querySelectorAll('[data-go="home"] span'))b.innerHTML=bi('Dashboard','ڈیش بورڈ');
+homeSec.querySelector('h2').dataset.bi='Dashboard|ڈیش بورڈ';
+const v47Style=document.createElement('style');v47Style.textContent=`
+#app [data-tab="home"] > :not(h2:first-child):not(.v6-datecard):not(.v46-summary){display:none!important}
+#app [data-tab="home"] .v6-datecard #v3status{display:none!important}
+#app [data-tab="more"] > .work-grid{display:none!important}
+#app [data-tab="more"] > .card:not(#v47Mgmt){display:none!important}
+#app [data-tab="settings"] > :not(#v47LegacySettings){display:none!important}
+#v47Mgmt{padding:0!important;overflow:hidden;border:1px solid #c7d3df;border-radius:9px;background:var(--card,#fff)}
+#v47Mgmt h3{background:#235c9f;color:white;margin:0;padding:9px 12px;font-size:15px}
+#v47Mgmt .v47body{padding:8px 12px}#v47Mgmt .v47menu{display:flex;width:100%;align-items:center;justify-content:space-between;text-align:left;padding:9px 4px!important;margin:0!important;border:0;border-bottom:1px solid #c7d3df;border-radius:0;background:transparent;color:inherit;min-height:36px!important;box-shadow:none}
+#v47Mgmt .v47note{font-size:12px;color:var(--mute,#64748b);margin:6px 0}#v47Mgmt .v47actions{display:flex;gap:5px;flex-wrap:wrap;margin:8px 0}#v47Mgmt [hidden]{display:none!important}
+`;document.head.append(v47Style);
+const v47Mgmt=document.createElement('div');v47Mgmt.id='v47Mgmt';v47Mgmt.className='card';mgmt.append(v47Mgmt);
+const v47Menus=[['users','User Management'],['approvals','Entry Approvals'],['rates','Fuel Prices & History'],['alerts','Business Alerts'],['audit','Audit Log'],['backup','Backup & Sync']];
+function v47Button(parent,label,fn){const b=document.createElement('button');b.type='button';b.className='alt v47menu';b.textContent=label+'  ›';b.onclick=fn;parent.append(b);return b}
+function v47Note(parent,text){const p=document.createElement('p');p.className='v47note';p.textContent=text;parent.append(p)}
+const v47Apl=$('#apl'); // keep the existing approval queue node and its handlers
+function v47Show(page='main'){
+ if(v47Apl.parentElement!==$('[data-tab="staff"]'))$('[data-tab="staff"]').append(v47Apl);
+ v47Mgmt.replaceChildren();const h=document.createElement('h3');h.textContent=page==='main'?'MANAGEMENT':v47Menus.find(x=>x[0]===page)?.[1]||'Management';v47Mgmt.append(h);const body=document.createElement('div');body.className='v47body';v47Mgmt.append(body);
+ const owner=v37Owner();if(!auth.currentUser){v47Note(body,'Sign in to continue.');return}
+ if(page==='main'){for(const [key,title] of v47Menus){if(!owner&&key!=='users'&&!(key==='rates'&&role()==='mgr'))continue;v47Button(body,title,()=>v47Show(key))}return}
+ v47Button(body,'← Back to Management',()=>v47Show());if(page!=='users'&&!owner&&!(page==='rates'&&role()==='mgr')){v47Note(body,'Owner access required.');return}
+ if(page==='users'){
+  v47Button(body,'Change My Password',()=>$('#cpw').click());
+  v47Button(body,'Forgot / Reset My Password',async()=>{const email=auth.currentUser?.email;if(!email||!confirm('Send password reset email to '+email+'?'))return;try{await sendPasswordResetEmail(auth,email);alert('Reset email sent.')}catch(e){alert(e.message)}});
+  if(!owner)return;
+  v47Button(body,'Create New User',()=>{if(!v37Owner())return;const name=(prompt('Full name')||'').trim();if(name)void mkUser(name)});
+  const list=document.createElement('select');list.setAttribute('aria-label','Select existing user');const users=[...new Set([...Object.keys(m.us||{}),...(m.mg||[]),...(m.ow||[])])];for(const email of users){const opt=document.createElement('option');opt.value=email;opt.textContent=(m.us?.[email]?.n||email)+' — '+((m.ow||[]).includes(email)?'Owner':(m.mg||[]).includes(email)?'Manager':'Staff');list.append(opt)}body.append(list);
+  v47Button(body,'Send Selected User Password Reset',async()=>{if(!v37Owner()||!list.value||!confirm('Send reset email to '+list.value+'?'))return;try{await sendPasswordResetEmail(auth,list.value);alert('Reset email sent.')}catch(e){alert(e.message)}});
+  v47Note(body,'User roles are displayed from existing records. Secure role changes, account activation/deactivation/deletion, session revocation and PIN reset require verified Firebase administrator services; unavailable in this release.');
+ }else if(page==='approvals'){
+  v47Note(body,'Existing pending requests only. Universal revision/deletion enforcement is not verified.');body.append(v47Apl);void apDraw();
+ }else if(page==='rates'){
+  const info=document.createElement('div');info.textContent='Selected business date '+d.date+' · Diesel '+fmt(n(d.rD))+' · Petrol '+fmt(n(d.rP));body.append(info);
+  v47Button(body,'Current Rates / Update / History',()=>{if(v37Owner()||role()==='mgr')go('rates')});
+  v47Note(body,'Existing rate history and daily rate entry retained.');
+ }else if(page==='alerts'){
+  const z=v45Summary(),c=v45BaseT(d),messages=[];if(z.closing<0)messages.push('Negative cash balance: '+fmt(z.closing));if(z.credit>z.sale)messages.push('Credit sales exceed total sales');if(z.cashSale<0)messages.push('Negative cash sales — check allocations');if(c.hB<0||c.pB<0)messages.push('Negative fuel stock');if(v37Pending())messages.push('Unsynced local entries');if(!navigator.onLine)messages.push('Device offline');if(!v45HistoryReady)messages.push('Cash history not yet verified');if(!v45Done(d,z))messages.push('Working not completed for '+d.date);if(z.difference)messages.push('Reconciliation difference: '+fmt(z.difference));
+  for(const msg of messages.length?messages:['No local cash or stock warnings'])v47Note(body,msg);const pending=document.createElement('p');pending.className='v47note';pending.textContent='Checking pending approvals…';body.append(pending);void getDocsFromServer(query(collection(db,'pending'),where('st','==','pending'),limit(50))).then(q=>{pending.textContent=q.docs.length?'Pending approvals: '+q.docs.length+(q.docs.length===50?'+':''):'No pending approvals found'}).catch(()=>{pending.textContent='Pending approvals could not be verified'});v47Button(body,'Refresh Alerts',()=>v47Show('alerts'));
+ }else if(page==='audit'){v47Button(body,'Open Audit Log',()=>{if(v37Owner())go('audit')});}
+ else if(page==='backup'){v47Note(body,'Connection: '+(navigator.onLine?'Online':'Offline')+' · '+(v37Pending()?'Local entries pending':'No local queue detected'));v47Note(body,'Last sync: '+(lastOk||'Not yet confirmed')+(lastErr?' · Last error: '+lastErr:''));v47Button(body,'Download Backup',()=>{if(v37Owner())$('#bk').click()});v47Note(body,'Existing automatic synchronization and backup functions retained. Restore is not verified.');}
+}
+let v47Identity='';const v47Role=applyRole;applyRole=function(){v47Role();const id=(auth.currentUser?.uid||'')+':'+v37Owner();if(id!==v47Identity){v47Identity=id;v47Show()}};
+const v47Approve=approve;approve=async function(id,ok){if(!v37Owner())return alert('Owner authorization required');return v47Approve(id,ok)};
+// Keep legacy settings nodes attached for older handlers, but remove duplicate navigation.
+for(const id of ['tkset','clr','delU','addO']){const el=$('#'+id);if(el){el.style.display='none';el.onclick=()=>alert('This action is unavailable in V47.')}}
+// Preserve lubricant inventory access outside Management.
+const v47Oil=document.createElement('button');v47Oil.type='button';v47Oil.className='alt';v47Oil.dataset.own='';v47Oil.textContent='Lubricant Stock & Cost';v47Oil.onclick=()=>{if(v37Owner())go('lub')};$('[data-tab="stock"] > h2')?.after(v47Oil);
+const v47LegacySettings=document.createElement('div');v47LegacySettings.id='v47LegacySettings';v47LegacySettings.className='card';v47Note(v47LegacySettings,'Settings have moved to Management.');v47Button(v47LegacySettings,'Open Management',()=>go('more'));v7Settings.append(v47LegacySettings);
+$('#rtl').before(v10RateBar);
+const v47StockRender=renderGroup;renderGroup=function(w){v47StockRender(w);if(w.group==='stock'&&v37Owner()&&!$('#v47OilLink')){const b=document.createElement('button');b.id='v47OilLink';b.type='button';b.className='alt';b.textContent='Lubricant Stock & Cost';b.onclick=()=>{if(v37Owner())go('lub')};entryPage.querySelector('.ep')?.append(b)}};
+v47Show();
 
 tabBar();
 cuDel=async i=>alert("Customer deletion disabled to protect ledger history.");
