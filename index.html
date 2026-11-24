@@ -1169,7 +1169,7 @@ const v28Recovery=document.createElement('button');v28Recovery.type='button';v28
 const v28Close=document.createElement('button');v28Close.type='button';v28Close.className='v3nav';v28Close.dataset.v28='close';v28Close.dataset.go='dayclose';v28Close.innerHTML='<i>✓</i><span>'+bi('Day Closing','حساب بند')+'</span>';
 v7Nav.querySelector('.v3nav[data-go="customers"]').after(v28Recovery);v7Nav.querySelector('.v3nav[data-go="reports"]').before(v28Close);
 const v28Role=applyRole;applyRole=function(){v28Role();v28Recovery.classList.toggle('hide',role()==='staff');};
-const v28TabBar=tabBar;tabBar=function(){v28TabBar();const w=work.get(activeWork),rec=w?.group==='customer'&&w.mode==='recovery',close=activeWork==='dayclose';v28Recovery.classList.toggle('on',rec);v28Close.classList.toggle('on',close);v28Recovery.classList.toggle('v4-open',work.get(groupKey('customer'))?.mode==='recovery');v28Close.classList.toggle('v4-open',work.has('dayclose'));if(rec||close){for(const b of v7Nav.querySelectorAll('.v3nav'))b.classList.toggle('on',b===(rec?v28Recovery:v28Close));const b=rec?v28Recovery:v28Close;if(b.offsetLeft<v7Nav.scrollLeft||b.offsetLeft+b.offsetWidth>v7Nav.scrollLeft+v7Nav.clientWidth)b.scrollIntoView({block:'nearest',inline:'nearest'});}};
+const v28TabBar=tabBar;tabBar=function(){v28TabBar();const w=work.get(activeWork),rec=false,close=activeWork==='dayclose';v28Recovery.classList.toggle('on',rec);v28Close.classList.toggle('on',close);v28Recovery.classList.toggle('v4-open',work.get(groupKey('customer'))?.mode==='recovery');v28Close.classList.toggle('v4-open',work.has('dayclose'));if(rec||close){for(const b of v7Nav.querySelectorAll('.v3nav'))b.classList.toggle('on',b===(rec?v28Recovery:v28Close));const b=rec?v28Recovery:v28Close;if(b.offsetLeft<v7Nav.scrollLeft||b.offsetLeft+b.offsetWidth>v7Nav.scrollLeft+v7Nav.clientWidth)b.scrollIntoView({block:'nearest',inline:'nearest'});}};
 
 const v29Style=document.createElement("style");v29Style.textContent="\n#app #dsum>.ln,#app #fbars>div,#app #tks>.ln,#app :is(.card,.ep)>.ln{border-bottom:1px solid var(--v6-line);padding-block:7px;gap:10px;min-width:0}\n#app #dsum>.ln:last-child,#app #fbars>div:last-child,#app :is(.card,.ep)>.ln:last-child{border-bottom:0}\n#app :is(#dsum,#fbars,#tks) .ln>b{flex-shrink:0;text-align:right;font-variant-numeric:tabular-nums lining-nums;white-space:nowrap}\n#app :is(#dsum,#fbars,#tks) .ln>span{min-width:0}\n#app #dsum>.v29-total{background:var(--v6-active);padding-inline:9px;border-radius:6px;font-weight:700}\n#app #dsum>.v29-stock{background:var(--v6-open);padding-inline:9px;border-radius:6px}\n#app #tks>.bar{margin-bottom:8px}\n#app #tks>.ln{border-bottom:0}\n#app #tks>.bar:not(:last-child){box-shadow:0 6px 0 -5px var(--v6-line)}\n#nav .v3nav span{white-space:normal!important;overflow:visible!important;font-size:12px!important;line-height:1.15!important}\n#nav .v3nav span small{white-space:normal!important}\n#app [data-tab=\"dayclose\"] #close,#app [data-tab=\"dayclose\"] [data-p^=\"chk.\"]{display:none!important}\n";document.head.appendChild(v29Style);
 
@@ -1753,6 +1753,37 @@ const v45Calendar=v35DrawCalendar;v35DrawCalendar=function(){v45Calendar();if(v4
 setInterval(()=>{if(auth.currentUser){if(v45UID&&v45UID!==auth.currentUser.uid){v45Unsub?.();v45UID='';v45History=[];v45HistoryReady=false}if($('#v45Summary'))v45Refresh()}else if(v45UID){v45Unsub?.();v45UID='';v45History=[];v45HistoryReady=false}},1000);
 // Same report available in Unified Report Centre.
 v34Types.cashflow='Daily Cash Flow Statement';$('#v34Type').insertAdjacentHTML('beforeend','<option value="cashflow">Daily Cash Flow Statement</option>');const v45ReportData=v34Data;v34Data=function(type,days,from,to,filter='*',vehicle='*',search=''){if(type!=='cashflow')return v45ReportData(type,days,from,to,filter,vehicle,search);return {type,from,to,columns:['Sources / Receipts','Amount','Allocation / Payments','Amount'],groups:days.map(r=>{const z=v45Summary(r);return {title:r.date+(v45Done(r,z)?' · ✓ Working Completed':''),rows:v45Rows(z),subtotal:[]}}),total:[]}};
+
+// V46: compact read-only dashboard; reuse the V45 accounting calculations.
+const v46Style=document.createElement('style');
+v46Style.textContent=`#nav [data-v28="recovery"]{display:none!important}
+#app [data-tab="home"] .kp.v46-summary{display:grid;grid-template-columns:minmax(0,1fr)!important;grid-auto-rows:auto!important;gap:8px!important}
+#app .v46-block{background:#fff;color:#172840;border:1px solid #dce3e9;border-radius:8px;overflow:hidden;min-width:0}
+#app .v46-heading{margin:0;padding:5px 10px;color:white;font-size:13px;font-weight:700;line-height:1.35}
+#app .v46-fuel{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:7px 10px;gap:6px}
+#app .v46-cell{min-width:0;display:flex;flex-direction:column;gap:2px}
+#app .v46-cell small{color:#526276;font-size:11px;line-height:1.25}
+#app .v46-cell b{font-size:clamp(12px,1.3vw,19px);font-variant-numeric:tabular-nums;overflow-wrap:anywhere;line-height:1.3}
+#app .v46-table{width:100%;border-collapse:collapse;table-layout:fixed;color:#172840;background:white;font-size:12px}
+#app .v46-table :is(td,th){padding:4px 8px!important;border-bottom:1px solid #e4e9ef;text-align:start;overflow-wrap:anywhere;line-height:1.25;background:white;color:#172840}
+#app .v46-table td:nth-child(even){text-align:end;font-variant-numeric:tabular-nums;font-weight:600}
+#app .v46-table tr:last-child td{font-weight:700;background:#f1f5f3}
+#app .v46-foot{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:7px 10px}
+#app .v46-status{padding:4px 10px;text-align:end;font-size:11px;border-top:1px solid #e4e9ef}
+#app .v46-negative{color:#b91c1c!important}#app .v46-positive{color:#15803d!important}
+@media(max-width:480px){#app .v46-table{font-size:11px}#app .v46-table :is(td,th){padding:4px!important}#app .v46-heading{font-size:12px}}
+`;document.head.append(v46Style);
+// Preserve the customer recovery workflow, removing only its separate navigation shortcut.
+v28Recovery.remove();
+v27KP.classList.remove('v27-summary');v27KP.classList.add('v46-summary');
+function v46Cell(label,value,cls=''){return '<div class="v46-cell"><small>'+label+'</small><b class="'+cls+'">'+fmt(value)+'</b></div>'}
+function v46Block(title,color,body){return '<section class="v46-block"><h3 class="v46-heading" style="background:'+color+'">'+title+'</h3>'+body+'</section>'}
+function v46Fuel(title,color,opening,sold,received,remaining){return v46Block(title,color,'<div class="v46-fuel">'+v46Cell('Opening',opening)+v46Cell('− Sold',sold,'v46-negative')+v46Cell('+ Stock Rcvd',received)+v46Cell('Remaining',remaining,remaining<0?'v46-negative':'v46-positive')+'</div>')}
+function v46Rows(z){return [['Opening Cash',z.opening,'Credit Sale',z.credit],['Today’s Sale',z.sale,'Bank / Wallet Receipts',z.digital+z.bankRecovery],['Recovery',z.recovery,'Bank Deposit',z.deposit],['Other Cash In',z.otherIn,'Paid to Owner',z.owner],['','','Expenses',z.expenses],['','','Supplier Payment',z.supplier],['','','Other Payments',z.otherOut],['','','Safe In',z.closing],['Total',z.left,'Total',z.right]]}
+function v46Dashboard(){const c=v45BaseT(d),z=v45Summary(d),rows=v46Rows(z).filter(r=>!(['Supplier Payment','Other Payments'].includes(r[2])&&!r[3])).map(r=>r[0]==='Other Cash In'&&!r[1]?['','',r[2],r[3]]:r);const table='<table class="v46-table"><colgroup><col style="width:29%"><col style="width:21%"><col style="width:29%"><col style="width:21%"></colgroup><thead><tr><th colspan="2">RECEIPTS (+)</th><th colspan="2">DISTRIBUTION (−)</th></tr></thead><tbody>'+rows.map(r=>'<tr>'+r.map(x=>'<td>'+ (typeof x==='number'?fmt(x):escV(x))+'</td>').join('')+'</tr>').join('')+'</tbody></table>';const ready=v45HistoryReady&&v21DayReady===d.date&&!v37Pending(),valid=z.cashSale>=0&&z.closing>=0,done=ready&&valid&&v45Done(d,z);const status=(!ready?'Cash history / sync not yet verified · ': '')+(!valid?'Check negative cash or sales allocations · ':'')+(done?'✓ Working Completed':'Working In Progress');const html=v46Fuel('DIESEL STOCK (L)','#235c9f',n(d.hS),c.hL,c.hA,c.hB)+v46Fuel('PETROL STOCK (L)','#d48b16',n(d.pS),c.pL,c.pA,c.pB)+v46Block('DAILY SALES & CASH SUMMARY (Rs.)','#18794e',table+'<div class="v46-foot">'+v46Cell('Today’s Cash Sale',z.cashSale,z.cashSale<0?'v46-negative':'')+v46Cell('Cash in Hand',z.closing,z.closing<0?'v46-negative':'v46-positive')+v46Cell('Difference',z.difference,z.difference?'v46-negative':'')+'</div><div class="v46-status '+(done?'v46-positive':'')+'">'+escV(status)+'</div>');if(v27KP.innerHTML!==html)v27KP.innerHTML=html}
+const v46Calc=calc;calc=function(){v46Calc();v46Dashboard()};
+// V45 subscribed to cash history only after opening Cash Handling. Start it on Home as well.
+setInterval(()=>{if(auth.currentUser){if(v45UID!==auth.currentUser.uid)v45Refresh();if(cur==='home')v46Dashboard()}},1000);
 
 tabBar();
 cuDel=async i=>alert("Customer deletion disabled to protect ledger history.");
