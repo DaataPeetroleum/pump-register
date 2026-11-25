@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0a1a3c"><script>(function(){try{var t=localStorage.getItem("th")||"system",d=t==="dark"||(t==="system"&&matchMedia("(prefers-color-scheme:dark)").matches);document.documentElement.dataset.theme=d?"dark":"light"}catch(e){}})()</script><link rel="manifest" href="manifest.json">
-<link rel="icon" href="daata-mark-v8.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="daata-icon-v8-192.png"><title>Daata Petroleum · V66</title>
+<link rel="icon" href="daata-mark-v8.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="daata-icon-v8-192.png"><title>Daata Petroleum · V67</title>
 <style>
 :root{--bg:#eef1f7;--ink:#0f1c3a;--mute:#5b6682;--line:#d5dbe8;--navy:#0a1a3c;--navy2:#13306b;--gold:#d4a72c;--gold2:#f0c850;--bad:#c0392b;--ok:#1e9e5a}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Naskh Arabic",Tahoma,system-ui,sans-serif;line-height:1.5;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
@@ -1711,7 +1711,7 @@ function v42Schedule(e){
  let attempts=0;
  const commit=()=>{v42AutoTimer=null;if(activeWork!==key||d.date!==date||v32User()!==user||work.get(key)?.mode!==mode||d.closed||d.v37Deleted||$('#epSave')!==button)return;
  if(bankBusy||workChanging||v37Busy||v21DayReady!==date||!v19Meta||(!reading&&v37Pending()&&navigator.onLine)){if(++attempts<=30)v42AutoTimer=setTimeout(commit,2000);else epMessage('Draft retained. Wait for sync, then save or continue editing.');return;}
- if(button.disabled)return;if(reading){for(let i=0;i<6;i++)if(v32Numbers(i).valid)v32QueueReading(i)}else if(entryDirty()&&v42Complete(w))button.click();};
+ if(button.disabled){if(++attempts<=30)v42AutoTimer=setTimeout(commit,2000);return;}if(reading){for(let i=0;i<6;i++)if(v32Numbers(i).valid)v32QueueReading(i)}else if(entryDirty()&&v42Complete(w))button.click();};
  v42AutoTimer=setTimeout(commit,10000);
 }
 document.addEventListener('input',v42Schedule);document.addEventListener('change',v42Schedule);
@@ -2280,10 +2280,10 @@ function v62Bin(root,refresh){const panel=document.createElement('details');pane
 // V64: one inline opening-stock record; repair missing/deleted baseline without restoring deleted working.
 function v64Plan(all,date,h,p,remove=false){
  const active=all.filter(x=>!x.data.v37Deleted).sort((a,b)=>a.id.localeCompare(b.id));
- if(active.length>399||active.some(x=>x.id!==x.data.date||x.data.closed))throw Error('Closed or too many active dates; reconcile before changing opening stock.');
+ if(active.length>399||active.some(x=>x.id!==x.data.date))throw Error('Stock history requires reconciliation; no changes made.');if(active.some(x=>x.data.closed))throw Error('Reopen closed date '+active.find(x=>x.data.closed).id+' before changing its stock balance.');
  if(remove){if(active.some(x=>{const z=v45BaseT({...blank(x.id),...x.data});return z.hL||z.pL||z.hA||z.pA||(x.data.dl||[]).length;}))throw Error('Sales or deliveries depend on opening stock. Use Edit instead.');return {rows:active,plan:active.map(x=>({...x.data,hS:0,pS:0})),date:null};}
  if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||date>today()||new Date(date+'T00:00:00Z').toISOString().slice(0,10)!==date)throw Error('Choose a valid business date.');
- if(all.some(x=>x.id===date&&x.data.v37Deleted))throw Error('This date is deleted. Select the first active date or restore the deleted date first.');
+ if(all.some(x=>x.id===date&&x.data.v37Deleted))throw Error('Use Start Fresh Working for this date, then enter opening stock.');
  if(active.length&&date>active[0].id)throw Error('Opening date must be on or before '+active[0].id+'.');
  if(!active.some(x=>x.id===date))active.unshift({id:date,data:blank(date),missing:true});
  return {rows:active,plan:v57StockPlan(active.map(x=>x.data),h,p),date};
@@ -2296,7 +2296,7 @@ async function v64Opening(panel){
  message.textContent=old?'Edit the saved opening stock or use the form above.':meta.stockOpeningDate?'Previous opening date is missing/deleted. Enter actual opening stock for '+first+'.':'Enter actual stock before first-day sales.';
  const row=document.createElement('div');row.className='v64record';if(meta.stockOpeningDate){row.innerHTML='<span>'+escV(meta.stockOpeningDate)+(old?'':' (deleted/missing)')+'</span><span>'+ (old?fmt(n(old.data.hS)):'—')+'</span><span>'+(old?fmt(n(old.data.pS)):'—')+'</span><div><button type="button" class="alt">Edit</button> <button type="button" class="alt v64delete">Delete</button></div>';list.append(row);const [edit,del]=row.querySelectorAll('button');edit.onclick=()=>{field('date').focus();form.scrollIntoView({block:'nearest'})};del.onclick=()=>commit(true);}else list.textContent='No saved opening stock.';
  async function commit(remove){save.disabled=true;for(const b of list.querySelectorAll('button'))b.disabled=true;try{v62Check();const date=field('date').value,h=remove?0:v43Amount(field('diesel').value,TANKS[0][3]),p=remove?0:v43Amount(field('petrol').value,TANKS[1][3]);const result=v64Plan(all,date,h,p,remove);if(remove&&!await v50Confirm('Delete opening stock','Clear the opening stock record? Stock entry will require a new opening balance.','Delete'))return;await v37Pin();v62Check();bankBusy=v37Busy=true;try{let next;await runTransaction(db,async tx=>{const s=await tx.get(mr),current=s.data();v37CheckMeta(current);if(!v37Equal(current,meta))throw Error('Records changed; reopen Opening Stock.');const snaps=await Promise.all(result.rows.map(x=>tx.get(doc(db,'days',x.id))));for(let i=0;i<snaps.length;i++){const x=result.rows[i];if(x.missing?snaps[i].exists():!v37Equal(snaps[i].data(),x.data))throw Error('Stock changed; reopen Opening Stock.');}for(let i=0;i<result.rows.length;i++){const x=result.rows[i],r=result.plan[i],ref=doc(db,'days',x.id);if(x.missing)tx.set(ref,r);else tx.update(ref,{hS:r.hS,pS:r.pS,v45Completed:null});}tx.update(mr,{stockOpeningDate:result.date});v57Audit(tx,result.date||meta.stockOpeningDate||d.date,remove?'delete opening stock':'save opening stock',{date:meta.stockOpeningDate||null,h:old?.data.hS??null,p:old?.data.pS??null},{date:result.date,h,p,days:result.plan.length});next={...current,stockOpeningDate:result.date};});m=next;v45History=[...v45History.filter(x=>!result.plan.some(y=>y.date===x.date)),...result.plan].sort((a,b)=>a.date.localeCompare(b.date));const current=result.plan.find(x=>x.date===d.date),prev=result.plan.filter(x=>x.date<d.date).at(-1);if(current){d.hS=current.hS;d.pS=current.pS;d.v45Completed=null;}else if(prev&&!d.v37Deleted){const z=v45BaseT(prev);d.hS=z.hB;d.pS=z.pB;} }finally{bankBusy=v37Busy=false;}v50Notice(remove?'Opening stock removed':'✓ Opening stock saved');v57Refresh();}catch(e){message.textContent=e.message;}finally{if(panel.isConnected){save.disabled=false;for(const b of list.querySelectorAll('button'))b.disabled=false;}}}
- form.onsubmit=e=>{e.preventDefault();void commit(false)};save.disabled=false;
+ const recover=document.createElement('button');recover.type='button';recover.className='alt';recover.textContent='Start Fresh Working';recover.hidden=true;save.after(recover);const hint=()=>{const target=all.find(x=>x.id===field('date').value);recover.hidden=!target?.data.v37Deleted;save.disabled=!!target?.data.v37Deleted;if(!recover.hidden)message.textContent='Deleted date: start fresh working without restoring old records.';};field('date').addEventListener('change',hint);recover.onclick=async()=>{const date=field('date').value;const h=field('diesel').value,p=field('petrol').value;if(await v67Restart(date)){openGroup('stock','openingstock',date);v67OpeningDraft={date,h,p};}};form.onsubmit=e=>{e.preventDefault();void commit(false)};hint();if(v67OpeningDraft?.date===field('date').value){field('diesel').value=v67OpeningDraft.h;field('petrol').value=v67OpeningDraft.p;v67OpeningDraft=null;}
  }catch(e){message.textContent=e.message;}
 }
 const v64Render=renderGroup;renderGroup=function(w){if(w.group==='stock'&&w.mode==='openingstock'&&v37Owner()){showEntry('Stock & Delivery / سٹاک اور ڈلیوری','<div id="v64OpeningPanel"><h3>Opening Stock</h3><form><div class="v64fields"><label>Business Date<input type="date" name="date" required></label><label>Diesel Opening (L)<input type="number" name="diesel" min="0" step="0.01" required></label><label>Petrol Opening (L)<input type="number" name="petrol" min="0" step="0.01" required></label></div><button type="submit" class="gold" disabled>Save Opening Stock</button></form><p data-v64msg role="status">Checking saved records…</p><h3>Saved Opening Stock Records</h3><div class="v64record v64head"><b>Date</b><b>Diesel (L)</b><b>Petrol (L)</b><b>Actions</b></div><div data-v64list></div></div>');const host=entryPage.querySelector('.ep');host.classList.add('v49compact','v50compact');v59StockTabs(w,host);void v64Opening($('#v64OpeningPanel'));return;}v64Render(w);if(w.group==='customer')entryPage.querySelectorAll('.v48rev').forEach(x=>x.remove());};
@@ -2313,6 +2313,31 @@ const v65Calc=calc;calc=function(){v65Calc();v65LockNotice();};
 const v65Render=renderGroup;renderGroup=function(w){v65Render(w);v65LockNotice();};
 const v65Close=$('#close');v65Close.onclick=()=>v50Notice('Day Close is not required. Use Working Completed in Cash Handling.');
 const v65Style=document.createElement('style');v65Style.textContent=`#app .v65lock{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:5px;padding:5px 7px;border:1px solid #d5a545;border-radius:5px;color:var(--v6-text);background:var(--v6-surface);font-size:12px;grid-column:1/-1;flex:1 1 100%;order:99}#app .v65lock button{min-height:30px!important;padding:3px 7px!important}#app #entryPage .ep>.v65lock{order:-1}#app #close{display:none!important}`;document.head.append(v65Style);
+
+
+// V67: explicit fresh working on a deleted business date; preserve the original archive.
+let v67OpeningDraft=null,v67Busy=false;
+function v67FreshPlan(date,day,meta){
+ if(!day?.v37Deleted||day.date!==date)throw Error('This date is already active.');
+ if((meta.lg||[]).some(x=>x.d===date)||(meta.rh||[]).some(x=>x.d===date))throw Error('Remaining transactions exist. Review them before starting fresh.');
+ return {...blank(date),closed:false,v45Completed:null};
+}
+async function v67Restart(date){if(v67Busy)return false;v67Busy=true;let locked=false;try{
+ v37Ready(date);if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||date>today())throw Error('Choose a valid business date.');
+ const dr=doc(db,'days',date),mr=doc(db,'meta','main'),ar=doc(db,'recycleBin',date);
+ const [ds,ms,as]=await Promise.all([getDocFromServer(dr),getDocFromServer(mr),getDocFromServer(ar)]),old=ds.data(),meta=ms.data(),archive=as.data();v37CheckMeta(meta);v67FreshPlan(date,old,meta);
+ if(archive&&archive.id!==old.v37Deleted)throw Error('Archive mismatch; no records changed.');
+ if(!await v50Confirm('Start Fresh Working','Start new working for '+date+'? Deleted backup stays in Recycle Bin and cannot overwrite new working.','Start Fresh'))return false;
+ await v37Pin();v37Ready(date);bankBusy=v37Busy=true;locked=true;let nextMeta;
+ await runTransaction(db,async tx=>{const [a,b,c]=await Promise.all([tx.get(dr),tx.get(mr),tx.get(ar)]);v37CheckMeta(b.data());if(!v37Equal(a.data(),old)||!v37Equal(b.data(),meta)||!v37Equal(c.data(),archive))throw Error('Records changed; try again.');const next=v67FreshPlan(date,a.data(),b.data());tx.set(dr,next);nextMeta={...meta};if(meta.stockOpeningDate===date){tx.update(mr,{stockOpeningDate:null});nextMeta.stockOpeningDate=null;}v57Audit(tx,date,'restart deleted business date',{deleted:old.v37Deleted},{fresh:true});});
+ m=nextMeta;v45History=v45History.filter(x=>x.date!==date);if(d.date===date){const w=work.get(activeWork);if(w){w.fields=[];w.dirty=false;}load(date);}v50Notice('✓ Fresh working started. Deleted backup retained.');return true;
+ }catch(e){v50Notice(e.message,true);return false;}finally{if(locked)bankBusy=v37Busy=false;v67Busy=false;}}
+const v67OldLock=v65LockNotice;v65LockNotice=function(){v67OldLock();if(!d.v37Deleted||!v37Owner())return;for(const host of $$('.v65lock')){if(host.dataset.sig?.split('|')[1]!==d.date||host.querySelector('[data-v67fresh]'))continue;const b=document.createElement('button');b.type='button';b.className='alt';b.dataset.v67fresh='1';b.textContent='Start Fresh Working';b.onclick=()=>v67Restart(d.date);host.append(b);}};
+// Prevent legacy customer restoration from partially modifying metadata before day-conflict validation.
+const v67Recover=v37Recover;v37Recover=async function(date,purge=false){const [a,b]=await Promise.all([getDocFromServer(doc(db,'recycleBin',date)),getDocFromServer(doc(db,'days',date))]);if(a.exists()&&b.exists()&&!b.data().v37Deleted&&(!a.data().v60||!v37Equal(b.data(),a.data().next))){if(!purge)throw Error('Fresh working exists. Restore would overwrite it; backup retained.');v37Ready(date);if(!await v50Confirm('Delete old backup','Remove the old Recycle Bin backup only? Current working remains unchanged.','Delete backup'))return;await v37Pin();v37Ready(date);bankBusy=v37Busy=true;try{await runTransaction(db,async tx=>{const ar=doc(db,'recycleBin',date),dr=doc(db,'days',date),mr=doc(db,'meta','main');const [x,y,z]=await Promise.all([tx.get(ar),tx.get(dr),tx.get(mr)]);v37CheckMeta(z.data());if(!v37Equal(x.data(),a.data())||!v37Equal(y.data(),b.data()))throw Error('Records changed; try again.');tx.delete(ar);});}finally{bankBusy=v37Busy=false;}return;}return v67Recover(date,purge);};
+function v67ResumeAuto(){const w=work.get(activeWork);if(!entryOpen||!w?.group||!entryDirty()||v42AutoTimer||bankBusy||workChanging||d.closed||d.v37Deleted)return;const button=$('#epSave');if(button&& (w.group==='reading'||v42Complete(w)))v42Schedule({target:button});}
+addEventListener('online',()=>{void v32Flush();void v32FlushEntries();v67ResumeAuto();});
+const v67RestoreFields=restoreFields;restoreFields=function(w){v67RestoreFields(w);setTimeout(v67ResumeAuto,0);};
 
 tabBar();
 cuDel=async i=>alert("Customer deletion disabled to protect ledger history.");
