@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0a1a3c"><script>(function(){try{var t=localStorage.getItem("th")||"system",d=t==="dark"||(t==="system"&&matchMedia("(prefers-color-scheme:dark)").matches);document.documentElement.dataset.theme=d?"dark":"light"}catch(e){}})()</script><link rel="manifest" href="manifest.json">
-<link rel="icon" href="daata-mark-v8.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="daata-icon-v8-192.png"><title>Daata Petroleum · V79</title>
+<link rel="icon" href="daata-mark-v8.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="daata-icon-v8-192.png"><title>Daata Petroleum · V80</title>
 <style>
 :root{--bg:#eef1f7;--ink:#0f1c3a;--mute:#5b6682;--line:#d5dbe8;--navy:#0a1a3c;--navy2:#13306b;--gold:#d4a72c;--gold2:#f0c850;--bad:#c0392b;--ok:#1e9e5a}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Naskh Arabic",Tahoma,system-ui,sans-serif;line-height:1.5;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
@@ -2473,6 +2473,45 @@ function v79SyncDraw(){const el=$('#v79Sync');if(!el||!auth.currentUser)return;c
 setInterval(v79SyncDraw,700);
 
 const v79Style=document.createElement('style');v79Style.textContent=`#app #entryPage .v79hidden{display:none!important}#app #entryPage .v79segment{display:flex;gap:6px;margin:5px 0}#app #entryPage .v79segment button{flex:1}#app #entryPage .v79segment [data-v79dir="in"].selected{background:#176737!important;color:#fff!important}#app #entryPage .v79segment [data-v79dir="out"].selected{background:#a32222!important;color:#fff!important}#app #entryPage #v45Summary[hidden]{display:none!important}#app #entryPage .v79statement .v79section td{background:#e3ebf7;color:#23578e;font-weight:bold}#app #entryPage .v79statement .v79total td{font-weight:bold}#app #entryPage .v79statement tr:last-child td{background:#23578e;color:white;font-weight:bold}`;document.head.append(v79Style);
+
+
+// V80: Cash Handling toolbar only; preserve existing controls, event handlers and data flow.
+function v80CashToolbar(host){
+ const tabs=host?.querySelector(':scope > .v45tabs'),summary=host?.querySelector(':scope > #v45Summary'),date=host?.querySelector('#epDate')?.closest('.epRow'),heading=host?.querySelector(':scope > .ln:has(#epBack)');
+ if(!tabs||!summary||!date||!heading||host.querySelector(':scope > .v80toolbar'))return;
+ const help=host.querySelector('.v13-help');
+ const bar=document.createElement('div');bar.className='v80toolbar';
+ const title=document.createElement('div');title.className='v80title';
+ const name=heading.querySelector('b');if(name)title.append(name);else title.textContent='Cash Handling';
+ if(help){const old=help.parentElement;title.append(help);if(old.classList.contains('v13-sectionhelp')&&!old.children.length)old.remove()}
+ else v13Help(title,'cash');
+ const back=heading.querySelector('#epBack');if(back)title.append(back);
+ summary.after(bar);bar.append(title,date,tabs);heading.remove();host.classList.add('v80cash');
+}
+const v80Render=renderGroup;renderGroup=function(w){v80Render(w);if(w.group==='cash'&&v45Modes.some(x=>x[0]===w.mode))v80CashToolbar(entryPage.querySelector('.ep'))};
+const v80Style=document.createElement('style');v80Style.textContent=`
+@media screen{
+#app #entryPage .ep.v80cash>.v80toolbar{grid-column:1/-1;display:flex!important;align-items:center;flex-wrap:wrap;gap:6px 9px!important;width:100%;box-sizing:border-box;margin:2px 0 5px!important;padding:3px 0!important;border-bottom:1px solid var(--v6-line,#dce3e9)}
+#app #entryPage .ep.v80cash .v80title{display:flex;align-items:center;gap:5px;flex:none;white-space:nowrap;font-size:14px;position:relative}
+#app #entryPage .ep.v80cash .v80title .v13-help{position:relative;display:inline-flex;align-items:center}
+#app #entryPage .ep.v80cash .v80title .v13-helptext{left:0;right:auto;z-index:50;white-space:normal}
+#app #entryPage .ep.v80cash .v80toolbar>.epRow{display:flex!important;align-items:center;gap:5px!important;flex:none;min-width:0!important;margin:0!important;padding:0!important}
+#app #entryPage .ep.v80cash .v80toolbar>.epRow>label{white-space:nowrap;font-size:12px!important}
+#app #entryPage .ep.v80cash .v80toolbar>.epRow>div{min-width:0!important;width:auto!important}
+#app #entryPage .ep.v80cash .v80toolbar .v36-date-tools{display:flex!important;align-items:center;gap:4px!important;width:auto!important}
+#app #entryPage .ep.v80cash .v80toolbar #epDate{width:132px!important;min-width:115px!important;height:36px!important}
+#app #entryPage .ep.v80cash .v80toolbar .v45tabs{display:grid!important;grid-template-columns:1.55fr 1.05fr 1.25fr .65fr!important;flex:1 1 540px;min-width:0;gap:5px!important;margin:0!important;padding:0!important}
+#app #entryPage .ep.v80cash .v80toolbar .v45tabs button:not(#v50unused){min-height:43px!important;padding:6px 8px!important;font-size:13px!important;line-height:1.2!important;white-space:normal!important;min-width:0!important}
+#app #entryPage .ep.v80cash .v80toolbar #epBack{display:none!important}
+}
+@media screen and (max-width:700px){
+#app #entryPage .ep.v80cash>.v80toolbar{gap:5px!important}
+#app #entryPage .ep.v80cash .v80toolbar>.epRow{flex:1 1 100%;flex-wrap:wrap}
+#app #entryPage .ep.v80cash .v80toolbar .v45tabs{flex:1 1 100%;grid-template-columns:repeat(2,minmax(0,1fr))!important}
+#app #entryPage .ep.v80cash .v80toolbar .v45tabs button:not(#v50unused){min-height:42px!important;font-size:12px!important}
+#app #entryPage .ep.v80cash .v80title .v13-helptext{max-width:calc(100vw - 45px);width:250px}
+}
+`;document.head.append(v80Style);
 
 tabBar();
 cuDel=async i=>alert("Customer deletion disabled to protect ledger history.");
