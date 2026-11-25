@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0a1a3c"><script>(function(){try{var t=localStorage.getItem("th")||"system",d=t==="dark"||(t==="system"&&matchMedia("(prefers-color-scheme:dark)").matches);document.documentElement.dataset.theme=d?"dark":"light"}catch(e){}})()</script><link rel="manifest" href="manifest.json">
-<link rel="icon" href="daata-mark-v8.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="daata-icon-v8-192.png"><title>Daata Petroleum · V81</title>
+<link rel="icon" href="daata-mark-v8.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="daata-icon-v8-192.png"><title>Daata Petroleum · V82</title>
 <style>
 :root{--bg:#eef1f7;--ink:#0f1c3a;--mute:#5b6682;--line:#d5dbe8;--navy:#0a1a3c;--navy2:#13306b;--gold:#d4a72c;--gold2:#f0c850;--bad:#c0392b;--ok:#1e9e5a}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Naskh Arabic",Tahoma,system-ui,sans-serif;line-height:1.5;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
@@ -2516,6 +2516,59 @@ const v80Style=document.createElement('style');v80Style.textContent=`
 #app #entryPage .ep.v80cash .v80title .v13-helptext{max-width:calc(100vw - 45px);width:250px}
 }
 `;document.head.append(v80Style);
+
+// V82: Align existing workspace controls; move DOM nodes, not financial handlers.
+function v82Toolbar(host,group){
+ if(!host||host.querySelector(':scope > .v82toolbar'))return;
+ const heading=host.querySelector(':scope > .ln:has(#epBack)');if(!heading)return;
+ const date=host.querySelector('#epDate')?.closest('.epRow');
+ const tabs=group==='stock'?host.querySelector(':scope > .v59tabs'):group==='customer'?host.querySelector(':scope > .v5-mode'):null;
+ const add=group==='customer'?host.querySelector('#v31AddCustomer'):null;
+ const help=host.querySelector('.v13-help');
+ const bar=document.createElement('div');bar.className='v82toolbar v82-'+group;
+ const title=document.createElement('div');title.className='v82title';
+ const name=heading.querySelector('b');if(name)title.append(name);
+ if(help){const old=help.parentElement;title.append(help);if(old.classList.contains('v13-sectionhelp')&&!old.children.length)old.remove();}else v13Help(title,group);
+ const back=heading.querySelector('#epBack');if(back)title.append(back);
+ // Preserve any additional heading actions instead of dropping them.
+ for(const node of [...heading.children])title.append(node);
+ heading.before(bar);if(tabs)bar.append(tabs);if(add)bar.append(add);if(date)bar.append(date);bar.append(title);heading.remove();host.classList.add('v82aligned');
+}
+const v82Render=renderGroup;renderGroup=function(w){v82Render(w);if(['reading','stock','customer'].includes(w.group))v82Toolbar(entryPage.querySelector('.ep'),w.group)};
+const v82Style=document.createElement('style');v82Style.textContent=`
+@media screen{
+#app #entryPage .ep.v82aligned>.v82toolbar{grid-column:1/-1!important;display:flex!important;align-items:center!important;flex-wrap:nowrap!important;gap:6px!important;width:100%!important;min-width:0!important;box-sizing:border-box;margin:3px 0 6px!important;padding:3px 0!important;border-bottom:1px solid var(--v6-line,#dce3e9)}
+#app #entryPage .ep.v82aligned .v82toolbar>.v82title{display:flex!important;align-items:center!important;gap:5px!important;flex:0 0 auto!important;width:auto!important;white-space:nowrap;font-size:12px!important;position:relative}
+#app #entryPage .ep.v82aligned .v82title>b{font-size:13px!important;line-height:1.25!important;white-space:nowrap}
+#app #entryPage .ep.v82aligned .v82title>b small{display:none!important}
+#app #entryPage .ep.v82aligned .v82title .v13-help{position:relative!important;display:inline-flex!important;margin:0!important}
+#app #entryPage .ep.v82aligned .v82title .v13-helptext{left:auto!important;right:0!important;white-space:normal!important;z-index:65}
+#app #entryPage .ep.v82aligned .v82toolbar>.epRow{display:flex!important;align-items:center!important;gap:4px!important;flex:0 0 auto!important;width:auto!important;max-width:none!important;min-width:0!important;margin:0!important;padding:0!important}
+#app #entryPage .ep.v82aligned .v82toolbar>.epRow>label{font-size:10px!important;max-width:72px!important;white-space:normal!important;line-height:1.2!important}
+#app #entryPage .ep.v82aligned .v82toolbar>.epRow>div{min-width:0!important;width:auto!important;flex:0 0 auto!important}
+#app #entryPage .ep.v82aligned .v82toolbar .v36-date-tools{display:flex!important;align-items:center!important;gap:4px!important;width:auto!important;flex:0 0 auto!important}
+#app #entryPage .ep.v82aligned .v82toolbar #epDate{width:128px!important;min-width:128px!important;max-width:128px!important;flex:0 0 128px!important;height:36px!important;font-size:12px!important}
+#app #entryPage .ep.v82aligned .v82toolbar .v36-calendar-toggle{width:auto!important;flex:0 0 auto!important;font-size:11px!important;white-space:nowrap!important}
+#app #entryPage .ep.v82aligned .v82toolbar>.v59tabs{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;flex:1 1 0!important;width:0!important;min-width:0!important;gap:5px!important;margin:0!important;padding:0!important}
+#app #entryPage .ep.v82aligned .v82toolbar .v59tabs button{min-height:46px!important;font-size:13px!important;padding:6px 5px!important;width:100%!important;min-width:0!important;white-space:normal!important;line-height:1.2!important}
+#app #entryPage .ep.v82aligned .v82toolbar>.v5-mode{display:flex!important;align-items:center!important;gap:5px!important;flex:1 1 0!important;width:0!important;min-width:0!important;margin:0!important;padding:0!important}
+#app #entryPage .ep.v82aligned .v82toolbar>.v5-mode>label{font-size:10px!important;flex:0 0 auto!important;max-width:75px}
+#app #entryPage .ep.v82aligned .v82toolbar>.v5-mode select{flex:1 1 0!important;width:0!important;min-width:0!important;min-height:46px!important;font-size:13px!important}
+#app #entryPage .ep.v82aligned .v82toolbar>#v31AddCustomer{flex:0 0 auto!important;min-height:46px!important;min-width:0!important;width:auto!important;margin:0!important;white-space:nowrap!important;padding:5px 9px!important}
+#app #entryPage .ep.v82aligned .v82toolbar #epBack{display:none!important}
+#app #entryPage .ep.v82aligned>.v82-reading>.v82title{margin-left:auto!important}
+}
+@media screen and (max-width:1050px){
+#app #entryPage .ep.v82aligned>.v82toolbar{flex-wrap:wrap!important}
+#app #entryPage .ep.v82aligned .v82toolbar>.v59tabs,#app #entryPage .ep.v82aligned .v82toolbar>.v5-mode{flex:1 1 100%!important;width:100%!important}
+}
+@media screen and (max-width:600px){
+#app #entryPage .ep.v82aligned .v82toolbar>.epRow{flex-wrap:wrap!important;max-width:100%!important}
+#app #entryPage .ep.v82aligned .v82toolbar>.v82title{white-space:normal!important;max-width:100%!important;flex-wrap:wrap!important}
+#app #entryPage .ep.v82aligned .v82toolbar .v59tabs button{min-height:42px!important;font-size:12px!important}
+#app #entryPage .ep.v82aligned .v82title .v13-helptext{max-width:calc(100vw - 45px);width:250px}
+}
+`;document.head.append(v82Style);
 
 tabBar();
 cuDel=async i=>alert("Customer deletion disabled to protect ledger history.");
