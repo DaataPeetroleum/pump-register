@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0a1a3c"><script>(function(){try{var t=localStorage.getItem("th")||"system",d=t==="dark"||(t==="system"&&matchMedia("(prefers-color-scheme:dark)").matches);document.documentElement.dataset.theme=d?"dark":"light"}catch(e){}})()</script><link rel="manifest" href="manifest.json">
-<link rel="icon" href="daata-mark-v8.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="daata-icon-v8-192.png"><title>Daata Petroleum · V80</title>
+<link rel="icon" href="daata-mark-v8.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="daata-icon-v8-192.png"><title>Daata Petroleum · V81</title>
 <style>
 :root{--bg:#eef1f7;--ink:#0f1c3a;--mute:#5b6682;--line:#d5dbe8;--navy:#0a1a3c;--navy2:#13306b;--gold:#d4a72c;--gold2:#f0c850;--bad:#c0392b;--ok:#1e9e5a}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Naskh Arabic",Tahoma,system-ui,sans-serif;line-height:1.5;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
@@ -2486,28 +2486,32 @@ function v80CashToolbar(host){
  if(help){const old=help.parentElement;title.append(help);if(old.classList.contains('v13-sectionhelp')&&!old.children.length)old.remove()}
  else v13Help(title,'cash');
  const back=heading.querySelector('#epBack');if(back)title.append(back);
- summary.after(bar);bar.append(title,date,tabs);heading.remove();host.classList.add('v80cash');
+ summary.after(bar);bar.append(tabs,date,title);heading.remove();host.classList.add('v80cash');
 }
 const v80Render=renderGroup;renderGroup=function(w){v80Render(w);if(w.group==='cash'&&v45Modes.some(x=>x[0]===w.mode))v80CashToolbar(entryPage.querySelector('.ep'))};
 const v80Style=document.createElement('style');v80Style.textContent=`
 @media screen{
-#app #entryPage .ep.v80cash>.v80toolbar{grid-column:1/-1;display:flex!important;align-items:center;flex-wrap:wrap;gap:6px 9px!important;width:100%;box-sizing:border-box;margin:2px 0 5px!important;padding:3px 0!important;border-bottom:1px solid var(--v6-line,#dce3e9)}
-#app #entryPage .ep.v80cash .v80title{display:flex;align-items:center;gap:5px;flex:none;white-space:nowrap;font-size:14px;position:relative}
+#app #entryPage .ep.v80cash>.v80toolbar{grid-column:1/-1;display:flex!important;align-items:center;flex-wrap:nowrap!important;gap:6px!important;width:100%!important;box-sizing:border-box;margin:3px 0 6px!important;padding:3px 0!important;border-bottom:1px solid var(--v6-line,#dce3e9)}
+#app #entryPage .ep.v80cash .v80toolbar>.v80title{display:flex!important;align-items:center;gap:5px;flex:0 0 auto!important;width:auto!important;white-space:nowrap;font-size:12px;position:relative}
 #app #entryPage .ep.v80cash .v80title .v13-help{position:relative;display:inline-flex;align-items:center}
-#app #entryPage .ep.v80cash .v80title .v13-helptext{left:0;right:auto;z-index:50;white-space:normal}
-#app #entryPage .ep.v80cash .v80toolbar>.epRow{display:flex!important;align-items:center;gap:5px!important;flex:none;min-width:0!important;margin:0!important;padding:0!important}
-#app #entryPage .ep.v80cash .v80toolbar>.epRow>label{white-space:nowrap;font-size:12px!important}
-#app #entryPage .ep.v80cash .v80toolbar>.epRow>div{min-width:0!important;width:auto!important}
-#app #entryPage .ep.v80cash .v80toolbar .v36-date-tools{display:flex!important;align-items:center;gap:4px!important;width:auto!important}
-#app #entryPage .ep.v80cash .v80toolbar #epDate{width:132px!important;min-width:115px!important;height:36px!important}
-#app #entryPage .ep.v80cash .v80toolbar .v45tabs{display:grid!important;grid-template-columns:1.55fr 1.05fr 1.25fr .65fr!important;flex:1 1 540px;min-width:0;gap:5px!important;margin:0!important;padding:0!important}
-#app #entryPage .ep.v80cash .v80toolbar .v45tabs button:not(#v50unused){min-height:43px!important;padding:6px 8px!important;font-size:13px!important;line-height:1.2!important;white-space:normal!important;min-width:0!important}
+#app #entryPage .ep.v80cash .v80title .v13-helptext{left:auto;right:0;z-index:50;white-space:normal}
+#app #entryPage .ep.v80cash .v80toolbar>.epRow{display:flex!important;align-items:center;gap:4px!important;flex:0 0 auto!important;width:auto!important;max-width:none!important;min-width:0!important;margin:0!important;padding:0!important}
+#app #entryPage .ep.v80cash .v80toolbar>.epRow>label{white-space:nowrap;font-size:10px!important;max-width:72px;white-space:normal!important;line-height:1.2}
+#app #entryPage .ep.v80cash .v80toolbar>.epRow>div{min-width:0!important;width:auto!important;flex:0 0 auto!important}
+#app #entryPage .ep.v80cash .v80toolbar .v36-date-tools{display:flex!important;align-items:center;gap:4px!important;width:auto!important;flex:0 0 auto!important}
+#app #entryPage .ep.v80cash .v80toolbar #epDate{width:128px!important;min-width:128px!important;max-width:128px!important;flex:0 0 128px!important;height:36px!important;font-size:12px!important}
+#app #entryPage .ep.v80cash .v80toolbar .v36-calendar-toggle{width:auto!important;flex:0 0 auto!important;font-size:11px!important;white-space:nowrap!important}
+#app #entryPage .ep.v80cash .v80toolbar>.v45tabs{display:grid!important;grid-template-columns:1.55fr 1.05fr 1.25fr .65fr!important;flex:1 1 0!important;width:0!important;min-width:0!important;gap:5px!important;margin:0!important;padding:0!important}
+#app #entryPage .ep.v80cash .v80toolbar .v45tabs button:not(#v50unused){min-height:46px!important;padding:6px 5px!important;font-size:13px!important;line-height:1.2!important;white-space:normal!important;min-width:0!important;width:100%!important;overflow-wrap:normal!important}
 #app #entryPage .ep.v80cash .v80toolbar #epBack{display:none!important}
 }
-@media screen and (max-width:700px){
-#app #entryPage .ep.v80cash>.v80toolbar{gap:5px!important}
-#app #entryPage .ep.v80cash .v80toolbar>.epRow{flex:1 1 100%;flex-wrap:wrap}
-#app #entryPage .ep.v80cash .v80toolbar .v45tabs{flex:1 1 100%;grid-template-columns:repeat(2,minmax(0,1fr))!important}
+@media screen and (max-width:1050px){
+#app #entryPage .ep.v80cash>.v80toolbar{flex-wrap:wrap!important;gap:6px!important}
+#app #entryPage .ep.v80cash .v80toolbar>.v45tabs{flex:1 1 100%!important;width:100%!important}
+}
+@media screen and (max-width:600px){
+#app #entryPage .ep.v80cash .v80toolbar>.v45tabs{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+#app #entryPage .ep.v80cash .v80toolbar>.epRow{flex-wrap:wrap!important;max-width:100%!important}
 #app #entryPage .ep.v80cash .v80toolbar .v45tabs button:not(#v50unused){min-height:42px!important;font-size:12px!important}
 #app #entryPage .ep.v80cash .v80title .v13-helptext{max-width:calc(100vw - 45px);width:250px}
 }
