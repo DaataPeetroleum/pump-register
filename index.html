@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0a1a3c"><script>(function(){try{var t=localStorage.getItem("th")||"system",d=t==="dark"||(t==="system"&&matchMedia("(prefers-color-scheme:dark)").matches);document.documentElement.dataset.theme=d?"dark":"light"}catch(e){}})()</script><link rel="manifest" href="manifest.json">
-<link rel="icon" href="daata-mark-v8.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="daata-icon-v8-192.png"><title>Daata Petroleum · V91</title>
+<link rel="icon" href="daata-mark-v8.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="daata-icon-v8-192.png"><title>Daata Petroleum · V94 Revised</title>
 <style>
 :root{--bg:#eef1f7;--ink:#0f1c3a;--mute:#5b6682;--line:#d5dbe8;--navy:#0a1a3c;--navy2:#13306b;--gold:#d4a72c;--gold2:#f0c850;--bad:#c0392b;--ok:#1e9e5a}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Naskh Arabic",Tahoma,system-ui,sans-serif;line-height:1.5;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
@@ -2755,6 +2755,21 @@ async function v94Apply(snapshot){
  }finally{bankBusy=false;}
 }
 
+await import('./customer-revised.js').then(({install})=>install({
+ getDay:()=>d,getMeta:()=>m,getWork:()=>work.get(activeWork),getWorks:()=>work,
+ addMode:mode=>groups.customer.modes.push(mode),
+ getBusy:()=>bankBusy||workChanging||v37Busy,getReady:()=>v21DayReady===d.date&&v19Meta,
+ getUser:v32User,getRole:role,owner:v37Owner,dateMatches:v93DateMatches,
+ openGroup,activateWork,groupKey,entryPage,showEntry,epDate,epBindDate,toolbar:v82Toolbar,
+ read:v32Read,write:v32Write,key:v32Key,vehicles:v33Vehicles,totals:v74Totals,
+ accounts:v85RecoveryAccounts,special:v85SpecialAccount,recipientLabel:v85RecipientLabel,
+ recoveryInfo:v85RecoveryInfo,validAmount:v33ValidAmount,queue:v33Queue,flush:v32FlushEntries,
+ pending:v33PendingRows,equal:v37Equal,fmt,esc:escV,notice:v50Notice,
+ clearAuto:v42ClearAuto,render:()=>work.get(activeWork)?.render(),
+ clean:workspace=>{workspace.fields=[];workspace.dirty=false;workspace.baseline=JSON.stringify(fieldState(entryPage));},
+ wrapRender:wrapper=>{const original=renderGroup;renderGroup=w=>wrapper(w,()=>original(w));},
+ wrapRestore:normalizer=>{const original=v19Restore;v19Restore=()=>{if(v19Pending)normalizer(v19Pending);return original();};}
+}));
 tabBar();
 cuDel=async i=>alert("Customer deletion disabled to protect ledger history.");
 labels();draw();ttDraw("home");lrem();if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js");
