@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0a1a3c"><script>(function(){try{var t=localStorage.getItem("th")||"system",d=t==="dark"||(t==="system"&&matchMedia("(prefers-color-scheme:dark)").matches);document.documentElement.dataset.theme=d?"dark":"light"}catch(e){}})()</script><link rel="manifest" href="manifest.json">
-<link rel="icon" href="daata-mark-v8.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="daata-icon-v8-192.png"><title>Daata Petroleum · V107</title>
+<link rel="icon" href="daata-mark-v8.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="daata-icon-v8-192.png"><title>Daata Petroleum · V109</title>
 <style>
 :root{--bg:#eef1f7;--ink:#0f1c3a;--mute:#5b6682;--line:#d5dbe8;--navy:#0a1a3c;--navy2:#13306b;--gold:#d4a72c;--gold2:#f0c850;--bad:#c0392b;--ok:#1e9e5a}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Naskh Arabic",Tahoma,system-ui,sans-serif;line-height:1.5;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
@@ -1859,9 +1859,9 @@ html[data-theme=dark] .v37-panel{background:#172337;color:white}
 `;document.head.append(v37Style);
 const v37Choose=v36Choose;
 let v107CalendarManage=false;const v107CalendarClose=v36Close;v36Close=function(){v107CalendarManage=false;return v107CalendarClose()};
-v36Choose=function(date){if(v36Input?.id==='date'&&v37Owner()&&!v36Delete&&(v107CalendarManage||v35Rows?.get(date)?.v37Deleted)){v35Selected=date;v35DrawCalendar();return}if(!v36Delete&&['date','epDate'].includes(v36Input?.id)&&date!==d.date&&date<=today()){try{if(bankBusy||workChanging||v98DayBusy)throw Error('Finish saving first');v98DraftGuard()}catch(e){v50Notice(e.message,true);return}}v37Choose(date)};
+v36Choose=function(date){if(['date','epDate'].includes(v36Input?.id)&&v37Owner()&&!v36Delete&&(v107CalendarManage||v35Rows?.get(date)?.v37Deleted)){v35Selected=date;v35DrawCalendar();return}if(!v36Delete&&['date','epDate'].includes(v36Input?.id)&&date!==d.date&&date<=today()){try{if(bankBusy||workChanging||v98DayBusy)throw Error('Finish saving first');v98DraftGuard()}catch(e){v50Notice(e.message,true);return}}v37Choose(date)};
 const v37Draw=v35DrawCalendar;
-v35DrawCalendar=function(){v37Draw();if(v35Cal.hidden||!v37Owner()||v36Input?.id!=='date'||v36Delete)return;
+v35DrawCalendar=function(){v37Draw();if(v35Cal.hidden||!v37Owner()||!['date','epDate'].includes(v36Input?.id)||v36Delete)return;
  for(const b of v35Cal.querySelectorAll('[data-v35date]'))if(v35Rows?.get(b.dataset.v35date)?.v37Deleted)b.classList.add('v37-deleted');
  const manage=document.createElement('button');manage.type='button';manage.className='alt';manage.textContent=v107CalendarManage?'Done managing days':'Manage days';manage.setAttribute('aria-pressed',String(v107CalendarManage));manage.onclick=()=>{v107CalendarManage=!v107CalendarManage;v35DrawCalendar()};v35Cal.querySelector('.v35-calhead').append(manage);
  const el=$('#v35CalDetail'),date=v35Selected;
@@ -2987,7 +2987,7 @@ const v95Style=document.createElement('style');v95Style.textContent=`#app .v95-v
 function v96Today(host,c=null,v='*'){
  const rows=(m.lg||[]).filter(x=>x.d===d.date&&(!c||x.c===c.n)&&(v==='*'||(x.v||'')===v)).sort((a,b)=>n(a.t)-n(b.t));
  const dr=rows.filter(x=>x.k==='credit').reduce((a,x)=>a+n(x.a),0),cr=rows.filter(x=>x.k==='pay').reduce((a,x)=>a+n(x.a),0),net=dr-cr;
- const caption=document.createElement('div');caption.className='v97today-summary';caption.innerHTML='<div class="v97date">Business date '+escV(d.date)+'</div><div class="v97totals"><div class="v97dr">Total DR<b data-v97-dr>'+fmt(dr)+'</b></div><div class="v97cr">Total CR<b data-v97-cr>'+fmt(cr)+'</b></div><div class="v97net">Net DR / CR<b data-v97-net>'+fmt(net)+'</b></div></div>';host.append(caption);const t=document.createElement('table');t.className='v96today';t.innerHTML='<thead><tr><th>Date</th><th>Customer / Vehicle</th><th>DR</th><th>CR</th><th>Action</th></tr></thead><tbody></tbody>';for(const x of rows){const r=t.tBodies[0].insertRow();for(const value of [x.d,x.c+(x.v?' / '+x.v:''),x.k==='credit'?fmt(n(x.a)):'',x.k==='pay'?fmt(n(x.a)):''])r.insertCell().textContent=value;const cell=r.insertCell(),customer=m.cu.find(y=>y.n===x.c);if(customer&&v37Owner()){const b=document.createElement('button');b.type='button';b.className='alt';b.textContent='Edit';b.onclick=()=>v71EditEntry(customer,x);const del=document.createElement('button');del.type='button';del.className='alt v37-danger';del.textContent='Delete / حذف';del.onclick=()=>void v98DeleteEntry(customer,x);cell.append(b,del)}}
+ const caption=document.createElement('div');caption.className='v97today-summary';caption.innerHTML='<div class="v97totals"><div class="v97dr">Total DR<b data-v97-dr>'+fmt(dr)+'</b></div><div class="v97cr">Total CR<b data-v97-cr>'+fmt(cr)+'</b></div><div class="v97net">Net DR / CR<b data-v97-net>'+fmt(net)+'</b></div></div>';if(!c&&v37Owner()){const bulk=document.createElement('button');bulk.type='button';bulk.className='alt v109bulk';bulk.textContent='Bulk Date Correction';bulk.onclick=()=>v108BulkDialog(d.date);caption.prepend(bulk);}host.append(caption);const t=document.createElement('table');t.className='v96today';t.innerHTML='<thead><tr><th>Date</th><th>Customer / Vehicle</th><th>DR</th><th>CR</th><th>Action</th></tr></thead><tbody></tbody>';for(const x of rows){const r=t.tBodies[0].insertRow();for(const value of [x.d,x.c+(x.v?' / '+x.v:''),x.k==='credit'?fmt(n(x.a)):'',x.k==='pay'?fmt(n(x.a)):''])r.insertCell().textContent=value;const cell=r.insertCell(),customer=m.cu.find(y=>y.n===x.c);if(customer&&v37Owner()){const b=document.createElement('button');b.type='button';b.className='alt';b.textContent='Edit';b.onclick=()=>v71EditEntry(customer,x);const del=document.createElement('button');del.type='button';del.className='alt v37-danger';del.textContent='Delete / حذف';del.onclick=()=>void v98DeleteEntry(customer,x);cell.append(b,del)}}
  if(!rows.length){const cell=t.tBodies[0].insertRow().insertCell();cell.colSpan=5;cell.textContent='No transactions for selected business date';}const foot=t.createTFoot(),total=foot.insertRow();for(const value of ['', 'Total',fmt(dr),fmt(cr),''])total.insertCell().textContent=value;host.append(t);
 }
 function v96VehicleTabs(panel,c,v,dr,cr,editing){
@@ -3196,9 +3196,13 @@ function v108BulkDialog(initial){try{v37Ready();v98DraftGuard();if(document.getE
  const visible=()=>rows.filter(r=>(r.name+' '+(r.old.v||'')).toLowerCase().includes(search.value.toLowerCase()));
  function render(){list.replaceChildren();const groups=new Map();for(const r of visible()){if(!groups.has(r.name))groups.set(r.name,[]);groups.get(r.name).push(r);}for(const [name,items] of groups){const block=make('div',list);block.style.cssText='border-bottom:1px solid #94a3b855;padding:5px';const label=make('label',block),all=make('input',label);all.type='checkbox';all.checked=items.every(x=>picked.has(x.id));all.indeterminate=!all.checked&&items.some(x=>picked.has(x.id));label.append(document.createTextNode(' '+name));all.onchange=()=>{for(const r of items)all.checked?picked.add(r.id):picked.delete(r.id);render()};for(const r of items){const l=make('label',block);l.style.cssText='display:flex;gap:6px;align-items:center;margin:3px 0 3px 16px';const ch=make('input',l);ch.type='checkbox';ch.checked=picked.has(r.id);ch.onchange=()=>{ch.checked?picked.add(r.id):picked.delete(r.id);render()};l.append(document.createTextNode((r.type==='opening'?'Opening Balance':r.type==='credit'?'DR':'CR')+' · '+(r.old.v||'Main')+' · '+fmt(r.type==='opening'?r.old.b:r.old.a)+(r.old.ref?' · '+r.old.ref.slice(-8):'')));}}totals();}
  function load(){picked.clear();rows=[];for(const c of m.cu||[])if(c.openingDate===from.value)rows.push({id:'o:'+rows.length,name:c.n,type:'opening',old:plainCopy(c)});for(const x of m.lg||[])if(x.d===from.value&&['credit','pay'].includes(x.k))rows.push({id:'l:'+rows.length,name:x.c,type:x.k,old:plainCopy(x)});render();}from.onchange=load;search.oninput=render;button(tools,'Select visible',()=>{for(const r of visible())picked.add(r.id);render()});button(tools,'Clear',()=>{picked.clear();render()});for(const [k,label] of [['opening','Opening'],['credit','DR'],['pay','CR']])button(tools,'Select '+label,()=>{for(const r of visible().filter(x=>x.type===k))picked.add(r.id);render()});const save=button(dialog,'Change Selected Dates',async()=>{if(busy)return;const a=from.value,b=to.value,selected=rows.filter(r=>picked.has(r.id));try{v108DatePlan(m,a,b,selected);if(!confirm('Move '+selected.length+' selected records from '+a+' to '+b+'? Amounts and references remain unchanged.'))return;busy=true;save.disabled=true;for(const el of dialog.querySelectorAll('input,button'))el.disabled=true;await v108Commit([a,b],meta=>v108DatePlan(meta,a,b,selected),'bulk date '+a+' → '+b);dialog.close();}catch(e){status.textContent=e.message;v50Notice(e.message,true);}finally{busy=false;for(const el of dialog.querySelectorAll('input,button'))el.disabled=false;}});button(dialog,'Close',()=>{if(!busy)dialog.close()});dialog.addEventListener('cancel',e=>{if(busy)e.preventDefault()});load();dialog.showModal();}catch(e){v50Notice(e.message,true);}}
-const v108CalendarBase=v35DrawCalendar;v35DrawCalendar=function(){v108CalendarBase();if(v35Cal.hidden||!v37Owner()||v36Delete||v36Input?.id!=='date')return;const host=$('#v35CalDetail');if(!host||host.querySelector('[data-v108bulk]'))return;const b=document.createElement('button');b.type='button';b.className='alt';b.dataset.v108bulk='1';b.textContent='Bulk Date Correction';b.onclick=()=>{const date=v35Selected||d.date;v36Close();v108BulkDialog(date)};host.append(b);v36Position()};
+const v108CalendarBase=v35DrawCalendar;v35DrawCalendar=function(){v108CalendarBase();if(v35Cal.hidden||!v37Owner()||v36Delete||!['date','epDate'].includes(v36Input?.id))return;const host=$('#v35CalDetail');if(!host||host.querySelector('[data-v108bulk]'))return;const b=document.createElement('button');b.type='button';b.className='alt';b.dataset.v108bulk='1';b.textContent='Bulk Date Correction';b.onclick=()=>{const date=v35Selected||d.date;v36Close();v108BulkDialog(date)};host.append(b);v36Position()};
 const v108EditBase=v62Edit;v62Edit=function(el,c,refresh){v108EditBase(el,c,refresh);if(!v37Owner())return;const box=el.querySelector('.v62-edit');if(!box)return;const b=document.createElement('button');b.type='button';b.className='alt';b.textContent='Edit Opening Balance';b.onclick=()=>{if(v102InlineDirty(box.parentElement)){v50Notice('Finish or cancel changes first',true);return;}box.remove();v108EditOpening(c);};box.append(b)};
 v43CustomerEdit=c=>v108EditOpening(c);
+
+// V109: common toolbar presentation; keep original controls and handlers.
+const v109DockBase=v107Dock;v107Dock=function(){v109DockBase();const target=v98DayBar.parentElement;if(!target||target===v6Shell.parentElement)return;target.classList.add('v109toolbar');const compact=(id,label)=>{const el=document.getElementById(id);if(el&&el.textContent!==label){el.title=el.textContent;el.setAttribute('aria-label',el.textContent);el.textContent=label;}};compact('v99DayToggle','Day Management');compact('v99Back','← Back');compact('v99Cancel','Cancel');compact('v99Close','Close');};
+const v109CalBase=v35DrawCalendar;v35DrawCalendar=function(){v109CalBase();if(v35Cal.hidden||v36Delete||!['date','epDate'].includes(v36Input?.id))return;const host=$('#v35CalDetail');if(!host)return;if(!v37Owner()){const note=document.createElement('small');note.textContent='Bulk Date Correction and Delete a Day require Owner access.';host.append(note);}else{const b=host.querySelector('[data-trash]');if(b&&b.textContent==='Delete Day')b.textContent='Delete a Day';}v36Position();};
 
 tabBar();
 cuDel=async i=>alert("Customer deletion disabled to protect ledger history.");
@@ -3456,6 +3460,45 @@ html body #app #v32Register .v72-savebar{position:static!important;bottom:auto!i
 html body #app :is(.v6-datecard:has(#date),.v82toolbar:has(#epDate),.v80toolbar:has(#epDate)) #v98SelectedDate{display:none!important}
 html body #app :is(.v6-datecard,.v82toolbar,.v80toolbar):has(#v98DayBar[data-warning=true]) :is(#date,#epDate){color:#a52626!important;font-weight:700!important}
 html[data-theme=dark] body #app :is(.v6-datecard,.v82toolbar,.v80toolbar):has(#v98DayBar[data-warning=true]) :is(#date,#epDate){color:#f0b0a8!important}
+}
+</style>
+
+<style id="v109-unified-toolbar">
+@media screen {
+html body #app .v109toolbar {display:flex!important;flex-wrap:wrap!important;align-items:center!important;align-content:flex-start!important;justify-content:flex-start!important;gap:4px!important;min-height:0!important;height:auto!important;padding:4px!important;box-sizing:border-box!important;position:relative!important;top:auto!important}
+html body #app .v109toolbar #v98DayBar:not([hidden]){display:flex!important;flex:0 1 auto!important;width:auto!important;max-width:100%!important;position:static!important;gap:4px!important;padding:0!important;flex-wrap:wrap!important;border:0!important;background:transparent!important}
+html body #app .v109toolbar #v98DayBar .v98day-copy{flex:0 1 auto!important;display:flex!important;gap:3px!important;min-width:0!important}
+html body #app .v109toolbar #v99Nav:not([hidden]){display:flex!important;flex:0 0 auto!important;width:auto!important;position:static!important;gap:3px!important;padding:0!important;margin:0!important;flex-wrap:nowrap!important}
+html body #app .v109toolbar :is(#v98ActiveDate,#v98SelectedDate,#v98WorkStatus,.epRow>label,.v82title>b,.v80title>b,.ln>b){font-size:12px!important;line-height:1.25!important;white-space:normal!important}
+html body #app .v109toolbar :is(#v98DayBar,#v99Nav,.epRow,.v82title,.v80title,.v36-date-tools) :is(button,input[type=date]){height:32px!important;min-height:32px!important;font-size:12px!important;line-height:1.2!important;padding:3px 5px!important;margin:0!important;box-sizing:border-box!important}
+html body #app .v109toolbar>.epRow{flex:0 1 auto!important;width:auto!important;min-width:0!important;max-width:100%!important;display:flex!important;align-items:center!important;gap:3px!important;margin:0!important;padding:0!important}
+html body #app .v109toolbar .v36-date-tools{width:auto!important;flex:0 1 auto!important;gap:3px!important;max-width:100%!important}
+html body #app .v109toolbar :is(#date,#epDate){width:119px!important;min-width:119px!important;max-width:119px!important;flex:0 0 119px!important}
+html body #app .v109toolbar>:is(.v82title,.v80title){flex:0 1 auto!important;gap:3px!important;display:flex!important;align-items:center!important;margin:0!important}
+html body #app .v109toolbar>:is(.v59tabs,.v5-mode,.v45tabs,#v10RateBar){order:20!important;flex:1 1 100%!important;width:100%!important;min-width:0!important;margin:0!important}
+html body #app .v109toolbar>#v10RateStatus{order:21!important}
+html body #app .v109toolbar #v98DayBar #v98SelectedDate{display:none!important}
+html body #app .v109toolbar:not(:has(#date,#epDate)) #v98DayBar #v98SelectedDate{display:block!important}
+html body #app .v97today-summary{position:static!important;top:auto!important;z-index:auto!important;inset:auto!important;margin:3px 0!important;padding:3px!important}
+html body #app .v96today :is(td,th){padding:4px 7px!important;line-height:1.25!important;font-size:13px!important;vertical-align:middle!important}
+html body #app .v96today td:last-child button,html body #app .v109bulk{min-height:30px!important;height:30px!important;padding:3px 7px!important;font-size:12px!important;margin:1px 2px!important}
+html body #app .v96today td:nth-child(3),html body #app .v96today td:nth-child(4){text-align:right!important;font-variant-numeric:tabular-nums}
+#v35Calendar .v37-actions{display:flex;flex-wrap:wrap;gap:4px}
+}
+@media screen and (min-width:1200px){
+html body #app .v109toolbar #v98DayBar:not([hidden]){flex-wrap:nowrap!important;white-space:nowrap!important}
+html body #app .v109toolbar #v98DayBar .v98day-copy{flex-wrap:nowrap!important}
+html body #app .v109toolbar #v98ActiveDate{white-space:nowrap!important;font-size:12px!important}
+html body #app .v109toolbar #v98WorkStatus{font-size:12px!important;white-space:nowrap!important}
+html body #app .v109toolbar #v98WorkStatus{max-width:110px;overflow-wrap:anywhere;white-space:normal!important}
+html body #app .v109toolbar #v98DayBar:has(.v98day-actions:not([hidden])){flex-wrap:wrap!important;flex-basis:100%!important}
+}
+@media screen and (max-width:899px){
+html body #app .v109toolbar #v98DayBar:not([hidden]){flex:1 1 100%!important;white-space:normal!important}
+html body #app .v109toolbar #v99Nav:not([hidden]){flex:1 1 100%!important;justify-content:space-between!important}
+html body #app .v109toolbar :is(button,input[type=date]){min-height:36px!important;height:auto!important}
+html body #app .v109toolbar>.epRow{flex:1 1 100%!important}
+html body #app .v109toolbar .v96today td{font-size:12px!important}
 }
 </style>
 </body></html>
